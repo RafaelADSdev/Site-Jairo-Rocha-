@@ -1,0 +1,56 @@
+{
+  "la-fleur-polinesia": {
+    "photos": [
+      "/images/la-fleur-polinesia-0.jpg",
+      "/images/la-fleur-polinesia-1.jpg",
+      "/images/la-fleur-polinesia-2.jpg",
+      "/images/la-fleur-polinesia-3.jpg"
+    ],
+    "source": "https://jairorocha.com.br/imoveis/residencial/apartamento/apartamentos-comprar-vender-porto-de-galinhas-ipojuca-pernambuco/931038"
+  },
+  "parc-college": {
+    "photos": [
+      "/images/parc-college-0.jpg",
+      "/images/parc-college-1.jpg",
+      "/images/parc-college-2.jpg",
+      "/images/parc-college-3.jpg"
+    ],
+    "source": "https://jairorocha.com.br/imoveis/residencial/apartamento/apartamentos-comprar-vender-imbiribeira-recife-pernambuco/931234"
+  },
+  "amura-carneiros": {
+    "photos": [
+      "/images/amura-carneiros-0.jpg",
+      "/images/amura-carneiros-1.jpg",
+      "/images/amura-carneiros-2.jpg",
+      "/images/amura-carneiros-3.jpg"
+    ],
+    "source": "https://jairorocha.com.br/imoveis/residencial/apartamento/apartamentos-comprar-vender-praia-dos-carneiros-tamandare-pernambuco/946120"
+  },
+  "belem-boulevard": {
+    "photos": [
+      "/images/belem-boulevard-0.jpg",
+      "/images/belem-boulevard-1.jpg",
+      "/images/belem-boulevard-2.jpg",
+      "/images/belem-boulevard-3.jpg"
+    ],
+    "source": "https://jairorocha.com.br/imoveis/residencial/apartamento/apartamentos-comprar-vender-encruzilhada-recife-pernambuco/931525"
+  },
+  "edf-nice": {
+    "photos": [
+      "/images/edf-nice-0.jpg",
+      "/images/edf-nice-1.jpg",
+      "/images/edf-nice-2.jpg",
+      "/images/edf-nice-3.jpg"
+    ],
+    "source": "https://jairorocha.com.br/imoveis/residencial/apartamento/apartamentos-alugar-locacao-boa-viagem-recife-pernambuco/935710"
+  },
+  "luar-do-parque": {
+    "photos": [
+      "/images/luar-do-parque-0.jpg",
+      "/images/luar-do-parque-1.jpg",
+      "/images/luar-do-parque-2.jpg",
+      "/images/luar-do-parque-3.jpg"
+    ],
+    "source": "https://jairorocha.com.br/imoveis/residencial/apartamento/apartamentos-comprar-vender-imbiribeira-recife-pernambuco/931197"
+  }
+}

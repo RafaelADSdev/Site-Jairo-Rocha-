@@ -1,0 +1,10 @@
+---
+import Icon from './Icon.astro';
+import {money, propertyHref} from '../data/properties';
+const {property:p, extra=false}=Astro.props;
+const href = propertyHref(p);
+---
+<article class:list={['property-card',{extra}]} hidden={extra} data-category={p.category} data-location={p.location.toLowerCase()} data-price={p.price} data-beds={p.beds}>
+ <div class="property-photo"><a href={href} aria-label={`Conhecer ${p.name}`}><img src={p.image} alt={p.name} loading="lazy" width="640" height="450"/></a><span class="badge">{p.label}</span><button class="favorite icon-btn" aria-label={`Favoritar ${p.name}`} aria-pressed="false"><Icon name="heart"/></button></div>
+ <div class="property-info"><p class="location"><Icon name="pin" size={14}/>{p.location}</p><a href={href}><h3>{p.name}</h3></a><div class="property-specs"><span><Icon name="bed" size={18}/>{p.beds} {p.beds===1?'quarto':'quartos'}</span>{p.parking>0&&<span><Icon name="car" size={18}/>{p.parking} {p.parking===1?'vaga':'vagas'}</span>}</div><div class="property-bottom"><div><small>{p.category==='locacao'?'Aluguel mensal':'Valor de referência'}</small><strong>{money(p.price)}{p.category==='locacao'&&<small> /mês</small>}</strong></div><a href={href} class="round-link" aria-label={`Ver ${p.name}`}><Icon name="diagonal"/></a></div></div>
+</article>

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.env*
+.impeccable/review/
+.netlify
+*.blend1
+tmp-*.jpg
+tmp-*.png
+IMG_*.PNG
+WhatsApp Image *
+Jair260513(bookdigital_sopro).pdf

@@ -1,0 +1,40 @@
+﻿{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-10T00:00:00Z",
+  "title": "Design System: Jairo Rocha Imóveis",
+  "extensions": {
+    "shadows": [
+      {"name":"search","value":"0 14px 35px #24352b0c","purpose":"Busca sobreposta à hero."},
+      {"name":"chat","value":"0 15px 65px #0003","purpose":"Diálogo de atendimento."}
+    ],
+    "motion": [
+      {"name":"button","value":"background .2s, transform .2s","purpose":"Hover do botão, translateY(-2px)."},
+      {"name":"photo","value":"transform .5s cubic-bezier(.16,1,.3,1)","purpose":"Zoom de fotografia em hover para scale(1.035)."},
+      {"name":"hero","value":"hero-open 1.8s cubic-bezier(.16,1,.3,1) both","purpose":"Entrada da foto de scale(1.06) para scale(1)."}
+    ],
+    "breakpoints": [
+      {"name":"wide-min","value":"1600px"},
+      {"name":"compact-max","value":"1100px"},
+      {"name":"mobile-max","value":"780px"},
+      {"name":"narrow-max","value":"480px"}
+    ]
+  },
+  "components": [
+    {
+      "name":"Botão principal",
+      "kind":"button",
+      "refersTo":"button-primary",
+      "description":"Ação principal vermelha com hover e foco visível.",
+      "html":"<button class=\"ds-btn\">Buscar imóveis</button>",
+      "css":".ds-btn{background:var(--red,#e4141a);color:white;border:0;border-radius:5px;padding:16px 24px;font:700 13px/1.4 var(--font,Manrope,sans-serif);cursor:pointer;transition:background .2s,transform .2s}.ds-btn:hover{background:var(--red-dark,#b70f14);transform:translateY(-2px)}.ds-btn:focus-visible{outline:3px solid var(--red,#e4141a);outline-offset:5px}.ds-btn:disabled{cursor:not-allowed;opacity:.5}@media(prefers-reduced-motion:reduce){.ds-btn{transition:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar":"Caderno de arquitetura pernambucana",
+    "overview":"Mockup Astro editorial com fotografia ampla, busca em papel branco e identidade extraída dos materiais oficiais: vermelho do alvo, preto, branco e ouro do selo de 40 anos.",
+    "keyCharacteristics":["Escala fotográfica","Sequência editorial","Estados claros","Precisão numérica"],
+    "rules":[{"name":"Movimento reduzido","body":"prefers-reduced-motion remove animações e transições e desativa rolagem suave.","section":"elevation"}],
+    "dos":["Preservar marca e fotografias reais do catálogo público.","Identificar demonstrações e materiais a fornecer."],
+    "donts":["Não apresentar backend, autenticação ou IA conectada como prontos.","Não inventar rentabilidade ou disponibilidade confirmada."]
+  }
+}

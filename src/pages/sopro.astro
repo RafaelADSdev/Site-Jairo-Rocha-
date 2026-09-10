@@ -1,0 +1,372 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import {money} from '../data/properties';
+import {sopro} from '../data/sopro';
+import {existsSync} from 'node:fs';
+import {resolve} from 'node:path';
+
+const hasModel = existsSync(resolve('public/models/sopro.glb'));
+const {daily, occupancy, cost, price, occupancySource, occupancyLabel} = sopro.investment;
+const shotIndex = (caption: string) => sopro.photos.findIndex((photo) => photo.caption === caption);
+const shot = (caption: string) => sopro.photos[shotIndex(caption)];
+const featuredCaptions = [
+  'Vista aérea',
+  'Entrada',
+  'Acesso',
+  'Recepção',
+  'Parque aquático',
+  'Praia do Sopro',
+  'Piscina e bar',
+  'Deck',
+  'Apartamento',
+  'Quarto',
+  'Living',
+  'Varanda gourmet',
+  'Spa',
+  'Restaurante'
+];
+const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(photo.caption));
+---
+<Layout title="Sopro" overlay>
+<section class="sopro-hero">
+  <img src="/images/sopro/aereo.webp" width="1920" height="1080" alt="Vista aérea da Praia do Toque, com coqueiral, faixa de areia e o mar de São Miguel dos Milagres." fetchpriority="high"/>
+  <div class="sopro-hero-shade"></div>
+  <div class="container sopro-hero-copy">
+    <h1>Sopro.<br/>A praia sentida<br/>em <em>cada detalhe.</em></h1>
+    <p>Praia do Toque, São Miguel dos Milagres — AL. {sopro.units} unidades com piscina privativa e uma prainha só do empreendimento.</p>
+    <div class="sopro-hero-actions">
+      <button class="btn btn-cream" data-chat-open>Quero conhecer o Sopro <Icon name="arrow"/></button>
+      <a class="hero-link" href="#espacos">Ver os espaços <span><Icon name="plus" size={16}/></span></a>
+    </div>
+    <nav class="sopro-jump" aria-label="Nesta página">
+      <a href="#espacos">Espaços</a>
+      <a href="#implantacao">Implantação</a>
+      <a href="#entorno">Entorno</a>
+      <a href="#numeros">Números</a>
+      <a href="#modelo">3D</a>
+    </nav>
+  </div>
+</section>
+
+<section class="sopro-spaces" id="espacos">
+  <div class="container">
+    <div class="sopro-spaces-head">
+      <h2>Os espaços.</h2>
+      <p>Piscina privativa, prainha, restaurante, spa e a recepção — fotografias oficiais do empreendimento.</p>
+    </div>
+
+    <button type="button" class="sopro-plate sopro-plate--lead" data-sopro-photo={shotIndex('Vista aérea')} aria-label="Ampliar: Vista aérea">
+      <span class="sopro-shot-frame">
+        <img src={shot('Vista aérea').src} alt={shot('Vista aérea').alt} width={shot('Vista aérea').width} height={shot('Vista aérea').height} loading="eager"/>
+      </span>
+      <span class="sopro-shot-name">Vista aérea</span>
+    </button>
+
+    <div class="sopro-spread">
+      <article class="sopro-folio">
+        <h3>A praia não é só vista.<br/><em>É sentida.</em></h3>
+        <p>{sopro.spreads[0].text}</p>
+      </article>
+      <div class="sopro-spread-frame">
+        {['Entrada', 'Acesso', 'Recepção'].map((caption) => (
+          <button type="button" class="sopro-shot" data-sopro-photo={shotIndex(caption)} aria-label={`Ampliar: ${caption}`}>
+            <span class="sopro-shot-frame">
+              <img src={shot(caption).src} alt={shot(caption).alt} width={shot(caption).width} height={shot(caption).height} loading="lazy"/>
+            </span>
+            <span class="sopro-shot-name">{caption}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="sopro-cluster">
+      <div class="sopro-spread sopro-spread--water">
+        <button type="button" class="sopro-plate sopro-plate--flush" data-sopro-photo={shotIndex('Parque aquático')} aria-label="Ampliar: Parque aquático">
+          <span class="sopro-shot-frame">
+            <img src={shot('Parque aquático').src} alt={shot('Parque aquático').alt} width={shot('Parque aquático').width} height={shot('Parque aquático').height} loading="lazy"/>
+          </span>
+          <span class="sopro-shot-name">Parque aquático</span>
+        </button>
+        <article class="sopro-folio">
+          <h3>Praia do <em>Sopro.</em></h3>
+          <p>{sopro.spreads[1].text}</p>
+        </article>
+      </div>
+      <div class="sopro-trio">
+        {['Praia do Sopro', 'Piscina e bar', 'Deck'].map((caption) => (
+          <button type="button" class="sopro-shot" data-sopro-photo={shotIndex(caption)} aria-label={`Ampliar: ${caption}`}>
+            <span class="sopro-shot-frame">
+              <img src={shot(caption).src} alt={shot(caption).alt} width={shot(caption).width} height={shot(caption).height} loading="lazy"/>
+            </span>
+            <span class="sopro-shot-name">{caption}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="sopro-cluster">
+      <div class="sopro-spread sopro-spread--live">
+        <article class="sopro-folio">
+          <h3>120 unidades.<br/><em>29,2 m² e 34,2 m².</em></h3>
+          <p>{sopro.spreads[3].text}</p>
+        </article>
+        <button type="button" class="sopro-plate sopro-plate--flush sopro-plate--room" data-sopro-photo={shotIndex('Apartamento')} aria-label="Ampliar: Apartamento">
+          <span class="sopro-shot-frame">
+            <img src={shot('Apartamento').src} alt={shot('Apartamento').alt} width={shot('Apartamento').width} height={shot('Apartamento').height} loading="lazy"/>
+          </span>
+          <span class="sopro-shot-name">Apartamento</span>
+        </button>
+      </div>
+      <div class="sopro-rooms">
+        {['Quarto', 'Living', 'Varanda gourmet'].map((caption) => (
+          <button type="button" class:list={['sopro-shot', {'sopro-shot--portrait': shot(caption).portrait}]} data-sopro-photo={shotIndex(caption)} aria-label={`Ampliar: ${caption}`}>
+            <span class="sopro-shot-frame">
+              <img src={shot(caption).src} alt={shot(caption).alt} width={shot(caption).width} height={shot(caption).height} loading="lazy"/>
+            </span>
+            <span class="sopro-shot-name">{caption}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="sopro-spread sopro-spread--late">
+      <button type="button" class="sopro-plate sopro-plate--flush" data-sopro-photo={shotIndex('Spa')} aria-label="Ampliar: Spa">
+        <span class="sopro-shot-frame">
+          <img src={shot('Spa').src} alt={shot('Spa').alt} width={shot('Spa').width} height={shot('Spa').height} loading="lazy"/>
+        </span>
+        <span class="sopro-shot-name">Spa</span>
+      </button>
+      <article class="sopro-folio">
+        <h3><em>Late Checkout.</em></h3>
+        <p>{sopro.spreads[2].text}</p>
+      </article>
+    </div>
+
+    <button type="button" class="sopro-plate sopro-plate--wide" data-sopro-photo={shotIndex('Restaurante')} aria-label="Ampliar: Restaurante">
+      <span class="sopro-shot-frame">
+        <img src={shot('Restaurante').src} alt={shot('Restaurante').alt} width={shot('Restaurante').width} height={shot('Restaurante').height} loading="lazy"/>
+      </span>
+      <span class="sopro-shot-name">Restaurante</span>
+    </button>
+
+    <div class="sopro-index">
+      {morePhotos.map((photo) => (
+        <button type="button" class:list={['sopro-shot', {'sopro-shot--portrait': photo.portrait}]} data-sopro-photo={shotIndex(photo.caption)} aria-label={`Ampliar: ${photo.caption}`}>
+          <span class="sopro-shot-frame">
+            <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy"/>
+          </span>
+          <span class="sopro-shot-name">{photo.caption}</span>
+        </button>
+      ))}
+    </div>
+
+    <ul class="sopro-leisure">
+      {sopro.leisure.map((item) => <li>{item}</li>)}
+    </ul>
+    <p class="demo-note sopro-spaces-note">Imagens oficiais do projeto. Perspectivas ilustrativas, sujeitas a alterações na execução.</p>
+  </div>
+</section>
+<section class="sopro-plan" id="implantacao">
+  <div class="container">
+    <div class="sopro-plan-head">
+      <h2>A implantação.</h2>
+      <p>Três ruas de unidades, o lazer no centro e a praia à esquerda. O desenho do condomínio na Praia do Toque.</p>
+    </div>
+    <button type="button" class="sopro-plan-shot" data-sopro-photo={sopro.photos.length} aria-label="Ampliar a implantação do Sopro">
+      <img src={sopro.plan.src} alt={sopro.plan.alt} width={sopro.plan.width} height={sopro.plan.height} loading="lazy"/>
+      <span>{sopro.plan.caption}</span>
+    </button>
+    <p class="demo-note">Planta de implantação oficial. Áreas e paisagismo ilustrativos do projeto.</p>
+  </div>
+</section>
+<dialog class="lightbox" id="sopro-gallery" aria-label="Galeria do Sopro">
+  <button class="icon-btn" id="sopro-gallery-close" aria-label="Fechar fotografia"><Icon name="close"/></button>
+  <img id="sopro-gallery-photo" src={sopro.photos[0].src} alt={sopro.photos[0].alt}/>
+  <div class="gallery-controls">
+    <button type="button" id="sopro-prev">Anterior</button>
+    <span id="sopro-photo-counter">1 / {sopro.photos.length + 1}</span>
+    <button type="button" id="sopro-next">Seguinte</button>
+  </div>
+  <p id="sopro-gallery-caption">{sopro.photos[0].caption}</p>
+</dialog>
+
+<section class="sopro-place" id="entorno">
+  <div class="container">
+    <div class="sopro-place-head">
+      <h2>O que o Toque<br/>coloca ao alcance.</h2>
+      <p>Distâncias aproximadas a partir da Praia do Toque, na Rota Ecológica de Alagoas. Confirme o trajeto no mapa.</p>
+    </div>
+    <div class="sopro-place-layout">
+      <ol class="sopro-nearby">
+        {sopro.nearby.map((place) => (
+          <li>
+            <strong>{place.name}</strong>
+            <span>{place.detail}</span>
+            <small>{place.distance}</small>
+          </li>
+        ))}
+      </ol>
+      <div class="sopro-map">
+        <iframe title="Sopro na Praia do Toque, São Miguel dos Milagres" src={sopro.embed} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        <a class="text-link" href={sopro.maps} target="_blank" rel="noreferrer">Abrir no Google Maps <Icon name="diagonal" size={16}/></a>
+        <p class="demo-note">{sopro.address}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sopro-yield" id="numeros">
+  <div class="sopro-proof">
+    <div class="container sopro-proof-layout">
+      <div class="sopro-proof-copy">
+        <h2>Um verdadeiro paraíso<br/><em>para investir.</em></h2>
+        <p class="sopro-proof-lead">O Sopro é muito mais do que um empreendimento de praia. É conquistar o privilégio de investir onde todos sonham passar férias.</p>
+      </div>
+      <div class="sopro-proof-figure">
+        <img src="/images/sopro/ocupacao.webp" width="910" height="648" alt="Vista aérea da Praia do Toque, com coqueiral, faixa de areia e o mar." loading="lazy"/>
+        <p class="sopro-proof-stat">
+          <strong>{occupancy}<span>%</span></strong>
+          <b>{occupancyLabel}</b>
+        </p>
+      </div>
+      <div class="sopro-proof-side">
+        <img src="/images/sopro/toque-entrada.webp" width="446" height="644" alt="Placa de bem-vindo na Praia do Toque, sob uma árvore." loading="lazy"/>
+        <img src="/images/sopro/toque-orla.webp" width="446" height="646" alt="Orla da Praia do Toque, com ondas na areia e céu aberto." loading="lazy"/>
+      </div>
+      <p class="demo-note sopro-proof-note">* Dados da {occupancySource}. Média do destino — não é garantia de ocupação ou renda da unidade.</p>
+    </div>
+  </div>
+  <div class="section container">
+  <div class="section-heading">
+    <div>
+      <h2>Antes de decidir,<br/>imagine os números.</h2>
+      <p>Um cenário de locação por temporada para o Sopro. Studio / 1 quarto na Rota Ecológica. A ocupação parte da média da {occupancySource}.</p>
+    </div>
+    <span class="demo-note">Simulação ilustrativa · premissas editáveis · não é garantia de renda</span>
+  </div>
+  <div class="simulator">
+    <form class="sim-form" id="sopro-sim-form">
+      <label class="field wide">Valor do investimento
+        <input id="sopro-investment" type="number" value={price} min="10000" max="100000000" step="1000" required/>
+      </label>
+      <label class="field wide">
+        <span class="range-heading">Diária média anual <output id="sopro-daily-label">{money(daily)}</output></span>
+        <input id="sopro-daily" type="range" min="100" max="2000" step="10" value={daily}/>
+      </label>
+      <label class="field wide">
+        <span class="range-heading">Ocupação anual <output id="sopro-occupancy-label">{occupancy}%</output></span>
+        <input id="sopro-occupancy" type="range" min="5" max="95" step="1" value={occupancy}/>
+      </label>
+      <label class="field wide">
+        <span class="range-heading">Custos operacionais <output id="sopro-cost-label">{cost}%</output></span>
+        <input id="sopro-cost" type="range" min="0" max="80" step="1" value={cost}/>
+      </label>
+      <p class="sim-disclaimer">Alta temporada em jan, fev e dez, sem dupla contagem. Custos saem primeiro; em seguida, um IR efetivo estimado de <span id="sopro-tax-rate">15%</span>. A ocupação inicial usa a média da {occupancySource}. Valorização e financiamento ficam de fora. Preço de referência pública a partir de {money(price)}.</p>
+    </form>
+    <aside class="simulation-result" aria-live="polite">
+      <span>Renda mensal líquida · estimativa</span>
+      <strong id="sopro-net-month">—</strong>
+      <small>Sopro · São Miguel dos Milagres · studio / 1 quarto</small>
+      <p class="sim-season" id="sopro-high-season">—</p>
+      <dl class="result-ledger">
+        <div><dt>Receita bruta anual</dt><dd id="sopro-gross">—</dd></div>
+        <div><dt>Custos operacionais</dt><dd id="sopro-cost-total">—</dd></div>
+        <div><dt>IR efetivo estimado</dt><dd id="sopro-tax-total">—</dd></div>
+        <div><dt>Renda anual líquida</dt><dd id="sopro-net-year">—</dd></div>
+        <div><dt>Yield líquido estabilizado</dt><dd id="sopro-yield">—</dd></div>
+        <div><dt>Diárias estimadas</dt><dd id="sopro-nights">—</dd></div>
+      </dl>
+      <p>Não é garantia de renda. Valide condomínio, canal, sazonalidade e tributação da unidade com a equipe.</p>
+      <button class="btn btn-cream" data-chat-open>Quero falar sobre o Sopro <Icon name="arrow" size={17}/></button>
+    </aside>
+  </div>
+  </div>
+</section>
+
+<section class="sopro-stage" id="modelo">
+  <div class="container">
+    <div class="sopro-stage-head">
+      <h2>Entre. Gire. Imagine.</h2>
+      <p>O modelo 3D do Sopro será incorporado aqui, exportado do Blender em GLB.</p>
+    </div>
+    {hasModel ? (
+      <div class="sopro-viewer">
+        <model-viewer
+          src={sopro.modelPath}
+          alt="Modelo 3D do empreendimento Sopro"
+          camera-controls
+          touch-action="pan-y"
+          shadow-intensity="1"
+          exposure="1"
+          id="sopro-model"
+        ></model-viewer>
+      </div>
+    ) : (
+      <div class="sopro-viewer sopro-viewer--empty">
+        <Icon name="cube" size={48}/>
+        <h3>O modelo 3D ainda não chegou.</h3>
+        <p>Este palco receberá o modelo do Sopro. Você poderá girar, aproximar e explorar o empreendimento sem sair da página.</p>
+        <p class="demo-note">Prévia · coloque o arquivo em public/models/sopro.glb</p>
+      </div>
+    )}
+  </div>
+</section>
+
+<section class="sopro-close">
+  <div class="container">
+    <div class="sopro-close-card">
+      <div>
+        <small>Valor de referência</small>
+        <strong>{money(sopro.priceFrom)}</strong>
+        <p>A partir deste valor, sujeito a confirmação. {sopro.units} unidades · {sopro.areas} · piscina privativa em todas.</p>
+      </div>
+      <button class="btn" data-chat-open>Quero conhecer este imóvel <Icon name="arrow" size={18}/></button>
+    </div>
+  </div>
+</section>
+<script>
+  import '../scripts/sopro-sim';
+  const photos = [...document.querySelectorAll<HTMLButtonElement>('[data-sopro-photo]')];
+  const gallery = document.querySelector<HTMLDialogElement>('#sopro-gallery');
+  const galleryPhoto = document.querySelector<HTMLImageElement>('#sopro-gallery-photo');
+  const galleryCaption = document.querySelector('#sopro-gallery-caption');
+  const galleryCounter = document.querySelector('#sopro-photo-counter');
+  let current = 0;
+  const shotAt = (index: number) => photos.find((button) => Number(button.dataset.soproPhoto) === index) ?? photos[index];
+  const show = (index: number) => {
+    if (!photos.length || !galleryPhoto) return;
+    current = (index + photos.length) % photos.length;
+    const shot = shotAt(current);
+    if (!shot) return;
+    const img = shot.querySelector('img');
+    if (img) {
+      galleryPhoto.src = img.src;
+      galleryPhoto.alt = img.alt;
+    }
+    if (galleryCaption) galleryCaption.textContent = shot.querySelector('.sopro-shot-name')?.textContent || '';
+    if (galleryCounter) galleryCounter.textContent = `${current + 1} / ${photos.length}`;
+  };
+  photos.forEach((button) => button.addEventListener('click', () => {
+    show(Number(button.dataset.soproPhoto));
+    gallery?.showModal();
+  }));
+  document.querySelector('#sopro-prev')?.addEventListener('click', () => show(current - 1));
+  document.querySelector('#sopro-next')?.addEventListener('click', () => show(current + 1));
+  document.querySelector('#sopro-gallery-close')?.addEventListener('click', () => gallery?.close());
+  gallery?.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') show(current - 1);
+    if (event.key === 'ArrowRight') show(current + 1);
+  });
+  const model = document.querySelector('#sopro-model');
+  if (model) {
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+    document.head.append(script);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      model.setAttribute('auto-rotate', '');
+    }
+  }
+</script>
+</Layout>
