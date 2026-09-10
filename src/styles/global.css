@@ -707,7 +707,7 @@ nav a[aria-current=page]{color:var(--red)}
 .sopro-viewer--empty svg{color:var(--gold-soft);margin-bottom:18px}
 .sopro-viewer--empty h3{font-size:28px;font-weight:500;color:#fff}
 .sopro-viewer--empty p{margin-top:14px;max-width:46ch;color:#d8d0c4}
-.sopro-viewer--empty .demo-note{color:#b9b1a4}
+.sopro-viewer--empty .demo-note,.sopro-stage .demo-note{color:#b9b1a4}
 .sopro-close{
   background:var(--night);
   padding:0 0 88px

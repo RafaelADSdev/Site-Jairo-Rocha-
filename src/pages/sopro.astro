@@ -288,13 +288,13 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
   <div class="container">
     <div class="sopro-stage-head">
       <h2>Entre. Gire. Imagine.</h2>
-      <p>O modelo 3D do Sopro será incorporado aqui, exportado do Blender em GLB.</p>
+      <p>O bloco do Sopro em três dimensões: térreo e primeiro andar, duas unidades por pavimento, cada uma com piscina. Arraste para girar. Use o scroll para aproximar.</p>
     </div>
     {hasModel ? (
       <div class="sopro-viewer">
         <model-viewer
           src={sopro.modelPath}
-          alt="Modelo 3D do empreendimento Sopro"
+          alt="Modelo 3D do bloco do Sopro, com térreo, primeiro andar e piscinas privativas"
           camera-controls
           touch-action="pan-y"
           shadow-intensity="1"
@@ -305,11 +305,11 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
     ) : (
       <div class="sopro-viewer sopro-viewer--empty">
         <Icon name="cube" size={48}/>
-        <h3>O modelo 3D ainda não chegou.</h3>
-        <p>Este palco receberá o modelo do Sopro. Você poderá girar, aproximar e explorar o empreendimento sem sair da página.</p>
-        <p class="demo-note">Prévia · coloque o arquivo em public/models/sopro.glb</p>
+        <h3>O modelo ainda está a caminho.</h3>
+        <p>Quando chegar, você gira, aproxima e percorre o bloco sem sair da página.</p>
       </div>
     )}
+    <p class="demo-note">Prévia do bloco. Planta ilustrativa, sujeita a ajustes na execução.</p>
   </div>
 </section>
 
@@ -319,7 +319,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
       <div>
         <small>Valor de referência</small>
         <strong>{money(sopro.priceFrom)}</strong>
-        <p>A partir deste valor, sujeito a confirmação. {sopro.units} unidades · {sopro.areas} · piscina privativa em todas.</p>
+        <p>A partir deste valor, sujeito a confirmação. {sopro.units} studios — 29,2&nbsp;m² no superior e 34,2&nbsp;m² no térreo, com garden. Piscina privativa em todas.</p>
       </div>
       <button class="btn" data-chat-open>Quero conhecer este imóvel <Icon name="arrow" size={18}/></button>
     </div>
