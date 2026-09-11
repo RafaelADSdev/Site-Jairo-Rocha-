@@ -3,6 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import PropertyCard from '../components/PropertyCard.astro';
 import {properties} from '../data/properties';
+import {priceScales, bedOptions} from '../data/filters';
+import {destinations, type DestinationKey} from '../data/litoral-simulator';
+
+// Cada destino abre o simulador do litoral já configurado para ele.
+const coastDestinations: DestinationKey[] = ['porto', 'muro', 'carneiros', 'tamandare'];
 ---
 <Layout home>
 <section class="hero" aria-roledescription="carrossel" aria-label="Destaques">
@@ -48,18 +53,56 @@ import {properties} from '../data/properties';
       <button type="button" data-hero-to="0" aria-current="true">Litoral<span class="hero-progress"></span></button>
       <button type="button" data-hero-to="1">Sopro<span class="hero-progress"></span></button>
       <button type="button" data-hero-to="2">La Fleur Polinésia<span class="hero-progress"></span></button>
+      <button type="button" class="hero-pause" data-hero-pause aria-pressed="false" aria-label="Pausar a troca automática dos destaques"><Icon name="pause" size={15}/><Icon name="play" size={15}/></button>
     </div>
     <a href="#encontre">Encontre seu lugar <span>↓</span></a>
   </div>
 </section>
-<section class="search-section container" id="encontre" aria-label="Buscar imóveis"><form action="/imoveis" class="search-box"><div class="search-tabs" role="group" aria-label="Finalidade"><label><input type="radio" name="tipo" value="novos" checked/><span>Novos</span></label><label><input type="radio" name="tipo" value="seminovos"/><span>Seminovos</span></label><label><input type="radio" name="tipo" value="locacao"/><span>Locação</span></label></div><div class="search-fields"><div class="search-place" data-place-suggest><label for="place-home">Onde você quer viver?</label><div><Icon name="pin"/><input id="place-home" name="local" placeholder="Cidade, bairro ou empreendimento"/></div></div><label><span>Tipo de imóvel</span><select name="formato"><option value="">Apartamento</option></select></label><label><span>Até qual valor?</span><select name="valor"><option value="">Sem limite</option><option value="500000">R$ 500 mil</option><option value="1000000">R$ 1 milhão</option><option value="2000000">R$ 2 milhões</option></select></label><button class="btn search-submit"><Icon name="search"/>Buscar imóveis</button></div></form><p class="search-assist"><Icon name="spark" size={16}/>Ainda não sabe por onde começar? <button data-chat-open>Deixe nossa assistente ajudar <Icon name="arrow" size={15}/></button></p></section>
+<section class="search-section container" id="encontre" aria-label="Buscar imóveis">
+  <form action="/imoveis" class="search-box">
+    <div class="search-tabs" role="group" aria-label="Finalidade">
+      <label><input type="radio" name="tipo" value="novos" checked/><span>Novos</span></label>
+      <label><input type="radio" name="tipo" value="seminovos"/><span>Seminovos</span></label>
+      <label><input type="radio" name="tipo" value="locacao"/><span>Locação</span></label>
+    </div>
+    <div class="search-fields">
+      <div class="search-place" data-place-suggest>
+        <label for="place-home">Onde você quer viver?</label>
+        <div><Icon name="pin"/><input id="place-home" name="local" placeholder="Cidade, bairro ou empreendimento"/></div>
+      </div>
+      <div class="search-choice">
+        <span>Quantos quartos?</span>
+        <select name="quartos">{bedOptions.map(([value,text])=><option value={value}>{text}</option>)}</select>
+      </div>
+      <div class="search-choice">
+        <span data-price-label>{priceScales.venda.label}</span>
+        <select name="valor" data-price-select>{priceScales.venda.options.map(([value,text])=><option value={value}>{text}</option>)}</select>
+      </div>
+      <button class="btn search-submit"><Icon name="search"/>Buscar imóveis</button>
+    </div>
+  </form>
+  <p class="search-assist"><Icon name="spark" size={16}/>Ainda não sabe por onde começar? <button data-chat-open>Deixe nossa assistente ajudar <Icon name="arrow" size={15}/></button></p>
+</section>
 <section class="section container home-list" id="enderecos"><div class="section-heading"><div><h2>Endereços que merecem<br/>a sua atenção.</h2><p>Uma seleção para inspirar o seu próximo passo.</p></div><button class="text-link" type="button" data-show-all aria-expanded="false" aria-controls="home-properties"><span data-show-all-label>Ver todos os imóveis</span> <Icon name="arrow"/></button></div><div class="property-grid" id="home-properties">{properties.map((p,i)=><PropertyCard property={p} extra={i>=3}/>)}</div></section>
-<section class="coast-section"><div class="container coast-layout"><div class="coast-copy"><h2>O mar muda<br/>a sua perspectiva.<br/><em>E os seus planos.</em></h2><p>Descubra as possibilidades do litoral pernambucano. Um refúgio para os seus dias. Um novo horizonte para investir.</p><a class="btn btn-cream" href="/litoral">Encontre seu lugar ao sol <Icon name="diagonal"/></a><a class="coast-sim" href="/litoral#simulador">Quanto pode render um imóvel no litoral? <Icon name="arrow" size={18}/></a></div><div class="coast-image"><img src="/images/marine.jpg" width="1024" height="576" alt="Piscinas e jardins do La Fleur Polinésia" loading="lazy"/><div class="coast-image-caption"><span>La Fleur Polinésia<small>Porto de Galinhas · PE</small></span><a href="/imovel/la-fleur-polinesia" class="round-link" aria-label="Conhecer La Fleur Polinésia"><Icon name="diagonal"/></a></div></div></div><div class="container destination-links"><a href="/litoral">Porto de Galinhas <Icon name="diagonal" size={17}/></a><a href="/litoral">Muro Alto <Icon name="diagonal" size={17}/></a><a href="/litoral">Praia dos Carneiros <Icon name="diagonal" size={17}/></a><a href="/litoral">Tamandaré <Icon name="diagonal" size={17}/></a></div></section>
+<section class="coast-section"><div class="container coast-layout"><div class="coast-copy"><h2>O mar muda<br/>a sua perspectiva.<br/><em>E os seus planos.</em></h2><p>Descubra as possibilidades do litoral pernambucano. Um refúgio para os seus dias. Um novo horizonte para investir.</p><a class="btn btn-cream" href="/litoral">Encontre seu lugar ao sol <Icon name="diagonal"/></a><a class="coast-sim" href="/litoral#simulador">Quanto pode render um imóvel no litoral? <Icon name="arrow" size={18}/></a></div><div class="coast-image"><img src="/images/marine.jpg" width="1024" height="576" alt="Piscinas e jardins do La Fleur Polinésia" loading="lazy"/><div class="coast-image-caption"><span>La Fleur Polinésia<small>Porto de Galinhas · PE</small></span><a href="/imovel/la-fleur-polinesia" class="round-link" aria-label="Conhecer La Fleur Polinésia"><Icon name="diagonal"/></a></div></div></div><div class="container destination-links">{coastDestinations.map(key=><a href={`/litoral?destino=${key}#simulador`}>{destinations[key].label} <Icon name="diagonal" size={17}/></a>)}</div></section>
 <section class="section container story-section"><div class="story-mark"><span>40</span><i>anos de histórias.</i></div><div class="story-copy"><h2>Os endereços mudam.<br/>A confiança permanece.</h2><p>Desde 1986, a Jairo Rocha faz parte das escolhas de quem quer viver Pernambuco. Agora, uma nova experiência para aproximar você do seu próximo imóvel.</p><a class="text-link" href="/sobre">Conheça a nossa história <Icon name="arrow"/></a></div></section>
 </Layout>
 <script>
   import '../scripts/hero-carousel';
   import '../scripts/hero-sea';
   import '../scripts/place-suggest';
+  import '../scripts/search-select';
   import '../scripts/home-list';
+  import {createPriceScale} from '../scripts/price-scale';
+
+  const search = document.querySelector<HTMLFormElement>('.search-box');
+  if (search) {
+    const applyScale = createPriceScale(
+      search.querySelector<HTMLSelectElement>('[data-price-select]')!,
+      search.querySelector<HTMLElement>('[data-price-label]')!
+    );
+    const purpose = () => String(new FormData(search).get('tipo') || '');
+    search.addEventListener('change', () => applyScale(purpose()));
+    applyScale(purpose());
+  }
 </script>

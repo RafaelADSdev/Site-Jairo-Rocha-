@@ -238,6 +238,7 @@ export function animateHeroSea(hero: HTMLElement) {
     hero.classList.remove('is-sea');
   };
   motion.addEventListener('change', onMotion);
+  let resizeTick = 0;
   const ro = new ResizeObserver(() => {
     cancelAnimationFrame(resizeTick);
     resizeTick = requestAnimationFrame(() => {

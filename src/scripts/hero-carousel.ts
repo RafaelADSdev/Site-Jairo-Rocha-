@@ -9,9 +9,12 @@ export function initHeroCarousel(hero: HTMLElement) {
   const buttons = [...hero.querySelectorAll<HTMLButtonElement>('[data-hero-to]')];
   if (slides.length < 2 || buttons.length < 2) return;
 
+  const pauseButton = hero.querySelector<HTMLButtonElement>('[data-hero-pause]');
+
   let index = 0;
   let hovered = false;
   let focused = false;
+  let paused = false;
   let timer = 0;
   let progress: Animation | null = null;
 
@@ -41,7 +44,7 @@ export function initHeroCarousel(hero: HTMLElement) {
   const arm = () => {
     window.clearTimeout(timer);
     stopProgress();
-    if (reduced() || hovered || focused || document.hidden) return;
+    if (paused || reduced() || hovered || focused || document.hidden) return;
     const bar = buttons[index]?.querySelector<HTMLElement>('.hero-progress');
     if (bar) {
       progress = bar.animate(
@@ -56,6 +59,15 @@ export function initHeroCarousel(hero: HTMLElement) {
     button.addEventListener('click', () => go(Number(button.dataset.heroTo)));
   });
 
+  // No toque não existe hover, então sem este controle não há como deter o avanço automático.
+  pauseButton?.addEventListener('click', () => {
+    paused = !paused;
+    pauseButton.setAttribute('aria-pressed', String(paused));
+    pauseButton.setAttribute('aria-label', paused ? 'Retomar a troca automática dos destaques' : 'Pausar a troca automática dos destaques');
+    pauseButton.classList.toggle('is-paused', paused);
+    arm();
+  });
+
   hero.addEventListener('mouseenter', () => {
     hovered = true;
     window.clearTimeout(timer);
@@ -65,13 +77,19 @@ export function initHeroCarousel(hero: HTMLElement) {
     hovered = false;
     arm();
   });
-  hero.addEventListener('focusin', () => {
+  // O próprio botão de pausa vive dentro da hero. Se ele contasse como foco,
+  // pressionar "Retomar" não teria efeito enquanto o botão seguisse focado.
+  const holdsFocus = (node: Node | null) =>
+    node instanceof HTMLElement && hero.contains(node) && !node.closest('[data-hero-pause]');
+
+  hero.addEventListener('focusin', (event) => {
+    if (!holdsFocus(event.target as Node)) return;
     focused = true;
     window.clearTimeout(timer);
     stopProgress();
   });
   hero.addEventListener('focusout', (event) => {
-    focused = hero.contains((event as FocusEvent).relatedTarget as Node);
+    focused = holdsFocus((event as FocusEvent).relatedTarget as Node);
     if (!focused) arm();
   });
   hero.addEventListener('keydown', (event) => {

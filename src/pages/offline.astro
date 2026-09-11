@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+---
+<Layout title="Sem conexão">
+<section class="container offline-page">
+  <span class="offline-badge"><i></i> Sem conexão</span>
+  <h1>Esta página ficou<br/>do outro lado da rede.</h1>
+  <p>Você está offline, mas o que já visitou continua disponível. Assim que o sinal voltar, o portal recarrega sozinho.</p>
+  <div class="offline-actions">
+    <button class="btn" data-offline-retry>Tentar novamente <Icon name="arrow"/></button>
+    <a class="text-link" href="/">Voltar ao início <Icon name="arrow"/></a>
+  </div>
+</section>
+<script>
+  const retry = document.querySelector('[data-offline-retry]');
+  retry?.addEventListener('click', () => location.reload());
+  addEventListener('online', () => location.reload());
+</script>
+</Layout>

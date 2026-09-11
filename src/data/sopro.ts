@@ -90,12 +90,7 @@ export const sopro = {
     {name: 'Tatuamunha', detail: 'Santuário do peixe-boi', distance: 'Cerca de 10 km'}
   ],
   investment: {
-    destination: 'milagres' as const,
-    kind: 'studio' as const,
-    price: 319900,
-    daily: 520,
     occupancy: 80,
-    cost: 35,
     occupancySource: 'ABIH/AL, 2024',
     occupancyLabel: 'Taxa de ocupação média'
   }

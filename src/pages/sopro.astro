@@ -7,7 +7,7 @@ import {existsSync} from 'node:fs';
 import {resolve} from 'node:path';
 
 const hasModel = existsSync(resolve('public/models/sopro.glb'));
-const {daily, occupancy, cost, price, occupancySource, occupancyLabel} = sopro.investment;
+const {occupancy, occupancySource, occupancyLabel} = sopro.investment;
 const shotIndex = (caption: string) => sopro.photos.findIndex((photo) => photo.caption === caption);
 const shot = (caption: string) => sopro.photos[shotIndex(caption)];
 const featuredCaptions = [
@@ -237,51 +237,6 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
       <p class="demo-note sopro-proof-note">* Dados da {occupancySource}. Média do destino — não é garantia de ocupação ou renda da unidade.</p>
     </div>
   </div>
-  <div class="section container">
-  <div class="section-heading">
-    <div>
-      <h2>Antes de decidir,<br/>imagine os números.</h2>
-      <p>Um cenário de locação por temporada para o Sopro. Studio / 1 quarto na Rota Ecológica. A ocupação parte da média da {occupancySource}.</p>
-    </div>
-    <span class="demo-note">Simulação ilustrativa · premissas editáveis · não é garantia de renda</span>
-  </div>
-  <div class="simulator">
-    <form class="sim-form" id="sopro-sim-form">
-      <label class="field wide">Valor do investimento
-        <input id="sopro-investment" type="number" value={price} min="10000" max="100000000" step="1000" required/>
-      </label>
-      <label class="field wide">
-        <span class="range-heading">Diária média anual <output id="sopro-daily-label">{money(daily)}</output></span>
-        <input id="sopro-daily" type="range" min="100" max="2000" step="10" value={daily}/>
-      </label>
-      <label class="field wide">
-        <span class="range-heading">Ocupação anual <output id="sopro-occupancy-label">{occupancy}%</output></span>
-        <input id="sopro-occupancy" type="range" min="5" max="95" step="1" value={occupancy}/>
-      </label>
-      <label class="field wide">
-        <span class="range-heading">Custos operacionais <output id="sopro-cost-label">{cost}%</output></span>
-        <input id="sopro-cost" type="range" min="0" max="80" step="1" value={cost}/>
-      </label>
-      <p class="sim-disclaimer">Alta temporada em jan, fev e dez, sem dupla contagem. Custos saem primeiro; em seguida, um IR efetivo estimado de <span id="sopro-tax-rate">15%</span>. A ocupação inicial usa a média da {occupancySource}. Valorização e financiamento ficam de fora. Preço de referência pública a partir de {money(price)}.</p>
-    </form>
-    <aside class="simulation-result" aria-live="polite">
-      <span>Renda mensal líquida · estimativa</span>
-      <strong id="sopro-net-month">—</strong>
-      <small>Sopro · São Miguel dos Milagres · studio / 1 quarto</small>
-      <p class="sim-season" id="sopro-high-season">—</p>
-      <dl class="result-ledger">
-        <div><dt>Receita bruta anual</dt><dd id="sopro-gross">—</dd></div>
-        <div><dt>Custos operacionais</dt><dd id="sopro-cost-total">—</dd></div>
-        <div><dt>IR efetivo estimado</dt><dd id="sopro-tax-total">—</dd></div>
-        <div><dt>Renda anual líquida</dt><dd id="sopro-net-year">—</dd></div>
-        <div><dt>Yield líquido estabilizado</dt><dd id="sopro-yield">—</dd></div>
-        <div><dt>Diárias estimadas</dt><dd id="sopro-nights">—</dd></div>
-      </dl>
-      <p>Não é garantia de renda. Valide condomínio, canal, sazonalidade e tributação da unidade com a equipe.</p>
-      <button class="btn btn-cream" data-chat-open>Quero falar sobre o Sopro <Icon name="arrow" size={17}/></button>
-    </aside>
-  </div>
-  </div>
 </section>
 
 <section class="sopro-stage" id="modelo">
@@ -326,7 +281,6 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
   </div>
 </section>
 <script>
-  import '../scripts/sopro-sim';
   const photos = [...document.querySelectorAll<HTMLButtonElement>('[data-sopro-photo]')];
   const gallery = document.querySelector<HTMLDialogElement>('#sopro-gallery');
   const galleryPhoto = document.querySelector<HTMLImageElement>('#sopro-gallery-photo');
@@ -360,13 +314,23 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
   });
   const model = document.querySelector('#sopro-model');
   if (model) {
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
-    document.head.append(script);
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       model.setAttribute('auto-rotate', '');
     }
+    // O model-viewer pesa ~910 KB e puxa um .glb de ~3,3 MB. Nada disso precisa
+    // entrar no carregamento inicial da página: só quando o visualizador se aproxima da tela.
+    const load = () => {
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+      document.head.append(script);
+    };
+    const near = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      near.disconnect();
+      load();
+    }, {rootMargin: '400px'});
+    near.observe(model);
   }
 </script>
 </Layout>
