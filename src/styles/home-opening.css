@@ -52,9 +52,21 @@
 .home-options-grid select { display:block; border:1px solid #a59b9f; border-radius:4px; margin-top:8px; padding:8px 10px; }
 .home-search-submit { min-height:50px; grid-row:1; grid-column:2; }
 .home-search-footnote { font-size:12px; text-align:center; color:var(--home-muted); margin-top:18px; }
+.home-page:has(.home-search-section:focus-within) .chat-fab { visibility:hidden; pointer-events:none; }
+.home-brand-art { --brand-emblem-size-mobile:88px; }
 .home-opening :focus-visible { outline:3px solid #fff; outline-offset:5px; }
 @media(min-width:1100px) { .home-search-form { grid-template-columns:1.5fr 2fr auto; gap:22px; } .home-search-options { grid-row:1; grid-column:2; margin:0; } .home-search-options summary { display:none; } .home-search-options>.home-options-grid { display:grid; padding:0; gap:14px; } .home-search-submit { grid-column:3; } }
 @media(max-width:1099px) { .home-opening-layout { grid-template-columns:minmax(0,1fr) 180px; gap:24px; padding-top:48px; } .home-brand-art { width:180px; } .home-opening h1 { font-size:46px; } .home-feature-switcher { gap:20px; margin-top:30px; } .home-feature-buttons { gap:18px; } }
 @media(max-width:780px) { .home-page .site-header { height:76px; } .home-page #main-nav { top:76px; } .home-opening { min-height:0; } .home-opening-layout { grid-template-columns:minmax(0,1fr) 90px; padding-top:32px; padding-bottom:62px; column-gap:10px; } .home-opening-copy { grid-column:1/-1; } .home-signature { font-size:11px; margin-bottom:18px; } .home-opening h1 { font-size:38px; max-width:520px; line-height:1.15; } .home-opening-copy>p { max-width:42ch; font-size:15px; margin-top:18px; } .home-feature-link { margin-top:10px; } .home-brand-art { width:100px; grid-column:2; grid-row:2; align-self:center; } .home-feature-switcher { grid-column:1; grid-row:2; display:block; margin-top:18px; } .home-feature-buttons { gap:8px; flex-wrap:wrap; } .home-feature-buttons button { padding:8px 5px; min-height:44px; } .home-feature-buttons button>span { font-size:12px; } .home-feature-buttons small { display:none; } .home-feature-switcher>p { font-size:11px; text-align:left; margin-top:8px; max-width:none; } .home-feature-switcher>p a { display:inline; min-height:0; padding:0; } .home-search-surface { padding:20px 18px; } .home-search-top { display:block; padding-bottom:12px; margin-bottom:16px; } .home-search-top h2 { font-size:20px; } .home-intents { gap:8px; flex-wrap:wrap; margin-top:12px; } .home-intents button,.home-intents a { padding:10px 12px; font-size:13px; } .home-search-form { grid-template-columns:1fr; gap:0; } .home-search-submit { grid-column:1; grid-row:2; margin-top:12px; } .home-search-options { grid-row:3; } .home-options-grid { grid-template-columns:1fr; gap:16px; } .home-search-footnote { text-align:left; line-height:1.65; } .home-landscape-shade { background:linear-gradient(90deg,#071c27cf,#071c2765),linear-gradient(0deg,#0b182cbf,transparent 70%); } }
 @media(max-width:390px) { .home-opening h1 { font-size:34px; } .home-intents a { padding-inline:8px; } .home-feature-buttons { gap:4px; } }
+@media(max-width:780px) {
+ .home-opening-layout { padding-top:24px; padding-bottom:48px; row-gap:12px; }
+ .home-signature { margin-bottom:14px; }
+ .home-feature-switcher { margin-top:0; }
+ .home-brand-art { width:88px; }
+ .home-search-top { padding-bottom:10px; margin-bottom:14px; }
+ .home-intents { gap:6px; flex-wrap:nowrap; }
+ .home-intents button,.home-intents a { padding-inline:8px; font-size:12px; white-space:nowrap; }
+ .home-search-options summary span { display:none; }
+}
 @media(prefers-reduced-motion:reduce) { .home-opening *, .home-search-section * { scroll-behavior:auto; transition-duration:.01ms!important; } }
