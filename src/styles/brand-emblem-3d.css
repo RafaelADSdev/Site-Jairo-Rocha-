@@ -1,12 +1,15 @@
-.brand-emblem{width:var(--brand-emblem-size,210px);display:grid;justify-items:center;position:relative;color:#fff;isolation:isolate}
-.brand-emblem__stage{position:relative;width:100%;aspect-ratio:1;filter:drop-shadow(0 14px 14px rgb(0 0 0 / .18))}
-.brand-emblem__fallback,.brand-emblem__stage canvas{display:block;width:100%;height:100%;position:absolute;inset:0}
-.brand-emblem__fallback{opacity:1}
+.brand-emblem{width:var(--brand-emblem-size,320px);position:relative;color:#171717;isolation:isolate;container-type:inline-size}
+.brand-emblem__stage{position:relative;width:100%;aspect-ratio:3.2;min-height:44px;filter:drop-shadow(0 9px 10px rgb(0 0 0 / .19))}
+.brand-emblem__fallback{display:flex;align-items:center;gap:5%;position:absolute;inset:7% 5%;padding:4% 5%;background:#fff;border-radius:5px;opacity:1}
+.brand-emblem__fallback img{display:block;width:68%;height:auto;max-height:100%;object-fit:contain}
+.brand-emblem__anniversary{align-self:center;display:flex;flex-direction:column;justify-content:center;border-left:1px solid #aaa7;padding-left:7%;color:#856a24;line-height:.85;text-align:center}
+.brand-emblem__anniversary b{font:700 14cqw/.85 'Manrope',sans-serif;letter-spacing:-.07em}
+.brand-emblem__anniversary small{font:italic 400 5cqw/1 'Manrope',sans-serif;margin-top:2px}
+.brand-emblem__stage canvas{display:block;width:100%;height:100%;position:absolute;inset:0;pointer-events:none}
 .brand-emblem[data-brand-state="ready"] .brand-emblem__fallback,.brand-emblem[data-brand-state="paused"] .brand-emblem__fallback{opacity:0}
-.brand-emblem__toggle{min-height:44px;max-width:100%;padding:8px 12px;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid rgb(255 255 255 / .55);border-radius:999px;background:#251d1fe6;color:#fff;font:inherit;font-size:12px;font-weight:600;line-height:1.25;cursor:pointer;text-align:center}
-.brand-emblem__toggle:hover{background:#39292e}
-.brand-emblem__toggle:focus-visible{outline:3px solid #fff;outline-offset:4px}
-.brand-emblem__toggle:disabled{cursor:default;color:#fff;opacity:1}
-.brand-emblem__control-icon{font:20px/1 sans-serif}
+.brand-emblem__toggle{position:absolute;inset:0;z-index:2;display:block;min-height:44px;width:100%;padding:0;border:0;border-radius:6px;background:transparent;color:inherit;cursor:pointer}
+.brand-emblem__toggle:hover{background:transparent}
+.brand-emblem__toggle:focus-visible{outline:3px solid #fff;outline-offset:3px;box-shadow:0 0 0 6px #581621}
+.brand-emblem__toggle:disabled{cursor:default;opacity:1}
 .brand-emblem__status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
-@media(max-width:780px){.brand-emblem{width:var(--brand-emblem-size-mobile,120px)}.brand-emblem__toggle{font-size:11px;padding-inline:9px}.brand-emblem__control-icon{font-size:16px}}
+@media(max-width:780px){.brand-emblem{width:var(--brand-emblem-size-mobile,140px)}}

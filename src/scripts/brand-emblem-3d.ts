@@ -1,6 +1,6 @@
 type Disposable = {dispose: () => void};
 
-/** The red emblem is decorative; the complete brand remains in the header. */
+/** Original complete wordmark and anniversary artwork on a real beveled 3D sign. */
 export function initBrandEmblems() {
   document.querySelectorAll<HTMLElement>('[data-brand-emblem]').forEach(initEmblem);
 }
@@ -22,7 +22,7 @@ function initEmblem(root: HTMLElement) {
   let frame = 0;
   let idle = 0;
   let previousTime = 0;
-  let angle = -.25;
+  let angle = -.10;
   let render: (() => void) | undefined;
   let resize: (() => void) | undefined;
   const resources: Disposable[] = [];
@@ -32,6 +32,7 @@ function initEmblem(root: HTMLElement) {
     root.dataset.brandState = state;
     label.textContent = text;
     button.setAttribute('aria-label', text);
+    button.title = text;
     button.disabled = state === 'loading' || (state === 'paused' && reduced.matches);
     if (announcement) status.textContent = announcement;
   };
@@ -49,9 +50,13 @@ function initEmblem(root: HTMLElement) {
       sync();
       return;
     }
-    const elapsed = previousTime ? Math.min((time - previousTime) / 1000, .05) : 0;
+    if (previousTime && time - previousTime < 1000 / 24) {
+      frame = requestAnimationFrame(animate);
+      return;
+    }
+    const elapsed = previousTime ? Math.min((time - previousTime) / 1000, .1) : 0;
     previousTime = time;
-    angle += elapsed * Math.PI * 2 / 16;
+    angle += elapsed * Math.PI * 2 / 20;
     render!();
     frame = requestAnimationFrame(animate);
   };
@@ -60,24 +65,27 @@ function initEmblem(root: HTMLElement) {
     if (!render || disposed) return;
     render();
     if (canMove()) {
-      setState('ready', 'Pausar giro 3D');
+      setState('ready', 'Pausar giro da logo 3D');
       frame = requestAnimationFrame(animate);
     } else {
-      setState('paused', reduced.matches ? 'Símbolo 3D estático' : userPaused ? 'Retomar giro 3D' : 'Pausar giro 3D');
+      setState('paused', reduced.matches ? 'Logo 3D estática — movimento reduzido' : userPaused ? 'Retomar giro da logo 3D' : 'Pausar giro da logo 3D');
     }
   };
 
   const initialize = async () => {
     if (loading || render || disposed) return;
     loading = true;
-    setState('loading', 'Carregando símbolo 3D');
+    setState('loading', 'Carregando logo completa em 3D');
     try {
-      // No renderer or Three.js download until desktop idle/visibility, or explicit opt-in.
+      // Load after idle/visibility; reduced-motion visitors retain the complete static logo.
       const THREE = await import('three');
+      const logo = new Image();
+      logo.src = '/images/logo.webp';
+      await Promise.all([logo.decode(), document.fonts.load('700 230px Manrope'), document.fonts.load('400 82px Manrope')]);
       if (disposed) return;
       const renderer = new THREE.WebGLRenderer({alpha: true, antialias: true, powerPreference: 'low-power'});
       resources.push(renderer);
-      renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+      renderer.setPixelRatio(Math.min(devicePixelRatio, mobile.matches ? 1.25 : 1.5));
       renderer.setClearColor(0x000000, 0);
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       // Preserve the brand red instead of filmic tone mapping shifting it coral.
@@ -85,27 +93,72 @@ function initEmblem(root: HTMLElement) {
       renderer.domElement.dataset.brandCanvas = '';
       renderer.domElement.setAttribute('aria-hidden', 'true');
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(35, 1, .1, 30);
-      camera.position.set(0, 0, 4.6);
+      const camera = new THREE.OrthographicCamera(-2, 2, .625, -.625, .1, 30);
+      camera.position.set(0, 0, 5);
       const emblem = new THREE.Group();
-      emblem.rotation.x = -.13;
-      emblem.rotation.z = -.1;
+      emblem.rotation.x = -.035;
       scene.add(emblem);
+      // The original raster wordmark is preserved, not approximated with a substitute font.
+      const artwork = document.createElement('canvas');
+      artwork.width = 1536;
+      artwork.height = 440;
+      const context = artwork.getContext('2d');
+      if (!context) throw new Error('Canvas 2D is unavailable');
+      context.fillStyle = '#ffffff';
+      context.fillRect(0, 0, artwork.width, artwork.height);
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = 'high';
+      context.drawImage(logo, 70, 54, 925, 333);
+      context.fillStyle = '#d0ceca';
+      context.fillRect(1060, 65, 3, 308);
+      context.fillStyle = '#856a24';
+      context.textAlign = 'center';
+      context.font = '700 230px Manrope';
+      context.fillText('40', 1273, 266);
+      context.font = 'italic 400 82px Manrope';
+      context.fillText('anos', 1278, 365);
+      const texture = new THREE.CanvasTexture(artwork);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 4);
+      resources.push(texture);
+
+      const width = 3.6;
+      const height = width * artwork.height / artwork.width;
+      const radius = .07;
+      const left = -width / 2;
+      const bottom = -height / 2;
       const shape = new THREE.Shape();
-      shape.absarc(0, 0, 1, 0, Math.PI * 2, false);
-      const hole = new THREE.Path();
-      hole.absarc(0, 0, .70, 0, Math.PI * 2, true);
-      shape.holes.push(hole);
-      const disc = new THREE.Shape();
-      disc.absarc(0, 0, .37, 0, Math.PI * 2, false);
-      const material = new THREE.MeshStandardMaterial({color: 0xe90012, metalness: .25, roughness: .30});
-      resources.push(material);
-      for (const outline of [shape, disc]) {
-        const geometry = new THREE.ExtrudeGeometry(outline, {depth: .17, bevelEnabled: true, bevelThickness: .018, bevelSize: .018, bevelSegments: 3, curveSegments: 64, steps: 1});
-        geometry.translate(0, 0, -.085);
-        resources.push(geometry);
-        emblem.add(new THREE.Mesh(geometry, material));
+      shape.moveTo(left + radius, bottom);
+      shape.lineTo(left + width - radius, bottom);
+      shape.quadraticCurveTo(left + width, bottom, left + width, bottom + radius);
+      shape.lineTo(left + width, bottom + height - radius);
+      shape.quadraticCurveTo(left + width, bottom + height, left + width - radius, bottom + height);
+      shape.lineTo(left + radius, bottom + height);
+      shape.quadraticCurveTo(left, bottom + height, left, bottom + height - radius);
+      shape.lineTo(left, bottom + radius);
+      shape.quadraticCurveTo(left, bottom, left + radius, bottom);
+      const volume = new THREE.ExtrudeGeometry(shape, {depth: .12, bevelEnabled: true, bevelThickness: .016, bevelSize: .016, bevelSegments: 3, curveSegments: 12, steps: 1});
+      volume.translate(0, 0, -.06);
+      const edgeMaterial = new THREE.MeshStandardMaterial({color: 0xf4f1eb, metalness: .22, roughness: .3});
+      resources.push(volume, edgeMaterial);
+      emblem.add(new THREE.Mesh(volume, edgeMaterial));
+      const faceGeometry = new THREE.ShapeGeometry(shape, 12);
+      const positions = faceGeometry.attributes.position;
+      const uv = faceGeometry.attributes.uv;
+      for (let index = 0; index < positions.count; index++) {
+        uv.setXY(index, (positions.getX(index) + width / 2) / width, (positions.getY(index) + height / 2) / height);
       }
+      uv.needsUpdate = true;
+      // Printed front/back artwork stays readable; the plaque, not the letters, is extruded.
+      const faceMaterial = new THREE.MeshBasicMaterial({map: texture, toneMapped: false});
+      resources.push(faceGeometry, faceMaterial);
+      const front = new THREE.Mesh(faceGeometry, faceMaterial);
+      front.position.z = .078;
+      emblem.add(front);
+      const back = new THREE.Mesh(faceGeometry, faceMaterial);
+      back.rotation.y = Math.PI;
+      back.position.z = -.078;
+      emblem.add(back);
       scene.add(new THREE.HemisphereLight(0xffffff, 0x873c4a, 1.5));
       const key = new THREE.DirectionalLight(0xfff1e5, 3);
       key.position.set(-3, 4, 6);
@@ -114,18 +167,27 @@ function initEmblem(root: HTMLElement) {
       rim.position.set(3, 1, -4);
       scene.add(rim);
       render = () => {emblem.rotation.y = angle; renderer.render(scene, camera);};
-      resize = () => {const size = Math.max(1, stage.clientWidth); renderer.setSize(size, size, false); render?.();};
+      resize = () => {
+        const stageWidth = Math.max(1, stage.clientWidth);
+        const stageHeight = Math.max(44, stage.clientHeight);
+        const aspect = stageWidth / stageHeight;
+        camera.left = -.625 * aspect;
+        camera.right = .625 * aspect;
+        camera.updateProjectionMatrix();
+        renderer.setSize(stageWidth, stageHeight, false);
+        render?.();
+      };
       stage.append(renderer.domElement);
       resizeObserver = new ResizeObserver(resize);
       resizeObserver.observe(stage);
       resize();
       renderer.domElement.addEventListener('webglcontextlost', (event) => {
         event.preventDefault();
-        fail('A visualização 3D foi interrompida. O símbolo original continua visível.');
+        fail('A visualização 3D foi interrompida. A logo completa continua visível.');
       }, {once: true});
       sync();
     } catch {
-      fail('Não foi possível abrir o 3D neste dispositivo. O símbolo original continua visível.');
+      fail('Não foi possível abrir o 3D neste dispositivo. A logo completa continua visível.');
     } finally {
       loading = false;
     }
@@ -136,10 +198,10 @@ function initEmblem(root: HTMLElement) {
     resizeObserver?.disconnect();
     resources.splice(0).forEach(resource => resource.dispose());
     stage.querySelector('canvas')?.remove();
-    setState('error', 'Tentar símbolo 3D novamente', message);
+    setState('error', 'Tentar logo completa em 3D novamente', message);
   };
   const autoStart = () => {
-    if (requested || render || loading || disposed || !visible || document.hidden || reduced.matches || mobile.matches) return;
+    if (requested || render || loading || disposed || !visible || document.hidden || reduced.matches) return;
     requested = true;
     void initialize();
   };
@@ -184,7 +246,7 @@ function initEmblem(root: HTMLElement) {
     document.removeEventListener('visibilitychange', onVisibility);
     resources.splice(0).forEach(resource => resource.dispose());
     stage.querySelector('canvas')?.remove();
-    setState('fallback', 'Ativar símbolo 3D');
+    setState('fallback', 'Ativar logo completa em 3D');
     button.disabled = true;
     window.addEventListener('pageshow', (event) => {
       if (event.persisted) {
