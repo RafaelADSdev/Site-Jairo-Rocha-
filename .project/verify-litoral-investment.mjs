@@ -4,7 +4,8 @@ const browser = await chromium.launch({channel:'chrome',headless:true});
 try {
  const page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
  const errors=[]; page.on('pageerror',e=>errors.push(e.message));
- await page.goto('http://localhost:4322/litoral');
+ await page.goto('http://localhost:4322/litoral?destino=carneiros#simulador');
+ assert.equal(await page.locator('#investor-destination').inputValue(),'carneiros','Homepage destination links remain supported');
  assert.equal(await page.locator('[data-investor]').count(),1,'Evidence-backed investor experience exists');
  await page.locator('[data-rental-details] > summary').click();
  for(const destination of ['porto','muro','carneiros','tamandare']) {
