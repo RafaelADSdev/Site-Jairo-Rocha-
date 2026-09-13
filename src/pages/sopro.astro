@@ -284,8 +284,8 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
 <section class="sopro-stage" id="modelo">
   <div class="container">
     <div class="sopro-stage-head">
-      <h2>Entre. Gire. Imagine.</h2>
-      <p>O bloco do Sopro em três dimensões: térreo e primeiro andar, duas unidades por pavimento, cada uma com piscina. O modelo de 3,3 MB só é carregado quando você escolhe explorar.</p>
+      <h2>Explore um bloco do Sopro.</h2>
+      <p>Comece pelo exterior e alterne para as vistas técnicas do térreo e do pavimento superior. O modelo de 3,3 MB só é carregado quando você escolhe explorar.</p>
     </div>
     {hasModel ? (
       <div class="sopro-viewer" id="sopro-viewer" data-model-state="idle" aria-busy="false">
@@ -305,11 +305,33 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
             <button class="btn btn-cream" type="button" id="sopro-model-load">Abrir experiência 3D <Icon name="arrow" size={17}/></button>
           </div>
         </div>
-        <div class="sopro-model-host" id="sopro-model-host" hidden></div>
+        <div class="sopro-model-host" id="sopro-model-host" hidden>
+          <div class="sopro-model-canvas" id="sopro-model-canvas"></div>
+          <div class="sopro-model-topbar">
+            <span class="sopro-model-live"><i aria-hidden="true"></i> Representação interativa</span>
+            <button class="sopro-model-fullscreen" type="button" id="sopro-model-fullscreen" aria-label="Ver em tela cheia" aria-pressed="false">
+              <Icon name="maximize" size={18}/><span>Tela cheia</span>
+            </button>
+          </div>
+          <div class="sopro-model-guide">
+            <div class="sopro-model-tabs" role="tablist" aria-label="Vistas do modelo 3D">
+              <button type="button" role="tab" aria-selected="true" tabindex="0" aria-controls="sopro-model-canvas" data-model-view-button="exterior">Exterior</button>
+              <button type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="sopro-model-canvas" data-model-view-button="terreo">Térreo</button>
+              <button type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="sopro-model-canvas" data-model-view-button="superior">Superior</button>
+            </div>
+            <div class="sopro-model-view-copy" aria-live="polite">
+              <small data-model-view-label>Vista arquitetônica</small>
+              <strong data-model-view-title>Bloco completo</strong>
+              <p data-model-view-copy>Duas unidades por pavimento, piscinas privativas e a área externa do conjunto.</p>
+            </div>
+            <p class="sopro-model-gesture"><Icon name="cube" size={17}/><span><strong>Arraste para girar.</strong> Use dois dedos ou a roda para aproximar.</span></p>
+          </div>
+        </div>
         <div class="sopro-model-loading" role="status" aria-live="polite" hidden>
           <span class="sopro-model-spinner" aria-hidden="true"></span>
           <strong>Preparando o Sopro em 3D</strong>
-          <span>Carregando o visualizador e o modelo…</span>
+          <div class="sopro-model-progress" role="progressbar" aria-label="Carregamento do modelo 3D" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+          <span data-model-progress-copy>Carregando o visualizador e o modelo…</span>
         </div>
         <div class="sopro-model-error" role="alert" hidden>
           <Icon name="cube" size={38}/>
@@ -329,7 +351,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
         <p>Quando chegar, você gira, aproxima e percorre o bloco sem sair da página.</p>
       </div>
     )}
-    <p class="demo-note">Prévia do bloco. Planta ilustrativa, sujeita a ajustes na execução.</p>
+    <p class="demo-note">Representação 3D interativa baseada no material comercial. Elementos, dimensões e acabamentos sujeitos a confirmação.</p>
   </div>
 </section>
 
@@ -380,13 +402,51 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
   const modelShell = document.querySelector<HTMLElement>('#sopro-viewer');
   const modelCover = modelShell?.querySelector<HTMLElement>('.sopro-model-cover');
   const modelHost = document.querySelector<HTMLElement>('#sopro-model-host');
+  const modelCanvas = document.querySelector<HTMLElement>('#sopro-model-canvas');
   const modelLoading = modelShell?.querySelector<HTMLElement>('.sopro-model-loading');
   const modelError = modelShell?.querySelector<HTMLElement>('.sopro-model-error');
   const modelLoad = document.querySelector<HTMLButtonElement>('#sopro-model-load');
   const modelRetry = document.querySelector<HTMLButtonElement>('#sopro-model-retry');
+  const modelFullscreen = document.querySelector<HTMLButtonElement>('#sopro-model-fullscreen');
+  const modelProgress = modelShell?.querySelector<HTMLElement>('.sopro-model-progress');
+  const modelProgressFill = modelProgress?.querySelector<HTMLElement>('span');
+  const modelProgressCopy = modelShell?.querySelector<HTMLElement>('[data-model-progress-copy]');
+  const modelViewLabel = modelShell?.querySelector<HTMLElement>('[data-model-view-label]');
+  const modelViewTitle = modelShell?.querySelector<HTMLElement>('[data-model-view-title]');
+  const modelViewCopy = modelShell?.querySelector<HTMLElement>('[data-model-view-copy]');
+  const modelViewButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-model-view-button]')];
   let modelTimeout: ReturnType<typeof setTimeout> | undefined;
+  let modelIsVisible = false;
 
   type ModelState = 'idle' | 'loading' | 'ready' | 'error';
+  type ModelView = 'exterior' | 'terreo' | 'superior';
+  const modelViews: Record<ModelView, {target: string; orbit: string; fieldOfView: string; label: string; title: string; copy: string}> = {
+    exterior: {
+      target: '40.26m 2.4m -4.14m',
+      orbit: '-35deg 67deg 27m',
+      fieldOfView: '32deg',
+      label: 'Vista arquitetônica',
+      title: 'Bloco completo',
+      copy: 'Duas unidades por pavimento, piscinas privativas e a área externa do conjunto.',
+    },
+    terreo: {
+      target: '7.24m 0.8m -4.14m',
+      orbit: '0deg 5deg 20m',
+      fieldOfView: '30deg',
+      label: 'Planta 3D',
+      title: 'Térreo com garden',
+      copy: 'Duas unidades espelhadas, garden e piscinas privativas junto às varandas.',
+    },
+    superior: {
+      target: '23.73m 0.8m -4.14m',
+      orbit: '0deg 5deg 18m',
+      fieldOfView: '30deg',
+      label: 'Planta 3D',
+      title: 'Pavimento superior',
+      copy: 'Duas unidades espelhadas no primeiro andar, ambas com piscina e varanda gourmet.',
+    },
+  };
+  const syncModelFocus = () => document.body.classList.toggle('sopro-model-active', modelIsVisible && modelShell?.dataset.modelState === 'ready');
   const setModelState = (state: ModelState) => {
     if (!modelShell || !modelCover || !modelHost || !modelLoading || !modelError) return;
     modelShell.dataset.modelState = state;
@@ -395,18 +455,47 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
     modelHost.hidden = state === 'idle' || state === 'error';
     modelLoading.hidden = state !== 'loading';
     modelError.hidden = state !== 'error';
+    syncModelFocus();
   };
 
   const failModel = () => {
     if (modelTimeout) clearTimeout(modelTimeout);
-    modelHost?.replaceChildren();
+    modelCanvas?.replaceChildren();
     setModelState('error');
   };
 
+  const applyModelView = (view: ModelView, focus = false) => {
+    const model = document.querySelector<HTMLElement>('#sopro-model');
+    const preset = modelViews[view];
+    if (!model || !modelShell || !preset) return;
+    modelShell.dataset.modelView = view;
+    model.setAttribute('camera-target', preset.target);
+    model.setAttribute('camera-orbit', preset.orbit);
+    model.setAttribute('field-of-view', preset.fieldOfView);
+    model.removeAttribute('auto-rotate');
+    if (modelViewLabel) modelViewLabel.textContent = preset.label;
+    if (modelViewTitle) modelViewTitle.textContent = preset.title;
+    if (modelViewCopy) modelViewCopy.textContent = preset.copy;
+    modelViewButtons.forEach((button) => {
+      const selected = button.dataset.modelViewButton === view;
+      button.setAttribute('aria-selected', String(selected));
+      button.tabIndex = selected ? 0 : -1;
+      if (selected && focus) button.focus();
+    });
+  };
+
+  const updateModelProgress = (value: number) => {
+    const percent = Math.max(0, Math.min(100, Math.round(value * 100)));
+    modelProgress?.setAttribute('aria-valuenow', String(percent));
+    if (modelProgressFill) modelProgressFill.style.transform = `scaleX(${percent / 100})`;
+    if (modelProgressCopy) modelProgressCopy.textContent = percent > 0 ? `${percent}% carregado` : 'Carregando o visualizador e o modelo…';
+  };
+
   const openModel = async () => {
-    if (!modelHost || modelShell?.dataset.modelState === 'loading') return;
+    if (!modelCanvas || modelShell?.dataset.modelState === 'loading') return;
     setModelState('loading');
-    modelHost.replaceChildren();
+    modelCanvas.replaceChildren();
+    updateModelProgress(0);
 
     try {
       await import('@google/model-viewer');
@@ -416,17 +505,28 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
       model.setAttribute('alt', 'Modelo 3D do bloco do Sopro, com térreo, primeiro andar e piscinas privativas');
       model.setAttribute('camera-controls', '');
       model.setAttribute('touch-action', 'pan-y');
-      model.setAttribute('shadow-intensity', '1');
-      model.setAttribute('exposure', '1');
+      model.setAttribute('shadow-intensity', '1.25');
+      model.setAttribute('shadow-softness', '.8');
+      model.setAttribute('exposure', '.95');
       model.setAttribute('interaction-prompt', 'auto');
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) model.setAttribute('auto-rotate', '');
+      model.setAttribute('min-camera-orbit', 'auto auto 8m');
+      model.setAttribute('max-camera-orbit', 'auto 88deg 42m');
+      model.setAttribute('camera-target', modelViews.exterior.target);
+      model.setAttribute('camera-orbit', modelViews.exterior.orbit);
+      model.setAttribute('field-of-view', modelViews.exterior.fieldOfView);
 
       model.addEventListener('load', () => {
         if (modelTimeout) clearTimeout(modelTimeout);
+        updateModelProgress(1);
+        applyModelView('exterior');
         setModelState('ready');
       }, {once: true});
+      model.addEventListener('progress', (event) => {
+        const totalProgress = (event as CustomEvent<{totalProgress?: number}>).detail?.totalProgress ?? 0;
+        updateModelProgress(totalProgress);
+      });
       model.addEventListener('error', failModel, {once: true});
-      modelHost.append(model);
+      modelCanvas.append(model);
       modelTimeout = setTimeout(failModel, 20_000);
     } catch {
       failModel();
@@ -435,5 +535,36 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
 
   modelLoad?.addEventListener('click', openModel);
   modelRetry?.addEventListener('click', openModel);
+  if (modelShell) {
+    new IntersectionObserver(([entry]) => {
+      modelIsVisible = entry.isIntersecting;
+      syncModelFocus();
+    }, {threshold: .45}).observe(modelShell);
+  }
+  modelViewButtons.forEach((button, index) => {
+    button.addEventListener('click', () => applyModelView(button.dataset.modelViewButton as ModelView));
+    button.addEventListener('keydown', (event) => {
+      let next = index;
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % modelViewButtons.length;
+      else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index - 1 + modelViewButtons.length) % modelViewButtons.length;
+      else if (event.key === 'Home') next = 0;
+      else if (event.key === 'End') next = modelViewButtons.length - 1;
+      else return;
+      event.preventDefault();
+      applyModelView(modelViewButtons[next].dataset.modelViewButton as ModelView, true);
+    });
+  });
+  modelFullscreen?.addEventListener('click', async () => {
+    if (!modelShell || !document.fullscreenEnabled) return;
+    if (document.fullscreenElement === modelShell) await document.exitFullscreen();
+    else await modelShell.requestFullscreen();
+  });
+  document.addEventListener('fullscreenchange', () => {
+    const active = document.fullscreenElement === modelShell;
+    modelFullscreen?.setAttribute('aria-pressed', String(active));
+    modelFullscreen?.setAttribute('aria-label', active ? 'Sair da tela cheia' : 'Ver em tela cheia');
+    const label = modelFullscreen?.querySelector('span');
+    if (label) label.textContent = active ? 'Sair da tela cheia' : 'Tela cheia';
+  });
 </script>
 </Layout>
