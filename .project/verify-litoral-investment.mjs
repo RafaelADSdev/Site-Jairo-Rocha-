@@ -6,6 +6,7 @@ try {
  const errors=[]; page.on('pageerror',e=>errors.push(e.message));
  await page.goto('http://localhost:4322/litoral');
  assert.equal(await page.locator('[data-investor]').count(),1,'Evidence-backed investor experience exists');
+ await page.locator('[data-rental-details] > summary').click();
  for(const destination of ['porto','muro','carneiros','tamandare']) {
   await page.selectOption('#investor-destination',destination);
   assert.equal(await page.locator('[data-purchase-offer]:visible').count(),3);
@@ -14,6 +15,8 @@ try {
  await page.locator('[data-scenario="conservative"]').click();
  assert.match(await page.locator('[data-investor-output="annualResult"]').textContent(),/767,25/);
  assert.match(await page.locator('[data-result-status]').textContent(),/negativo/i);
+ assert.equal(await page.locator('[data-investor-live]').getAttribute('role'),'status');
+ await page.waitForFunction(()=>document.querySelector('[data-investor-live]').textContent.includes('negativo'));
  await page.locator('[data-scenario="intermediate"]').click();
  assert.match(await page.locator('[data-investor-output="annualResult"]').textContent(),/13\.317,19/);
  await page.locator('#daily').fill('0');
@@ -21,6 +24,9 @@ try {
  assert(await page.locator('[data-investor-copy]').isDisabled());
  await page.locator('#daily').fill('325');
  assert(await page.locator('[data-investor-results]').isVisible());
+ await page.locator('#daily').fill('1000000000001');
+ assert.equal(await page.locator('#daily').getAttribute('aria-invalid'),'true');
+ assert.notEqual(await page.locator('#error-daily').textContent(),'');
  await page.locator('#daily').fill('10');
  assert.match(await page.locator('[data-break-even]').textContent(),/não cobre/i);
  await page.locator('[data-scenario="intermediate"]').click();
@@ -35,9 +41,9 @@ try {
  for(const width of [375,768,1440]) {
   await page.setViewportSize({width,height:950});
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'No overflow '+width);
-  await page.locator('#investir').scrollIntoViewIfNeeded();
+  await page.locator('#investir').evaluate(el=>scrollTo(0,el.getBoundingClientRect().top+scrollY-30));
   await page.screenshot({path:'tmp/litoral-investor-'+width+'.png'});
-  await page.locator('#simulador').scrollIntoViewIfNeeded();
+  await page.locator('#simulador').evaluate(el=>scrollTo(0,el.getBoundingClientRect().top+scrollY-30));
   await page.screenshot({path:'tmp/litoral-investor-calculator-'+width+'.png'});
  }
  const staticPage=await browser.newPage({javaScriptEnabled:false});
