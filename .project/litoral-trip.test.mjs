@@ -15,6 +15,8 @@ test('route goes from Recife airport to selected destination',()=>{
  assert.match(drivingRoute('bad-id'),/-8.5061/);
 });
 test('itinerary adapts to short and extended stays',()=>{
+ assert.equal(itineraryFor('porto',1).length,2);
+ for(const nights of [0,-1,NaN,1.5,31]) assert.deepEqual(itineraryFor('porto',nights),[]);
  assert.equal(itineraryFor('porto',2).length,3);
  assert.match(itineraryFor('muro',7).join(' '),/7/);
  assert(itineraryFor('invalid',3).length>0);
