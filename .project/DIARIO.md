@@ -1,5 +1,26 @@
 # Diário — Site Jairo Rocha
 
+## 2026-09-13 13:51
+
+**Foco:** disponibilizar o código do portal na pasta local e iniciar o ambiente de desenvolvimento para o Alexandre.
+
+**Feito:**
+
+- Confirmado que o repositório completo está em `Site Jairo Rocha/`, no branch `codex/takeover-audit`.
+- Confirmado o remoto `origin` apontando para `RafaelADSdev/Site-Jairo-Rocha-`.
+- Servidor Astro local iniciado em `http://localhost:4322/`.
+- Site local aberto no navegador interno do Codex e mantido disponível para inspeção.
+
+**Próximos passos:**
+
+- Receber a lista de ajustes visuais, de conteúdo ou funcionais desejados.
+
+**Bloqueios / dúvidas:**
+
+- Nenhum para desenvolvimento local.
+
+---
+
 ## 2026-09-13 11:58
 
 **Foco:** assumir o projeto existente, integrar o repositório fornecido e estabelecer uma baseline segura para os próximos ajustes.
