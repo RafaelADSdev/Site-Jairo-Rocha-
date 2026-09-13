@@ -37,6 +37,8 @@ try {
  assert(await nojs.locator('h1').isVisible());
  assert(await nojs.locator('[data-home-submit]').isVisible());
  assert.equal(await nojs.locator('#home-type').inputValue(),'venda');
+ await nojs.setViewportSize({width:1440,height:1000});
+ assert(await nojs.locator('#home-type').isVisible(),'Desktop filters available without JS');
  assert.equal(errors.length,0,errors.join('\n'));
  console.log('PASS homepage: manual features, purchase/rent routing, investor link, no-JS, 3 widths.');
 } finally {await browser.close();}
