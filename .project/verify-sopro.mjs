@@ -5,6 +5,7 @@ import { chromium } from 'playwright';
 // 2. As a visitor, I choose when the 3D model downloads and see loading feedback.
 // 3. As a visitor on an unreliable connection, I get a useful fallback and can retry.
 // 4. As a mobile visitor, I receive responsive Sopro images instead of desktop originals.
+// 5. As a buyer, I can move through guided exterior, ground-floor and upper-floor 3D views.
 
 const url = 'http://localhost:4322/sopro';
 const assert = (condition, message) => {
@@ -42,9 +43,34 @@ try {
   await page.locator('#sopro-model-load').click();
   await page.waitForSelector('[data-model-state="loading"]');
   assert(await page.locator('.sopro-model-loading').isVisible(), '3D loading feedback should remain visible while downloading');
+  assert(await page.getByRole('progressbar', { name: /carregamento do modelo 3d/i }).isVisible(), '3D loading should expose determinate progress');
   await page.waitForSelector('[data-model-state="ready"]', { timeout: 15_000 });
   assert(modelRequests.length === 1, 'The GLB should download once after the visitor asks for 3D');
   assert(await page.locator('model-viewer').isVisible(), 'Loaded 3D viewer should become visible');
+
+  const viewTabs = page.getByRole('tablist', { name: /vistas do modelo 3d/i });
+  assert(await viewTabs.isVisible(), 'Ready 3D should expose guided view controls');
+  const exteriorView = page.getByRole('tab', { name: /exterior/i });
+  const groundView = page.getByRole('tab', { name: /térreo/i });
+  const upperView = page.getByRole('tab', { name: /superior/i });
+  assert(await exteriorView.getAttribute('aria-selected') === 'true', 'Exterior should be the initial guided view');
+  assert(await page.locator('#sopro-model').getAttribute('camera-target') === '40.26m 2.4m -4.14m', 'Initial camera should focus the complete block rather than all disconnected studies');
+  assert(await page.locator('[data-model-view-title]').getByText(/bloco completo/i).isVisible(), 'Exterior view should explain what is framed');
+
+  await groundView.click();
+  assert(await groundView.getAttribute('aria-selected') === 'true', 'Ground-floor tab should become selected');
+  assert(await page.locator('#sopro-viewer').getAttribute('data-model-view') === 'terreo', 'Viewer state should identify the ground-floor view');
+  assert(await page.locator('#sopro-model').getAttribute('camera-target') === '7.24m 0.8m -4.14m', 'Ground-floor preset should focus its isolated study');
+  assert(await page.locator('[data-model-view-title]').getByText(/térreo com garden/i).isVisible(), 'Ground-floor view should carry specific guidance');
+
+  await groundView.press('ArrowRight');
+  assert(await upperView.getAttribute('aria-selected') === 'true', 'Arrow keys should navigate the guided view tabs');
+  assert(await page.locator('#sopro-viewer').getAttribute('data-model-view') === 'superior', 'Viewer state should identify the upper-floor view');
+  assert(await page.locator('#sopro-model').getAttribute('camera-target') === '23.73m 0.8m -4.14m', 'Upper-floor preset should focus its isolated study');
+  assert(await page.locator('[data-model-view-title]').getByText(/pavimento superior/i).isVisible(), 'Upper-floor view should carry specific guidance');
+
+  assert(await page.getByRole('button', { name: /ver em tela cheia/i }).isVisible(), '3D experience should offer fullscreen inspection');
+  assert(await page.getByText(/arraste para girar/i).isVisible(), '3D experience should make gestures discoverable');
   await page.close();
 
   const fallbackPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
@@ -80,7 +106,7 @@ try {
   assert(imageState.unoptimized.length === 0, `Mobile selected original images: ${imageState.unoptimized.join(', ')}`);
   await imagePage.close();
 
-  console.log(JSON.stringify({ typologies: 2, threeD: 'idle -> loading -> ready; error fallback', responsiveImages: imageState.count }));
+  console.log(JSON.stringify({ typologies: 2, threeD: 'idle -> loading -> guided exterior/ground/upper; error fallback', responsiveImages: imageState.count }));
 } finally {
   await browser.close();
 }
