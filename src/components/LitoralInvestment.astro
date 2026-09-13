@@ -1,15 +1,72 @@
 ---
-import Icon from './Icon.astro';
+import {purchaseOffers,rentalOffers,destinationNames,researchDate,marketIndicators,riskNotes} from '../data/litoral-investment-evidence';
+import {investmentDefaults,calculateInvestment,investmentScenarios} from '../lib/litoral-investment';
+import '../styles/litoral-investment.css';
+const money=(value:number)=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(value);
+const initial=calculateInvestment(investmentDefaults);
+const fields=[
+ ['purchase','Preço de compra (R$)',1,undefined,.01,'Preço da unidade; não inclui os valores abaixo.'],
+ ['closing','Custos de aquisição (R$)',0,undefined,.01,'ITBI, registro, escritura e outros custos aplicáveis. Cotar para a unidade.'],
+ ['fitOut','Montagem e adequação (R$)',0,undefined,.01,'Móveis, enxoval, equipamentos e obras iniciais.'],
+ ['cashReserve','Reserva inicial de caixa (R$)',0,undefined,.01,'Capital para imprevistos; não é despesa anual.'],
+ ['daily','Diária média do ano (R$)',.01,undefined,.01,'Hospedagem por noite ocupada, sem limpeza. Não use só a diária de feriado.'],
+ ['occupancy','Ocupação anual (%)',0,100,.1,'Percentual das noites disponíveis, não só da alta temporada.'],
+] as const;
+const costs=[
+ ['fixedMonthly','Custos fixos mensais (R$)',0,undefined,.01,'Condomínio, IPTU mensalizado, internet, seguro e apoio. Exemplo: 900 + 100 + 100 + 100.'],
+ ['platformPercent','Taxa do canal (%)',0,100,.1,'Incide sobre hospedagem + limpeza cobrada. Use a taxa do seu contrato.'],
+ ['managementPercent','Gestão da hospedagem (%)',0,100,.1,'Percentual da hospedagem, sem limpeza. Adapte ao contrato.'],
+ ['reservePercent','Provisão de manutenção (%)',0,100,.1,'Percentual da hospedagem reservado para manutenção e reposição.'],
+ ['consumptionPerNight','Consumo por noite (R$)',0,undefined,.01,'Energia, água e insumos por noite ocupada.'],
+ ['averageStay','Estadia média (noites)',1,365,.1,'Define a quantidade média de trocas e limpezas.'],
+ ['cleaningIncome','Limpeza cobrada por estadia (R$)',0,undefined,.01,'Receita adicional. A taxa do canal também incide aqui.'],
+ ['cleaningCost','Limpeza paga por estadia (R$)',0,undefined,.01,'Custo de limpeza e lavanderia a cada troca.'],
+ ['blockedNights','Noites indisponíveis no ano',0,365,1,'Uso próprio, obras e bloqueios: retirados das 365 noites.'],
+] as const;
+const ledger=[['lodging','Hospedagem'],['cleaningRevenue','Limpeza cobrada'],['platform','Taxa do canal'],['management','Gestão'],['maintenance','Provisão de manutenção'],['cleaning','Limpeza e lavanderia'],['consumption','Consumo variável'],['fixedAnnual','Custos fixos anuais']] as const;
 ---
-<section class="coast-investment coast-wrap" id="simulador" aria-labelledby="coast-investment-title">
-  <details class="coast-investment-fold">
-    <summary><div><span class="coast-eyebrow">Além da estadia</span><h2 id="coast-investment-title">Está pensando em investir também?</h2><p>Abra o simulador de investimento e explore as suas próprias premissas.</p></div><span class="coast-fold-icon" aria-hidden="true">+</span></summary>
-    <div class="coast-investment-content">
-      <p class="coast-investment-note">Simulação ilustrativa · premissas editáveis. Esta conta é independente do orçamento da sua viagem e não representa promessa de rentabilidade.</p>
-      <div class="simulator"><form class="sim-form" id="sim-form"><label class="field">Seu destino<select id="destination"><option value="porto">Porto de Galinhas</option><option value="muro">Muro Alto</option><option value="carneiros">Praia dos Carneiros</option><option value="tamandare">Tamandaré</option></select></label><label class="field">Tipo de imóvel<select id="property-type"><option value="studio">Studio / 1 quarto</option><option value="dois" selected>2 quartos</option><option value="tres">3 quartos</option><option value="casa">Casa</option></select></label><label class="field wide">Valor do investimento<input id="investment" type="number" value="790000" min="10000" max="100000000" step="1000" required/></label><div class="field wide"><span class="range-heading"><label for="daily">Diária média anual</label> <output id="daily-label" for="daily">R$ 450</output></span><input id="daily" type="range" min="100" max="2000" step="10" value="450"/></div><div class="field wide"><span class="range-heading"><label for="occupancy">Ocupação anual</label> <output id="occupancy-label" for="occupancy">48%</output></span><input id="occupancy" type="range" min="5" max="95" step="1" value="48"/></div><div class="field wide"><span class="range-heading"><label for="cost">Custos operacionais</label> <output id="cost-label" for="cost">32%</output></span><input id="cost" type="range" min="0" max="80" step="1" value="32"/></div><p class="sim-disclaimer">A alta temporada (jan, fev e dez) entra no fluxo mês a mês, sem dupla contagem sobre a média anual. Os custos saem primeiro; em seguida, um IR efetivo estimado de <span id="tax-rate">15%</span>. Diária e ocupação partem das bases de cada destino e mantêm o que você ajustar. O yield líquido é a renda anual líquida dividida pelo valor do investimento. Valorização e financiamento ficam de fora desta leitura.</p></form><aside class="simulation-result"><p class="sr-only" id="sim-status" role="status" aria-live="polite"></p><span>Renda mensal líquida · estimativa</span><strong id="net-month">R$ 3.797</strong><small id="scenario-caption">Porto de Galinhas · 2 quartos</small><p class="sim-season" id="high-season">R$ 25.575 na alta (jan, fev e dez)</p><dl class="result-ledger"><div><dt>Receita bruta anual</dt><dd id="gross">R$ 78.840</dd></div><div><dt>Custos operacionais</dt><dd id="cost-total">R$ 25.229</dd></div><div><dt>IR efetivo estimado</dt><dd id="tax-total">R$ 8.042</dd></div><div><dt>Renda anual líquida</dt><dd id="net-year">R$ 45.570</dd></div><div><dt>Yield líquido estabilizado</dt><dd id="yield">5,8%</dd></div><div><dt>Diárias estimadas</dt><dd id="nights">175 noites/ano</dd></div></dl><p>Mesma conta do simulador de referência do litoral: sazonalidade calibrada, custos e imposto em camadas. Não é garantia de renda. Valide condomínio, canal e tributação da unidade.</p><button class="btn btn-cream" data-chat-open>Encontre um imóvel para meus planos <Icon name="arrow" size={17}/></button></aside></div>
-    </div>
-  </details>
+<section class="investor coast-wrap" id="investir" data-investor aria-labelledby="investor-title">
+ <header class="investor-intro"><div><span class="investor-kicker">Caderno do investidor · litoral de Pernambuco</span><h2 id="investor-title">O mar encanta.<br/>Os números precisam<br/>fazer sentido.</h2></div><div><p>Compare preços anunciados, teste os custos da operação e saiba o que conferir antes de investir.</p><p class="investor-note">Pesquisa consultada em {researchDate}. Evidência pública ajuda a decidir; não comprova a rentabilidade de uma unidade.</p><a class="coast-button" href="#simulador">Testar meu cenário <span aria-hidden="true">↓</span></a></div></header>
+ <nav class="investor-nav" aria-label="Área do investidor"><a href="#precos-litoral">Comparar preços</a><a href="#simulador">Abrir os números</a><a href="#diligencia-litoral">Conferir documentos</a></nav>
+ <section id="precos-litoral" class="investor-research" aria-labelledby="investor-prices-title">
+  <div class="investor-section-heading"><div><h3 id="investor-prices-title">Preços com endereço de origem.</h3><p>12 ofertas selecionadas, três por destino. Preço pedido não é preço de venda realizada. Disponibilidade a confirmar no anúncio.</p></div><label class="investor-filter">Consultar destino<select id="investor-destination" disabled>{Object.entries(destinationNames).map(([key,name])=><option value={key}>{name}</option>)}</select></label></div>
+  <p class="investor-note">Áreas privativas, úteis e totais não são equivalentes. Tipologias e estágios diferentes não formam uma média comparável. A seleção não representa todo o mercado.</p>
+  <div class="investor-offers">{purchaseOffers.map(offer=><article class="investor-offer" data-purchase-offer data-destination={offer.destination}>
+   <div class="investor-offer-name"><span>{destinationNames[offer.destination]}</span><h4>{offer.name}</h4><p>{offer.bedrooms} · {offer.area} m² · {offer.areaType}</p></div>
+   <div class="investor-offer-price"><span>{offer.from?'A partir de':'Preço pedido'}</span><strong>{money(offer.price)}</strong><p>{offer.stage}</p></div>
+   <div class="investor-offer-detail"><p>{offer.fees}</p><p class="investor-note">{offer.note}</p><a href={offer.url} target="_blank" rel="noopener noreferrer">Consultar anúncio original <span aria-hidden="true">↗</span></a></div>
+  </article>)}</div>
+  <details class="investor-disclosure" data-rental-details><summary>Diárias anunciadas: o que elas mostram — e o que não mostram</summary><div><p>Uma diária anunciada não é a diária média do ano. Calendários públicos não são cotações fechadas: confirme mínimo de noites, limpeza, taxas, hóspedes e disponibilidade. As hospedagens abaixo não são necessariamente as unidades à venda acima.</p>
+   <div class="investor-rentals">{rentalOffers.map(offer=><article data-rental-offer data-destination={offer.destination}><h4>{offer.name}</h4><p>{offer.typology}</p><strong>{money(offer.price)} <span>/ noite anunciada</span></strong><p>{offer.period}</p><p class="investor-note">{offer.note}</p><a href={offer.url} target="_blank" rel="noopener noreferrer">Consultar referência de hospedagem ↗</a></article>)}</div>
+  </div></details>
+  <details class="investor-disclosure"><summary>Por que duas fontes de ocupação dão números diferentes?</summary><div><p>AirDNA e AirROI usam bases e metodologias próprias. Ipojuca reúne Porto de Galinhas e Muro Alto; Tamandaré inclui Carneiros. Não são quatro mercados independentes. Não fazemos média entre as fontes nem aplicamos estes percentuais automaticamente à sua unidade.</p>
+   <ul class="investor-market">{marketIndicators.map(item=><li><strong>{item.city} · {item.provider}</strong><span>{item.occupancy}% de ocupação estimada</span><p>{item.period} · {item.note}</p><a href={item.url} target="_blank" rel="noopener noreferrer">Ver metodologia e dados ↗</a></li>)}</ul>
+   <p class="investor-note">Ocupação de mercado costuma usar noites disponíveis, não todas as noites do ano. Imóveis bloqueados, amostras e períodos mudam a leitura. Não equivale a garantia de receita ou ocupação futura.</p>
+  </div></details>
+ </section>
+ <section class="investor-calculator" id="simulador" aria-labelledby="investor-calculator-title">
+  <div class="investor-section-heading"><div><h3 id="investor-calculator-title">Quanto sobra depois da operação?</h3><p>Os números iniciais são hipóteses de cálculo, não médias de uma praia ou previsão de desempenho. Ajuste cada premissa ao imóvel.</p></div></div>
+  <div class="investor-scenarios" role="group" aria-label="Cenários hipotéticos">{Object.entries(investmentScenarios).map(([key,scenario])=><button type="button" disabled data-scenario={key} aria-pressed={key==='intermediate'}><strong>{scenario.label}</strong><span>{money(scenario.daily)} / noite · {scenario.occupancy}% ocupado</span></button>)}</div>
+  <p class="investor-note">Os cenários alteram apenas diária e ocupação. Seus custos e capital permanecem. Não têm probabilidade atribuída.</p>
+  <p class="sr-only" data-investor-live role="status" aria-live="polite" aria-atomic="true"></p>
+  <div class="investor-sim-layout">
+   <form id="investor-form" novalidate><fieldset disabled data-investor-fields><legend>Seu capital e sua operação</legend><div class="investor-fields">{fields.map(([key,label,min,max,step,hint])=><label>{label}<input id={key==='daily'?'daily':`inv-${key}`} name={key} type="number" min={min} max={max} step={step} value={investmentDefaults[key]} required inputmode="decimal" aria-describedby={`hint-${key} error-${key}`}/><small id={`hint-${key}`}>{hint}</small><span class="investor-field-error" id={`error-${key}`} data-error={key}></span></label>)}</div>
+   <details class="investor-disclosure" data-investor-costs><summary>Detalhar despesas, limpezas e uso próprio</summary><div class="investor-fields">{costs.map(([key,label,min,max,step,hint])=><label>{label}<input id={`inv-${key}`} name={key} type="number" min={min} max={max} step={step} value={investmentDefaults[key]} required inputmode="decimal" aria-describedby={`hint-${key} error-${key}`}/><small id={`hint-${key}`}>{hint}</small><span class="investor-field-error" id={`error-${key}`} data-error={key}></span></label>)}</div></details>
+   <p class="investor-note">A hipótese de taxa de canal é 16%. O Airbnb informa estruturas distintas para o Brasil: 4% no modelo dividido e 16% na taxa única, conforme o anfitrião. Não some as duas. <a href="https://www.airbnb.com.br/help/article/1857" target="_blank" rel="noopener noreferrer">Confira a regra do seu anúncio</a>.</p>
+   <button type="button" class="investor-reset" data-investor-reset>Restaurar hipóteses iniciais</button></fieldset></form>
+   <aside class="investor-result" aria-label="Resultado financeiro do cenário"><p data-investor-error role="status" hidden>Revise os campos indicados para recalcular. O resultado anterior foi ocultado.</p><div data-investor-results>
+    <p>Caixa operacional anual<br/><small>antes de IR e financiamento</small></p><strong class="investor-result-main" data-investor-output="annualResult">{money(initial.annualResult)}</strong><p data-result-status>Resultado positivo no cenário, não renda garantida.</p>
+    <div class="investor-result-secondary"><div><span>Média mensal</span><strong id="net-month" data-investor-output="monthlyResult">{money(initial.monthlyResult)}</strong></div><div><span>Retorno operacional / ano</span><strong data-investor-output="yieldPercent">{initial.yieldPercent.toFixed(2)}%</strong></div></div>
+    <dl class="investor-ledger"><div><dt>Capital total comprometido</dt><dd data-investor-output="capital">{money(initial.capital)}</dd></div>{ledger.map(([key,label])=><div><dt>{label}</dt><dd data-investor-output={key}>{money(initial[key])}</dd></div>)}<div class="investor-ledger-total"><dt>Despesas + provisão / ano</dt><dd data-investor-output="totalCosts">{money(initial.totalCosts)}</dd></div></dl>
+    <p data-night-summary></p><div class="investor-equilibrium"><h4>Ocupação de equilíbrio</h4><p data-break-even></p></div>
+    <p class="investor-result-note">Média mensal é o total anual dividido por 12, não pagamento mensal. Não inclui IR, parcelas ou juros, valorização, revenda, tributos não informados e imprevistos além das provisões. Valide com gestor e contador.</p>
+   </div></aside>
+  </div>
+  <noscript><p class="investor-note" data-investor-noscript>Ative o JavaScript para editar e recalcular. O exemplo fixo acima usa R$ 600.000 de capital, diária de R$ 325 e 45% de ocupação. Os anúncios e documentos continuam acessíveis.</p></noscript>
+ </section>
+ <section id="diligencia-litoral" class="investor-diligence" aria-labelledby="investor-documents-title"><div><h3 id="investor-documents-title">Antes da proposta,<br/>confira os documentos.</h3><p>Destino atrativo não elimina risco de vacância, aumento de custos, concorrência ou restrição à operação. Segurança de decisão vem dos documentos da unidade.</p>
+  <ol><li><strong>Receita comprovável.</strong> Extratos de 12–24 meses, reservas, cancelamentos, noites bloqueadas, taxas e repasses conciliados.</li><li><strong>Conta completa.</strong> Condomínio, IPTU, seguros, manutenção, gestão, enxoval e custos de compra. Separe imóveis na planta dos já operacionais.</li><li><strong>Direito de operar.</strong> Matrícula, convenção e atas, regras de curta estadia, alvarás/licenças e situação SPU quando aplicável. Avaliação jurídica e contábil individual.</li></ol>
+  <button type="button" class="coast-button" data-investor-copy disabled>Preparar pedido de estudo <span aria-hidden="true">↗</span></button><p class="investor-note">Gera um texto com suas hipóteses e os documentos a pedir. Não envia mensagem, não reserva imóvel e não armazena dados.</p><p data-investor-copy-status role="status"></p><label class="investor-manual-copy" hidden>Texto para copiar e enviar ao seu atendimento<textarea data-investor-brief readonly rows="10"></textarea></label>
+ </div><div class="investor-risk-list"><h4>Pontos de atenção e fontes</h4>{riskNotes.map(risk=><details class="investor-disclosure"><summary>{risk.title}</summary><div><p>{risk.text}</p><a href={risk.url} target="_blank" rel="noopener noreferrer">{risk.label} ↗</a></div></details>)}<p class="investor-note">Fontes consultadas em {researchDate}; informações e normas podem mudar. Esta página não substitui diligência, avaliação profissional ou recomendação individual de investimento.</p></div></section>
 </section>
-<script>
-  import '../scripts/litoral-sim';
-</script>
+<script>import '../scripts/litoral-investment';</script>

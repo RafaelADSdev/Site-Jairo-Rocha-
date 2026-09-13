@@ -43,7 +43,7 @@
 .coast-opening-bottom { position: absolute; bottom: 28px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; border-top: 1px solid #ffffff66; padding-top: 20px; font-size: 12px; letter-spacing: .035em; }
 .coast-opening-bottom a { display: flex; align-items: center; gap: 35px; color: white; }
 .coast-opening-bottom a span { font-size: 24px; }
-.coast-chapters { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--coast-line); }
+.coast-chapters { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--coast-line); }
 .coast-chapters a { display: flex; gap: 18px; align-items: center; padding-block: 28px; color: var(--coast-ink); font-size: 15px; }
 .coast-chapters a span { color: var(--coast-wine); font-size: 12px; font-weight: 800; }
 .coast-chapters a:hover { color: var(--coast-wine); text-decoration: underline; }
@@ -245,7 +245,7 @@
   .coast-actions .coast-button { width: 100%; }
   .coast-image-disclosure { font-size: 11px; margin-top: 18px; max-width: 310px; }
   .coast-opening-bottom { bottom: 22px; padding-top: 15px; font-size: 10px; }
-  .coast-chapters { gap: 12px; }
+  .coast-chapters { gap: 12px; grid-template-columns: repeat(2, 1fr); }
   .coast-chapters a { align-items: flex-start; flex-direction: column; gap: 6px; font-size: 11px; line-height: 1.4; }
   .coast-chapters a span { font-size: 10px; }
   .coast-section { padding-block: 54px; }

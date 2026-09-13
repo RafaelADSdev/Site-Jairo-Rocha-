@@ -1,0 +1,70 @@
+.investor { padding-block:72px 40px; }
+.investor [hidden] { display:none !important; }
+.investor :is(h2,h3,h4) { text-wrap:balance; }
+.investor-intro { display:grid; grid-template-columns:1.15fr 1fr; gap:64px; padding-block:30px 44px; border-top:1px solid var(--coast-line); align-items:end; }
+.investor-kicker { display:block; font-size:14px; color:var(--coast-wine); margin-bottom:22px; }
+.investor .investor-intro h2 { font-size:44px; line-height:1.15; letter-spacing:-.03em; }
+.investor .investor-note { color:var(--coast-muted); font-size:14px; line-height:1.65; }
+.investor-nav { display:flex; flex-wrap:wrap; gap:12px 32px; padding-block:16px; border-block:1px solid var(--coast-line); }
+.investor a { color:var(--coast-wine); }
+.investor .coast-button { color:white; }
+.investor-nav a,.investor-offer a,.investor-rentals a,.investor-market a,.investor-risk-list a { display:inline-flex; align-items:center; min-height:44px; }
+.investor-research { padding-block:48px 24px; }
+.investor-section-heading { display:flex; align-items:end; gap:40px; justify-content:space-between; }
+.investor-section-heading>div { max-width:730px; }
+.investor h3 { font-size:30px; line-height:1.25; letter-spacing:-.02em; }
+.investor p { max-width:75ch; }
+.investor-filter { min-width:230px; font-size:14px; font-weight:600; }
+.investor :is(input,select,textarea) { width:100%; min-width:0; min-height:48px; border:1px solid #a28e98; background:white; color:var(--coast-ink); padding:10px 12px; border-radius:4px; font-size:16px; margin-top:8px; }
+.investor-offer { display:grid; grid-template-columns:1fr .85fr 1.3fr; gap:28px; padding-block:28px; border-bottom:1px solid var(--coast-line); }
+.investor-offer-name>span,.investor-offer-price>span { display:block; color:var(--coast-muted); font-size:14px; margin-bottom:8px; }
+.investor h4 { font-size:20px; line-height:1.35; }
+.investor-offer-price strong { display:block; font-size:24px; font-weight:600; font-variant-numeric:tabular-nums; }
+.investor-offer p { margin:8px 0; }
+.investor-disclosure { border-bottom:1px solid var(--coast-line); }
+.investor-disclosure summary { padding-block:20px; min-height:56px; cursor:pointer; font-weight:600; }
+.investor-disclosure>div { padding-bottom:24px; }
+.investor-rentals { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+.investor-rentals article { padding-top:16px; border-top:1px solid var(--coast-line); }
+.investor-rentals strong { font-size:22px; }
+.investor-rentals strong span { font-size:14px; font-weight:400; }
+.investor-market { padding:0; list-style:none; }
+.investor-market li { padding-block:16px; border-bottom:1px solid var(--coast-line); }
+.investor-market span { display:block; }
+.investor-calculator { padding-block:48px; }
+.investor-scenarios { display:flex; gap:12px; margin-top:24px; }
+.investor-scenarios button { flex:1; border:1px solid #a28e98; background:white; color:var(--coast-ink); padding:16px; text-align:left; cursor:pointer; border-radius:4px; }
+.investor-scenarios button[aria-pressed=true] { background:var(--coast-wine); color:white; border-color:var(--coast-wine); }
+.investor-scenarios strong,.investor-scenarios span { display:block; }
+.investor-scenarios span { font-size:14px; margin-top:4px; }
+.investor-sim-layout { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); align-items:start; gap:40px; margin-top:32px; }
+.investor fieldset { padding:0; margin:0; border:0; min-width:0; }
+.investor legend { font-size:20px; margin-bottom:24px; }
+.investor-fields { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.investor-fields label { font-size:15px; font-weight:600; min-width:0; }
+.investor-fields small { display:block; font-size:13px; color:var(--coast-muted); font-weight:400; margin-top:8px; line-height:1.6; }
+.investor-field-error { display:block; color:#9b1839; font-size:14px; margin-top:6px; }
+.investor input[aria-invalid=true] { border:2px solid #9b1839; }
+.investor-reset { border:1px solid #a28e98; background:white; color:var(--coast-wine); padding:12px 18px; min-height:48px; cursor:pointer; }
+.investor button:disabled { opacity:.65; cursor:not-allowed; }
+.investor-result { padding:32px; background:var(--coast-soft); border:1px solid var(--coast-line); font-variant-numeric:tabular-nums; }
+.investor-result>div>p:first-child { margin-top:0; }
+.investor-result-main { display:block; font-size:38px; line-height:1.2; letter-spacing:-.025em; color:var(--coast-wine); overflow-wrap:anywhere; }
+.investor-result [data-result-status] { font-size:14px; }
+.investor-result-secondary { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-block:28px; }
+.investor-result-secondary span { display:block; font-size:13px; }
+.investor-result-secondary strong { font-size:22px; overflow-wrap:anywhere; }
+.investor-ledger { margin:0; }
+.investor-ledger>div { display:flex; justify-content:space-between; gap:18px; border-bottom:1px solid var(--coast-line); padding-block:11px; font-size:14px; }
+.investor-ledger dd { margin:0; text-align:right; min-width:0; max-width:55%; overflow-wrap:anywhere; }
+.investor-ledger-total { font-weight:700; }
+.investor-equilibrium { padding-top:16px; border-top:1px solid var(--coast-line); }
+.investor .investor-result-note { font-size:13px; color:var(--coast-muted); }
+.investor-diligence { display:grid; grid-template-columns:1fr 1fr; gap:64px; padding-block:44px; border-top:1px solid var(--coast-line); }
+.investor-diligence ol { padding-left:22px; }
+.investor-diligence li { margin-block:18px; padding-left:8px; }
+.investor-manual-copy { display:block; margin-top:20px; }
+.investor textarea { resize:vertical; }
+@media(hover:hover) { .investor-scenarios button:not([aria-pressed=true]):hover,.investor-reset:hover { background:var(--coast-soft); } .investor-disclosure summary:hover { color:var(--coast-wine); } }
+@media(max-width:1050px) { .investor-intro { gap:36px; } .investor-sim-layout { grid-template-columns:1fr; } .investor-result { max-width:720px; width:100%; } .investor-offer { grid-template-columns:1fr 1fr; } .investor-offer-detail { grid-column:1/-1; } .investor-diligence { gap:32px; } }
+@media(max-width:700px) { .investor { padding-top:40px; } .investor-intro,.investor-diligence { grid-template-columns:1fr; gap:24px; } .investor .investor-intro h2 { font-size:34px; } .investor-section-heading { display:block; } .investor-filter { display:block; margin-block:24px; } .investor h3 { font-size:26px; } .investor-offer { gap:12px; } .investor-offer-price strong { font-size:22px; } .investor-offer-name,.investor-offer-price { grid-column:1/-1; } .investor-scenarios { flex-direction:column; } .investor-scenarios button { padding:14px 16px; } .investor-fields,.investor-rentals { grid-template-columns:1fr; } .investor-result { padding:22px 18px; } .investor-result-main { font-size:34px; } .investor-result-secondary { grid-template-columns:1fr; } .investor-ledger>div { gap:10px; } .investor-ledger dt { max-width:60%; } .investor-nav { gap:8px 24px; } }
