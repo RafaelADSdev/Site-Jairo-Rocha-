@@ -1,5 +1,33 @@
 # Diário — Site Jairo Rocha
 
+## 2026-09-13 17:24
+
+**Foco:** transformar o bloco 3D do Sopro em uma experiência guiada e preservar a fidelidade possível sem usar Blender fora do MCP.
+
+**Feito:**
+
+- Auditado o GLB: 1.519 meshes, aproximadamente 62 mil triângulos, 26 materiais de cor e nenhuma textura de imagem.
+- Identificado que o arquivo reúne três estudos desconectados, fazendo a câmera automática enquadrar cerca de 51 m de largura e reduzir demais o bloco completo.
+- Medidos diretamente no GLB os centros do bloco, térreo e superior para criar presets de câmera sem alterar a geometria.
+- Criada a interface “Explore um bloco do Sopro”, com vista inicial do exterior, abas de térreo e superior, orientação de gestos, progresso acessível, tela cheia e navegação por teclado.
+- A assistente flutuante agora se recolhe apenas enquanto o visualizador pronto estiver em foco, sem cobrir os controles.
+- Mantidos carregamento sob demanda, timeout, retry, fallback e aviso de representação comercial.
+- Respeitada a exigência do usuário: como o Blender MCP não está disponível, nenhuma geometria foi alterada pelo Blender local.
+- Teste focado, build de 14 páginas, regressão desktop/mobile e detector de anti-patterns passaram.
+- Lighthouse da página manteve Acessibilidade 100 e Boas Práticas 100.
+
+**Próximos passos:**
+
+- Avaliar a nova experiência local com o usuário.
+- Para elevar a fidelidade geométrica, obter Blender MCP ou o arquivo arquitetônico original em SKP, RVT, IFC, DWG ou equivalente.
+- Com fonte oficial, reconstruir materiais e fachadas e validar lado a lado com os renders.
+
+**Bloqueios / dúvidas:**
+
+- O Blender MCP não está disponível nesta sessão; a geometria atual continua conceitual.
+
+---
+
 ## 2026-09-13 17:02
 
 **Foco:** melhorar a página do Sopro com 3D resiliente, imagens otimizadas e comparação das tipologias.

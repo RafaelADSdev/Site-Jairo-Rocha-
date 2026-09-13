@@ -57,3 +57,15 @@
 **Alternativas:** aguardar a definição da hospedagem; usar apenas uma imagem WebP por posição; contratar um serviço externo de transformação.
 
 **Consequências:** a otimização funciona em qualquer hospedagem estática. O repositório cresce com os derivados, mas uma navegação mobile completa da página passou a selecionar aproximadamente 0,98 MB de imagens contra 12,58 MB do conjunto original referenciado.
+
+---
+
+## 2026-09-13 — Não alterar a geometria do Sopro sem Blender MCP ou fonte arquitetônica oficial
+
+**Contexto:** o usuário pediu que qualquer trabalho no Blender seja feito via MCP. O Blender MCP não está disponível nesta sessão e o `.blend` existente foi gerado por script com medidas inferidas, não importado de um projeto executivo confirmado.
+
+**Decisão:** preservar a geometria atual e melhorar a experiência por código no site. O GLB passou a ser enquadrado por coordenadas medidas, com vistas guiadas para bloco, térreo e superior. Uma reconstrução geométrica futura dependerá do Blender MCP ou de um arquivo arquitetônico oficial, como SKP, RVT, IFC, DWG ou modelo equivalente.
+
+**Alternativas:** usar o Blender local fora do MCP; editar a geometria por outro processo não solicitado; apresentar o modelo atual sem explicar seus limites.
+
+**Consequências:** a experiência ficou muito mais legível sem inventar arquitetura. O modelo continua sendo uma representação comercial conceitual e a própria interface declara que dimensões e acabamentos exigem confirmação.

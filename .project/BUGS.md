@@ -15,6 +15,8 @@
 
 ## ✅ Resolvidos
 
+- [x] 2026-09-13 GLB do Sopro enquadrava três estudos desconectados e deixava o bloco minúsculo — causa: câmera automática considerava térreo, superior e bloco completo como uma única composição de cerca de 51 m de largura; fix: presets de câmera medidos para exterior, térreo e superior, com o bloco como vista inicial.
+- [x] 2026-09-13 Assistente flutuante cobria os controles da experiência 3D — causa: os dois elementos ocupavam o canto inferior direito; fix: ocultar o atalho flutuante somente enquanto o visualizador pronto estiver em foco.
 - [x] 2026-09-13 Página do Sopro transferia imagens grandes também no mobile — causa: ausência de variantes e `srcset`; fix: WebPs responsivos e componente dedicado, reduzindo a seleção medida numa navegação completa de 12,58 MB para aproximadamente 0,98 MB.
 - [x] 2026-09-13 Experiência 3D não tinha estados resilientes — causa: visualizador sem capa, carregamento explícito ou recuperação; fix: carregamento sob demanda com capa, loading, timeout, retry e fallback para a implantação.
 - [x] 2026-09-13 Container mobile do 3D deixava uma faixa preta abaixo do conteúdo — causa: altura mínima externa maior que a dos estados internos; fix: alinhar a altura mínima do container no breakpoint mobile.
