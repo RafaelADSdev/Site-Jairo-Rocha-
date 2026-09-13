@@ -54,6 +54,11 @@
 .home-search-footnote { font-size:12px; text-align:center; color:var(--home-muted); margin-top:18px; }
 .home-page:has(.home-search-section:focus-within) .chat-fab { visibility:hidden; pointer-events:none; }
 .home-brand-art { --brand-emblem-size-mobile:88px; }
+.home-brand-art { --brand-emblem-size:320px; --brand-emblem-size-mobile:210px; }
+@media(min-width:1100px) {
+ .home-opening-layout { grid-template-columns:minmax(0,1fr) 320px; column-gap:36px; }
+ .home-brand-art { width:320px; }
+}
 .home-opening :focus-visible { outline:3px solid #fff; outline-offset:5px; }
 @media(min-width:1100px) { .home-search-form { grid-template-columns:1.5fr 2fr auto; gap:22px; } .home-search-options { grid-row:1; grid-column:2; margin:0; } .home-search-options summary { display:none; } .home-search-options>.home-options-grid { display:grid; padding:0; gap:14px; } .home-search-submit { grid-column:3; } }
 @media(max-width:1099px) { .home-opening-layout { grid-template-columns:minmax(0,1fr) 180px; gap:24px; padding-top:48px; } .home-brand-art { width:180px; } .home-opening h1 { font-size:46px; } .home-feature-switcher { gap:20px; margin-top:30px; } .home-feature-buttons { gap:18px; } }
@@ -70,3 +75,12 @@
  .home-search-options summary span { display:none; }
 }
 @media(prefers-reduced-motion:reduce) { .home-opening *, .home-search-section * { scroll-behavior:auto; transition-duration:.01ms!important; } }
+@media(min-width:781px) and (max-width:1099px) {
+ .home-brand-art { width:210px; --brand-emblem-size:210px; }
+ .home-opening-layout { grid-template-columns:minmax(0,1fr) 210px; }
+}
+@media(max-width:780px) {
+ .home-brand-art { width:210px; grid-column:1/-1; grid-row:2; justify-self:end; }
+ .home-feature-switcher { grid-column:1/-1; grid-row:3; }
+ .home-feature-buttons { gap:16px; }
+}
