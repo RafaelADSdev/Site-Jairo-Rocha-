@@ -26,6 +26,7 @@ const form=document.querySelector<HTMLFormElement>('.home-search-form');
 if(form) {
  const type=form.querySelector<HTMLSelectElement>('#home-type')!;
  const price=form.querySelector<HTMLSelectElement>('#home-price')!;
+ price.disabled=false;
  const intents=Array.from(document.querySelectorAll<HTMLButtonElement>('[data-home-intent]'));
  let scale='venda';
  const update=()=>{
