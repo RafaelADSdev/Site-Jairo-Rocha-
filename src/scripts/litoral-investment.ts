@@ -88,5 +88,7 @@ if(root) {
  });
  $<HTMLFieldSetElement>('[data-investor-fields]').disabled=false;
  destination.disabled=false;buttons.forEach(button=>button.disabled=false);
+ const requested=new URLSearchParams(location.search).get('destino');
+ if(requested && Object.hasOwn(destinationNames,requested)) destination.value=requested;
  filter();update();
 }
