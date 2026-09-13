@@ -285,7 +285,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
   <div class="container">
     <div class="sopro-stage-head">
       <h2>Explore um bloco do Sopro.</h2>
-      <p>Comece pelo exterior e aproxime o olhar do térreo ou do pavimento superior. O modelo otimizado de 1,9 MB só é carregado quando você escolhe explorar.</p>
+      <p>Comece pelo exterior e aproxime o olhar do térreo ou do pavimento superior. O modelo otimizado de 2,1 MB só é carregado quando você escolhe explorar.</p>
     </div>
     {hasModel ? (
       <div class="sopro-viewer" id="sopro-viewer" data-model-state="idle" aria-busy="false">
@@ -301,7 +301,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
           <div class="sopro-model-cover-copy">
             <Icon name="cube" size={34}/>
             <strong>Explore o bloco em 3D</strong>
-            <span>Carregamento sob demanda · 1,9 MB</span>
+            <span>Carregamento sob demanda · 2,1 MB</span>
             <button class="btn btn-cream" type="button" id="sopro-model-load">Abrir experiência 3D <Icon name="arrow" size={17}/></button>
           </div>
         </div>
@@ -501,7 +501,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
       await import('@google/model-viewer');
       const model = document.createElement('model-viewer');
       model.id = 'sopro-model';
-      model.setAttribute('src', '/models/sopro-v2.glb');
+      model.setAttribute('src', '/models/sopro-v2.glb?v=2.1-access');
       model.setAttribute('alt', 'Representação 3D de um bloco do Sopro com quatro unidades, piscinas privativas, escadas externas e paisagismo');
       model.setAttribute('camera-controls', '');
       model.setAttribute('touch-action', 'pan-y');

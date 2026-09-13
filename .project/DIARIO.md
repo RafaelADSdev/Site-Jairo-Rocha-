@@ -1,6 +1,32 @@
 # Diário — Site Jairo Rocha
 
-## 2026-09-13 18:10
+## 2026-09-13 18:07
+
+**Foco:** corrigir a circulação das escadas externas no novo modelo 3D do Sopro.
+
+**Feito:**
+
+- Confirmado visualmente que as escadas terminavam contra paredes superiores inteiras, sem patamar nem porta de chegada.
+- Revisitadas a planta superior e as perspectivas do book oficial; elas confirmam o acesso externo, mas não fornecem cotas completas.
+- Mantida a reconstrução exclusivamente pelo Blender MCP conectado ao Blender 5.2.1, com telemetria detalhada desligada.
+- Divididas as duas paredes laterais superiores para criar vãos de acesso, portas envidraçadas, molduras e puxadores.
+- Acrescentados patamares contínuos entre o último degrau e cada porta, guarda-corpos de proteção e corrimãos nos dois lados das escadas.
+- Regenerados `sopro-v2.blend` e `public/models/sopro-v2.glb`; a versão corrigida tem aproximadamente 2,1 MB, 326 meshes e cerca de 6,8 mil triângulos.
+- Adicionado versionamento à URL do GLB para impedir que o navegador reutilize a versão anterior em cache.
+- Validado o render do Blender, o carregamento `ready` no navegador, o build das 14 rotas e o audit com 0 vulnerabilidades.
+
+**Próximos passos:**
+
+- Validar visualmente a circulação corrigida com o usuário.
+- Substituir proporções aproximadas por cotas executivas se a empresa fornecer o projeto arquitetônico.
+
+**Bloqueios / dúvidas:**
+
+- Nenhum para a representação comercial; cotas executivas continuam indisponíveis no book.
+
+---
+
+## 2026-09-13 17:59
 
 **Foco:** reconstruir e integrar um bloco 3D melhor do Sopro usando o Blender MCP.
 

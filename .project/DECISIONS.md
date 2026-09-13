@@ -80,4 +80,4 @@
 
 **Alternativas:** continuar usando o modelo fragmentado; editar o `.blend` fora do MCP; aguardar indefinidamente um arquivo executivo.
 
-**Consequências:** o arquivo web caiu de aproximadamente 3,3 MB para 1,9 MB e a complexidade para 288 meshes e cerca de 5,8 mil triângulos, melhorando carregamento e manipulação. O resultado é uma representação comercial, não um modelo executivo; dimensões não cotadas precisam ser confirmadas antes de uso técnico.
+**Consequências:** após completar a circulação vertical com patamares, portas laterais e guarda-corpos, o arquivo web ficou em aproximadamente 2,1 MB, 326 meshes e cerca de 6,8 mil triângulos — ainda muito abaixo do original de 3,3 MB, 1.519 meshes e 62 mil triângulos. O resultado é uma representação comercial, não um modelo executivo; dimensões não cotadas precisam ser confirmadas antes de uso técnico.

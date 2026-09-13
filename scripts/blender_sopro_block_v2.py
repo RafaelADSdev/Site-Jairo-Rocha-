@@ -138,7 +138,7 @@ def create_window(name, x, y, z, width):
     box(f"{name}_bottom", (x, y, z - 1.11), (0.08, width + 0.05, 0.06), MAT_WOOD, "ARCH", 0.01)
 
 
-def create_stair(name, y, mirror=False):
+def create_stair(name, y):
     steps = 17
     run = 3.55
     rise = 2.88
@@ -164,14 +164,41 @@ def create_stair(name, y, mirror=False):
             "STAIRS",
             0.012,
         )
-    side = -1 if mirror else 1
-    rail_y = y + side * 0.53
-    beam_between(f"{name}_handrail", (5.55, rail_y, 1.05), (2.25, rail_y, 3.78), 0.035, MAT_WOOD, "STAIRS")
-    for idx in range(5):
-        t = idx / 4
-        x = 5.55 + (2.25 - 5.55) * t
-        z = 0.95 + (3.68 - 0.95) * t
-        cylinder(f"{name}_post_{idx}", (x, rail_y, z - 0.32), 0.025, 0.72, MAT_WOOD, "STAIRS", 10)
+    # Both sides are protected; the inner rail reads as wall-mounted and the outer
+    # rail prevents the decorative stair from looking disconnected or unsafe.
+    for rail_side in (-1, 1):
+        rail_y = y + rail_side * 0.53
+        beam_between(
+            f"{name}_handrail_{rail_side:+d}",
+            (5.55, rail_y, 1.05),
+            (2.25, rail_y, 3.78),
+            0.035,
+            MAT_WOOD,
+            "STAIRS",
+        )
+        for idx in range(5):
+            t = idx / 4
+            x = 5.55 + (2.25 - 5.55) * t
+            z = 0.95 + (3.68 - 0.95) * t
+            cylinder(
+                f"{name}_post_{rail_side:+d}_{idx}",
+                (x, rail_y, z - 0.32),
+                0.025,
+                0.72,
+                MAT_WOOD,
+                "STAIRS",
+                10,
+            )
+
+    # The top landing bridges the final tread to a real side entrance in the
+    # upper unit. Its dimensions are proportional because the book has no cotas.
+    landing_x = 1.58
+    box(f"{name}_landing", (landing_x, y, 2.94), (1.42, 1.08, 0.18), MAT_CONCRETE, "STAIRS", 0.025)
+    box(f"{name}_landing_finish", (landing_x, y, 3.045), (1.36, 1.02, 0.045), MAT_WOOD, "STAIRS", 0.012)
+    outer_y = y + (-0.58 if y < 0 else 0.58)
+    beam_between(f"{name}_landing_guard", (0.88, outer_y, 3.76), (2.28, outer_y, 3.76), 0.035, MAT_WOOD, "STAIRS")
+    for idx, x in enumerate((0.88, 1.58, 2.28)):
+        cylinder(f"{name}_landing_guard_post_{idx}", (x, outer_y, 3.40), 0.025, 0.72, MAT_WOOD, "STAIRS", 10)
 
 
 def create_bed(name, x, y, z, flip=False):
@@ -307,8 +334,18 @@ box("ARCH_BackWall_Upper", (-5.10, 0, 4.40), (0.22, 6.72, 2.80), MAT_OFFWHITE, "
 box("ARCH_PartyWall_Ground", (-0.25, 0, 1.47), (9.75, 0.18, 2.82), MAT_CONCRETE, "ARCH", 0.025)
 box("ARCH_PartyWall_Upper", (-0.25, 0, 4.40), (9.75, 0.18, 2.80), MAT_CONCRETE, "ARCH", 0.025)
 for y in (-3.30, 3.30):
+    side_name = "Left" if y < 0 else "Right"
     box(f"ARCH_SideWall_Ground_{y:+.2f}", (-0.30, y, 1.47), (9.70, 0.20, 2.82), MAT_BROWN, "ARCH", 0.035)
-    box(f"ARCH_SideWall_Upper_{y:+.2f}", (-0.30, y, 4.40), (9.70, 0.20, 2.80), MAT_BROWN, "ARCH", 0.035)
+    # Split the upper wall around the access door instead of sealing the stair
+    # against a solid facade.
+    box(f"ARCH_SideWall_UpperBack_{side_name}", (-2.18, y, 4.40), (5.94, 0.20, 2.80), MAT_BROWN, "ARCH", 0.035)
+    box(f"ARCH_SideWall_UpperFront_{side_name}", (3.26, y, 4.40), (2.58, 0.20, 2.80), MAT_BROWN, "ARCH", 0.035)
+    box(f"ARCH_SideWall_UpperHeader_{side_name}", (1.36, y, 5.49), (1.22, 0.20, 0.62), MAT_BROWN, "ARCH", 0.025)
+    box(f"DOOR_Upper_{side_name}_Glass", (1.36, y, 4.06), (1.08, 0.055, 2.04), MAT_GLASS, "GLASS", 0.01)
+    for door_x in (0.82, 1.90):
+        box(f"DOOR_Upper_{side_name}_Frame_{door_x:.2f}", (door_x, y - (0.012 if y < 0 else -0.012), 4.06), (0.05, 0.08, 2.10), MAT_WOOD, "ARCH", 0.01)
+    box(f"DOOR_Upper_{side_name}_Top", (1.36, y, 5.08), (1.12, 0.08, 0.06), MAT_WOOD, "ARCH", 0.01)
+    box(f"DOOR_Upper_{side_name}_Handle", (1.72, y - (0.06 if y < 0 else -0.06), 4.04), (0.04, 0.035, 0.34), MAT_METAL, "ARCH", 0.008)
 
 # Interior service cores preserve the floor-plan reading without claiming executive dimensions.
 for y in (-1.66, 1.66):
@@ -339,8 +376,8 @@ for label, y in (("Left", -1.66), ("Right", 1.66)):
     create_pool(f"POOL_Upper_{label}", (5.38, y), (2.00, 1.50), 3.04, elevated=True)
 
 # External stairs and handcrafted wood rails.
-create_stair("STAIR_Left", -3.78, mirror=False)
-create_stair("STAIR_Right", 3.78, mirror=True)
+create_stair("STAIR_Left", -3.78)
+create_stair("STAIR_Right", 3.78)
 
 # Interior cues kept intentionally simplified for a performant commercial viewer.
 for level, z in (("G", 0.13), ("U", 3.06)):
