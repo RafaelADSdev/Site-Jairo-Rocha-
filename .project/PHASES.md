@@ -25,6 +25,8 @@
 - [x] Otimizar as imagens da página Sopro com `srcset` WebP gerado no projeto
 - [x] Tornar o 3D do Sopro sob demanda, com capa, loading, retry e fallback
 - [x] Transformar o 3D do Sopro em experiência guiada com vistas, progresso, teclado e tela cheia
+- [x] Registrar o Blender MCP no Codex e instalar o add-on no Blender 5.2
+- [ ] Reconstruir e otimizar a geometria do bloco do Sopro via Blender MCP
 - [ ] Definir relação com o site operacional `jairorocha.com.br`
 - [ ] Escolher Vercel ou Netlify e alinhar imagens, cache e headers
 - [ ] Definir CMS/CRM/fonte do catálogo

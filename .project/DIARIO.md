@@ -1,5 +1,29 @@
 # Diário — Site Jairo Rocha
 
+## 2026-09-13 17:30
+
+**Foco:** preparar a reconstrução fiel do modelo 3D do Sopro pelo Blender MCP.
+
+**Feito:**
+
+- Confirmado que a experiência web havia sido melhorada, mas a geometria do GLB ainda era a conceitual existente.
+- Diagnosticado que o Blender MCP estava configurado apenas no Claude e não aparecia no inventário de ferramentas da sessão do Codex.
+- Registrado no Codex o servidor STDIO `blender`, usando o caminho absoluto do `uvx` e o pacote `blender-mcp`.
+- Instalado o add-on `blender_mcp.py` no diretório de add-ons do Blender 5.2.
+- Confirmado com `codex mcp get blender` que o servidor está habilitado.
+
+**Próximos passos:**
+
+- Reiniciar o Codex para carregar as ferramentas do Blender MCP.
+- No Blender, habilitar `Interface: MCP for Blender`, abrir o painel lateral e iniciar o MCP Server.
+- Abrir o `.blend` do Sopro, reconstruir o bloco a partir das plantas e renders oficiais, otimizar a malha e exportar um novo GLB para o site.
+
+**Bloqueios / dúvidas:**
+
+- O book oficial fornece plantas e áreas, mas não todas as cotas executivas; elementos não cotados continuarão identificados como aproximações até validação da empresa.
+
+---
+
 ## 2026-09-13 17:24
 
 **Foco:** transformar o bloco 3D do Sopro em uma experiência guiada e preservar a fidelidade possível sem usar Blender fora do MCP.

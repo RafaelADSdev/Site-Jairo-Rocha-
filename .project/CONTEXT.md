@@ -16,6 +16,8 @@ Astro foi atualizado de 5.18.2 para 7.3.2. O audit de dependências passou de 3 
 
 A página do Sopro agora tem comparação visual das tipologias térrea e superior baseada nas plantas do book oficial, imagens WebP responsivas e experiência 3D guiada e resiliente. O 3D abre focado no bloco completo, oferece vistas específicas de exterior, térreo e superior, progresso real, navegação por teclado, tela cheia, retry e fallback. Em uma navegação mobile completa, as imagens selecionadas pelo navegador somaram aproximadamente 0,98 MB contra 12,58 MB do conjunto original referenciado, redução aproximada de 92%. O Lighthouse específico da página marcou 100 em Acessibilidade e 100 em Boas Práticas.
 
+O Blender MCP foi registrado no Codex como servidor STDIO (`uvx blender-mcp`) e o add-on foi instalado para o Blender 5.2. A reconstrução geométrica ainda não começou porque a sessão atual precisa ser reiniciada para receber as novas ferramentas; no Blender, o add-on precisa ser habilitado e o MCP Server iniciado.
+
 Lighthouse mobile da home, antes das otimizações de performance: Performance 74, Acessibilidade 100, Boas Práticas 100 e SEO 63. O SEO baixo é esperado enquanto a apresentação permanecer com `noindex,nofollow`. O principal gargalo é LCP de laboratório em 8,5 s, associado à hero/carrossel e à entrega de imagens sem o CDN esperado.
 
 ## Próximos passos
@@ -27,7 +29,8 @@ Lighthouse mobile da home, antes das otimizações de performance: Performance 7
 - [ ] Alinhar cabeçalhos de cache e segurança à hospedagem escolhida; `netlify.toml` não governa a publicação atual na Vercel.
 - [ ] Definir fonte real do catálogo e destino dos leads antes de implementar backend, autenticação, IA ou administração persistente.
 - [ ] Validar com a empresa preços, disponibilidade, autorização de mídia, simulação e dados do Sopro.
-- [ ] Obter o arquivo arquitetônico original do Sopro ou disponibilizar o Blender MCP antes de alterar a geometria conceitual do modelo 3D.
+- [ ] Reiniciar o Codex, habilitar `Interface: MCP for Blender` no Blender 5.2 e iniciar o MCP Server.
+- [ ] Reconstruir o bloco do Sopro no Blender MCP usando o book oficial como referência; validar proporções não cotadas com a empresa antes de apresentá-las como executivas.
 - [ ] Decidir quais ajustes visuais e de conteúdo entram na próxima rodada.
 
 ## Stack
