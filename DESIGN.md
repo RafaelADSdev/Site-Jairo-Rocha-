@@ -15,6 +15,16 @@ colors:
   night: "#161616"
   sand: "#f3ead0"
   white: "#ffffff"
+  coast-ink: "#321e27"
+  coast-wine: "#651d32"
+  coast-soft: "#f5f1f3"
+  coast-muted: "#74636c"
+  coast-line: "#e1d9dd"
+  coast-focus: "#d6425b"
+  coast-sea: "#d4eeea"
+  coast-reef: "#9acdc5"
+  coast-map-label: "#426e68"
+  coast-map-muted: "#826e78"
 typography:
   display:
     fontFamily: "Manrope, sans-serif"
