@@ -1,64 +1,47 @@
-import { chromium } from 'playwright';
+import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
-
-const browser = await chromium.launch({channel: 'chrome', headless: true, args: ['--enable-unsafe-swiftshader']});
-const url = process.env.BRAND_TEST_URL || 'http://localhost:4322/';
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--enable-unsafe-swiftshader']});
 try {
-  const desktop = await browser.newPage({viewport: {width: 1440, height: 1000}});
-  const errors = [];
-  desktop.on('pageerror', error => errors.push(error.message));
-  await desktop.goto(url, {waitUntil: 'networkidle'});
-  assert.equal(await desktop.locator('[data-brand-emblem]').count(), 1, 'Home provides the brand emblem');
-  await desktop.waitForFunction(() => document.querySelector('[data-brand-emblem]').dataset.brandState === 'ready');
-  assert.equal(await desktop.locator('[data-brand-canvas]').getAttribute('aria-hidden'), 'true');
-  await desktop.getByRole('button', {name: 'Pausar giro 3D', exact: true}).click();
-  assert.equal(await desktop.locator('[data-brand-emblem]').getAttribute('data-brand-state'), 'paused');
-  const paused = await desktop.locator('[data-brand-canvas]').screenshot();
-  await desktop.waitForTimeout(250);
-  assert.deepEqual(await desktop.locator('[data-brand-canvas]').screenshot(), paused, 'Paused geometry does not move');
-  await desktop.getByRole('button', {name: 'Retomar giro 3D', exact: true}).click();
-  await desktop.waitForTimeout(300);
-  assert.notDeepEqual(await desktop.locator('[data-brand-canvas]').screenshot(), paused, 'Resumed geometry moves');
-  await desktop.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
-  await desktop.waitForFunction(() => document.querySelector('[data-brand-emblem]').dataset.brandState === 'paused');
-  await desktop.evaluate(() => scrollTo(0, 0));
-  await desktop.waitForFunction(() => document.querySelector('[data-brand-emblem]').dataset.brandState === 'ready');
-  await desktop.emulateMedia({reducedMotion: 'reduce'});
-  await desktop.waitForFunction(() => document.querySelector('[data-brand-emblem]').dataset.brandState === 'paused');
-  await desktop.emulateMedia({reducedMotion: 'no-preference'});
-  assert.equal(await desktop.locator('[data-brand-emblem]').getAttribute('data-brand-state'), 'paused', 'Preference changes do not override a pause');
-
-  for (const options of [
-    {viewport: {width: 375, height: 812}, isMobile: true, hasTouch: true},
-    {viewport: {width: 1440, height: 1000}, reducedMotion: 'reduce'},
-  ]) {
-    const page = await browser.newPage(options);
-    await page.goto(url, {waitUntil: 'networkidle'});
-    assert.equal(await page.locator('[data-brand-emblem]').getAttribute('data-brand-state'), 'fallback');
-    assert.equal(await page.locator('[data-brand-canvas]').count(), 0, 'No WebGL renderer before opt-in');
-    assert(await page.locator('[data-brand-fallback]').isVisible());
-    const button = page.getByRole('button', {name: 'Ativar símbolo 3D', exact: true});
-    assert((await button.boundingBox()).height >= 44);
-    await button.click();
-    await page.waitForFunction(() => ['ready', 'paused'].includes(document.querySelector('[data-brand-emblem]').dataset.brandState));
-    if (options.reducedMotion) assert.equal(await page.locator('[data-brand-emblem]').getAttribute('data-brand-state'), 'paused', 'Reduced-motion opt-in shows a static 3D emblem');
-    await page.close();
-  }
-
-  const fallback = await browser.newPage({viewport: {width: 375, height: 812}});
-  await fallback.addInitScript(() => {
-    const getContext = HTMLCanvasElement.prototype.getContext;
-    HTMLCanvasElement.prototype.getContext = function(type, ...args) {
-      return type === 'webgl' || type === 'webgl2' ? null : getContext.call(this, type, ...args);
-    };
-  });
-  await fallback.goto(url, {waitUntil: 'networkidle'});
-  await fallback.getByRole('button', {name: 'Ativar símbolo 3D', exact: true}).click();
-  await fallback.waitForFunction(() => document.querySelector('[data-brand-emblem]').dataset.brandState === 'error');
-  assert(await fallback.locator('[data-brand-fallback]').isVisible());
-  assert(await fallback.getByRole('button', {name: 'Tentar símbolo 3D novamente', exact: true}).isVisible());
-  assert.deepEqual(errors, []);
-  console.log('PASS emblem: desktop rotation/pause, preference changes, mobile/reduced-motion opt-in, WebGL fallback.');
-} finally {
-  await browser.close();
-}
+ const page=await browser.newPage({viewport:{width:1440,height:1000}});
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('http://localhost:4322/',{waitUntil:'networkidle'});
+ assert.equal(await page.locator('[data-brand-fallback] img').count(),1,'Complete original wordmark replaces isolated emblem');
+ assert.equal(await page.locator('[data-brand-fallback] img').getAttribute('src'),'/images/logo.webp');
+ assert.match(await page.locator('[data-brand-fallback]').textContent(),/40/);
+ assert.equal(await page.locator('.brand-emblem__control-icon').count(),0,'No visible pill or rotating-arrow icon');
+ assert.equal(await page.locator('[data-brand-toggle]').evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)');
+ await page.waitForFunction(()=>document.querySelector('[data-brand-emblem]').dataset.brandState==='ready');
+ await page.locator('[data-brand-toggle]').click();
+ assert.equal(await page.locator('[data-brand-emblem]').getAttribute('data-brand-state'),'paused');
+ const still=await page.locator('[data-brand-canvas]').screenshot();
+ await page.waitForTimeout(300);
+ assert.deepEqual(await page.locator('[data-brand-canvas]').screenshot(),still);
+ await page.locator('[data-brand-toggle]').press('Enter');
+ await page.waitForTimeout(400);
+ assert.notDeepEqual(await page.locator('[data-brand-canvas]').screenshot(),still);
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.waitForFunction(()=>document.querySelector('[data-brand-emblem]').dataset.brandState==='paused');
+ await page.emulateMedia({reducedMotion:'no-preference'});
+ assert.equal(await page.locator('[data-brand-emblem]').getAttribute('data-brand-state'),'paused');
+ const mobile=await browser.newPage({viewport:{width:375,height:812},isMobile:true,hasTouch:true});
+ await mobile.goto('http://localhost:4322/',{waitUntil:'networkidle'});
+ await mobile.waitForFunction(()=>document.querySelector('[data-brand-emblem]').dataset.brandState==='ready');
+ await mobile.locator('[data-brand-toggle]').tap();
+ assert.equal(await mobile.locator('[data-brand-emblem]').getAttribute('data-brand-state'),'paused');
+ assert(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ const reduced=await browser.newPage({reducedMotion:'reduce'});
+ await reduced.goto('http://localhost:4322/',{waitUntil:'networkidle'});
+ assert.equal(await reduced.locator('[data-brand-canvas]').count(),0);
+ assert(await reduced.locator('[data-brand-fallback] img').isVisible());
+ const fallback=await browser.newPage();
+ await fallback.addInitScript(()=>{
+  const original=HTMLCanvasElement.prototype.getContext;
+  HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/.test(type)?null:original.call(this,type,...args);};
+ });
+ await fallback.goto('http://localhost:4322/',{waitUntil:'networkidle'});
+ await fallback.waitForFunction(()=>document.querySelector('[data-brand-emblem]').dataset.brandState==='error');
+ assert(await fallback.locator('[data-brand-fallback] img').isVisible());
+ assert.match(await fallback.locator('[data-brand-toggle]').getAttribute('aria-label'),/Tentar/);
+ assert.deepEqual(errors,[]);
+ console.log('PASS full rotating logo: original brand + 40 years, no pill, click/keyboard/tap pause, mobile, reduced motion, WebGL fallback.');
+} finally {await browser.close();}
