@@ -11,10 +11,11 @@
 - [ ] Administração, assistente e persistência são apenas demonstrações e não devem ser apresentadas como funcionalidades operacionais.
 - [ ] Catálogo, preços, disponibilidade, mídias e premissas do simulador precisam de confirmação da empresa.
 - [ ] `robots.txt` e sitemap não existem na prévia; isso é aceitável enquanto ela permanecer com `noindex`, mas bloqueia o lançamento SEO.
-- [ ] O PDF do Sopro tem aproximadamente 27,8 MB e precisa de estratégia de entrega antes de tráfego em produção. O GLB de aproximadamente 3,3 MB já é carregado somente após ação do usuário.
+- [ ] O PDF do Sopro tem aproximadamente 27,8 MB e precisa de estratégia de entrega antes de tráfego em produção. O novo GLB de aproximadamente 1,9 MB já é carregado somente após ação do usuário.
 
 ## ✅ Resolvidos
 
+- [x] 2026-09-13 Modelo 3D do Sopro era fragmentado, pesado e pouco fiel na leitura visual — causa: três estudos reunidos em 1.519 meshes, aproximadamente 62 mil triângulos e câmera condicionada por uma cena de 51 m; fix: reconstrução via Blender MCP a partir do book oficial, com quatro unidades, quatro piscinas, escadas, vidro, paisagismo, 288 meshes, cerca de 5,8 mil triângulos e GLB de 1,9 MB.
 - [x] 2026-09-13 GLB do Sopro enquadrava três estudos desconectados e deixava o bloco minúsculo — causa: câmera automática considerava térreo, superior e bloco completo como uma única composição de cerca de 51 m de largura; fix: presets de câmera medidos para exterior, térreo e superior, com o bloco como vista inicial.
 - [x] 2026-09-13 Assistente flutuante cobria os controles da experiência 3D — causa: os dois elementos ocupavam o canto inferior direito; fix: ocultar o atalho flutuante somente enquanto o visualizador pronto estiver em foco.
 - [x] 2026-09-13 Página do Sopro transferia imagens grandes também no mobile — causa: ausência de variantes e `srcset`; fix: WebPs responsivos e componente dedicado, reduzindo a seleção medida numa navegação completa de 12,58 MB para aproximadamente 0,98 MB.

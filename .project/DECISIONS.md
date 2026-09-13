@@ -69,3 +69,15 @@
 **Alternativas:** usar o Blender local fora do MCP; editar a geometria por outro processo não solicitado; apresentar o modelo atual sem explicar seus limites.
 
 **Consequências:** a experiência ficou muito mais legível sem inventar arquitetura. O modelo continua sendo uma representação comercial conceitual e a própria interface declara que dimensões e acabamentos exigem confirmação.
+
+---
+
+## 2026-09-13 — Reconstruir o bloco comercial do Sopro via Blender MCP
+
+**Contexto:** o GLB anterior reunia três estudos desconectados em 1.519 meshes e aproximadamente 62 mil triângulos. O book oficial confirma a composição de quatro unidades, as áreas e os principais elementos arquitetônicos, mas não contém todas as cotas executivas.
+
+**Decisão:** usar exclusivamente o Blender MCP para construir uma nova versão organizada do bloco, baseada nas plantas e perspectivas oficiais. A cena representa duas unidades térreas e duas superiores, quatro piscinas privativas, varandas, escadas externas, vidro, materiais terrosos e paisagismo. A versão anterior foi mantida intacta, e a página passou a apontar explicitamente para `sopro-v2.glb`.
+
+**Alternativas:** continuar usando o modelo fragmentado; editar o `.blend` fora do MCP; aguardar indefinidamente um arquivo executivo.
+
+**Consequências:** o arquivo web caiu de aproximadamente 3,3 MB para 1,9 MB e a complexidade para 288 meshes e cerca de 5,8 mil triângulos, melhorando carregamento e manipulação. O resultado é uma representação comercial, não um modelo executivo; dimensões não cotadas precisam ser confirmadas antes de uso técnico.

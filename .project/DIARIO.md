@@ -1,5 +1,31 @@
 # Diário — Site Jairo Rocha
 
+## 2026-09-13 18:10
+
+**Foco:** reconstruir e integrar um bloco 3D melhor do Sopro usando o Blender MCP.
+
+**Feito:**
+
+- Controlado o Blender 5.2, habilitado o add-on `MCP for Blender` e iniciado o servidor local na porta 9876.
+- Desabilitada a telemetria detalhada do add-on antes da reconstrução; permanecem apenas contagens mínimas anônimas declaradas pelo próprio complemento.
+- Aberto e auditado o `.blend` anterior pelo MCP: 1.537 objetos e 26 materiais, com três estudos desconectados.
+- Revisados o book oficial de 46 páginas, as plantas e os renders do empreendimento para derivar a composição e a linguagem visual permitidas pelas fontes.
+- Criado `scripts/blender_sopro_block_v2.py`, que gera uma cena organizada com quatro unidades, quatro piscinas, escadas externas, vidro, interiores simplificados, materiais e paisagismo tropical.
+- Salvos `sopro-v2.blend` e `public/models/sopro-v2.glb`; a versão web tem aproximadamente 1,9 MB, 288 meshes e cerca de 5,8 mil triângulos.
+- Integrada a v2 à página com texto de peso atualizado e novos presets de câmera.
+- Validado no navegador local o carregamento real, o estado `ready`, a fachada inicial e as vistas de térreo e superior; build das 14 rotas concluído.
+
+**Próximos passos:**
+
+- Validar visualmente com o cliente e, se houver, substituir aproximações por cotas ou modelo executivo oficial.
+- Fazer a próxima rodada de performance global e definir a hospedagem definitiva.
+
+**Bloqueios / dúvidas:**
+
+- O book não fornece todas as cotas executivas; o modelo continua corretamente identificado como representação comercial conceitual.
+
+---
+
 ## 2026-09-13 17:30
 
 **Foco:** preparar a reconstrução fiel do modelo 3D do Sopro pelo Blender MCP.

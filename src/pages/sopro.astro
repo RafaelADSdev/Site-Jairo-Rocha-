@@ -7,7 +7,7 @@ import {sopro} from '../data/sopro';
 import {existsSync} from 'node:fs';
 import {resolve} from 'node:path';
 
-const hasModel = existsSync(resolve('public/models/sopro.glb'));
+const hasModel = existsSync(resolve('public/models/sopro-v2.glb'));
 const {occupancy, occupancySource, occupancyLabel} = sopro.investment;
 const shotIndex = (caption: string) => sopro.photos.findIndex((photo) => photo.caption === caption);
 const shot = (caption: string) => sopro.photos[shotIndex(caption)];
@@ -285,7 +285,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
   <div class="container">
     <div class="sopro-stage-head">
       <h2>Explore um bloco do Sopro.</h2>
-      <p>Comece pelo exterior e alterne para as vistas técnicas do térreo e do pavimento superior. O modelo de 3,3 MB só é carregado quando você escolhe explorar.</p>
+      <p>Comece pelo exterior e aproxime o olhar do térreo ou do pavimento superior. O modelo otimizado de 1,9 MB só é carregado quando você escolhe explorar.</p>
     </div>
     {hasModel ? (
       <div class="sopro-viewer" id="sopro-viewer" data-model-state="idle" aria-busy="false">
@@ -301,7 +301,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
           <div class="sopro-model-cover-copy">
             <Icon name="cube" size={34}/>
             <strong>Explore o bloco em 3D</strong>
-            <span>Carregamento sob demanda · 3,3 MB</span>
+            <span>Carregamento sob demanda · 1,9 MB</span>
             <button class="btn btn-cream" type="button" id="sopro-model-load">Abrir experiência 3D <Icon name="arrow" size={17}/></button>
           </div>
         </div>
@@ -422,26 +422,26 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
   type ModelView = 'exterior' | 'terreo' | 'superior';
   const modelViews: Record<ModelView, {target: string; orbit: string; fieldOfView: string; label: string; title: string; copy: string}> = {
     exterior: {
-      target: '40.26m 2.4m -4.14m',
-      orbit: '-35deg 67deg 27m',
+      target: '1.2m 2.8m 0m',
+      orbit: '90deg 67deg 28m',
       fieldOfView: '32deg',
       label: 'Vista arquitetônica',
       title: 'Bloco completo',
       copy: 'Duas unidades por pavimento, piscinas privativas e a área externa do conjunto.',
     },
     terreo: {
-      target: '7.24m 0.8m -4.14m',
-      orbit: '0deg 5deg 20m',
+      target: '2.3m 1m 0m',
+      orbit: '90deg 72deg 18m',
       fieldOfView: '30deg',
-      label: 'Planta 3D',
+      label: 'Foco no térreo',
       title: 'Térreo com garden',
       copy: 'Duas unidades espelhadas, garden e piscinas privativas junto às varandas.',
     },
     superior: {
-      target: '23.73m 0.8m -4.14m',
-      orbit: '0deg 5deg 18m',
+      target: '2.3m 4.1m 0m',
+      orbit: '90deg 65deg 19m',
       fieldOfView: '30deg',
-      label: 'Planta 3D',
+      label: 'Foco no superior',
       title: 'Pavimento superior',
       copy: 'Duas unidades espelhadas no primeiro andar, ambas com piscina e varanda gourmet.',
     },
@@ -501,16 +501,16 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
       await import('@google/model-viewer');
       const model = document.createElement('model-viewer');
       model.id = 'sopro-model';
-      model.setAttribute('src', '/models/sopro.glb');
-      model.setAttribute('alt', 'Modelo 3D do bloco do Sopro, com térreo, primeiro andar e piscinas privativas');
+      model.setAttribute('src', '/models/sopro-v2.glb');
+      model.setAttribute('alt', 'Representação 3D de um bloco do Sopro com quatro unidades, piscinas privativas, escadas externas e paisagismo');
       model.setAttribute('camera-controls', '');
       model.setAttribute('touch-action', 'pan-y');
       model.setAttribute('shadow-intensity', '1.25');
       model.setAttribute('shadow-softness', '.8');
       model.setAttribute('exposure', '.95');
       model.setAttribute('interaction-prompt', 'auto');
-      model.setAttribute('min-camera-orbit', 'auto auto 8m');
-      model.setAttribute('max-camera-orbit', 'auto 88deg 42m');
+      model.setAttribute('min-camera-orbit', 'auto auto 6m');
+      model.setAttribute('max-camera-orbit', 'auto 88deg 38m');
       model.setAttribute('camera-target', modelViews.exterior.target);
       model.setAttribute('camera-orbit', modelViews.exterior.orbit);
       model.setAttribute('field-of-view', modelViews.exterior.fieldOfView);
