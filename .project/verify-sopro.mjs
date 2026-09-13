@@ -24,8 +24,8 @@ try {
 
   const typeCards = page.locator('[data-sopro-type]');
   assert(await typeCards.count() === 2, 'Sopro typology comparison should show two official options');
-  assert(await typeCards.nth(0).getByText(/Térreo com garden/i).isVisible(), 'Ground-floor typology label');
-  assert(await typeCards.nth(1).getByText(/Superior/i).isVisible(), 'Upper-floor typology label');
+  assert(await typeCards.nth(0).getByRole('heading', { name: 'Térreo com garden', exact: true }).isVisible(), 'Ground-floor typology label');
+  assert(await typeCards.nth(1).getByRole('heading', { name: 'Superior', exact: true }).isVisible(), 'Upper-floor typology label');
   assert(await typeCards.nth(0).getByText(/34 m²/i).isVisible(), 'Ground-floor area from the official book');
   assert(await typeCards.nth(1).getByText(/29 m²/i).isVisible(), 'Upper-floor area from the official book');
   assert(await typeCards.locator('img').count() === 2, 'Both typologies should include an official floor plan');

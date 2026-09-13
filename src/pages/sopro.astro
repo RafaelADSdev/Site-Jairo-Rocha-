@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
+import SoproImage from '../components/SoproImage.astro';
 import {money} from '../data/properties';
 import {sopro} from '../data/sopro';
 import {existsSync} from 'node:fs';
@@ -30,7 +31,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
 ---
 <Layout title="Sopro" overlay>
 <section class="sopro-hero">
-  <img src="/images/sopro/aereo.webp" width="1920" height="1080" alt="Vista aérea da Praia do Toque, com coqueiral, faixa de areia e o mar de São Miguel dos Milagres." fetchpriority="high"/>
+  <SoproImage src="/images/sopro/aereo.webp" width={1920} height={1080} sizes="100vw" alt="Vista aérea da Praia do Toque, com coqueiral, faixa de areia e o mar de São Miguel dos Milagres." loading="eager" fetchpriority="high"/>
   <div class="sopro-hero-shade"></div>
   <div class="container sopro-hero-copy">
     <h1>Sopro.<br/>A praia sentida<br/>em <em>cada detalhe.</em></h1>
@@ -41,6 +42,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
     </div>
     <nav class="sopro-jump" aria-label="Nesta página">
       <a href="#espacos">Espaços</a>
+      <a href="#tipologias">Plantas</a>
       <a href="#implantacao">Implantação</a>
       <a href="#entorno">Entorno</a>
       <a href="#numeros">Números</a>
@@ -58,7 +60,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
 
     <button type="button" class="sopro-plate sopro-plate--lead" data-sopro-photo={shotIndex('Vista aérea')} aria-label="Ampliar: Vista aérea">
       <span class="sopro-shot-frame">
-        <img src={shot('Vista aérea').src} alt={shot('Vista aérea').alt} width={shot('Vista aérea').width} height={shot('Vista aérea').height} loading="eager"/>
+        <SoproImage {...shot('Vista aérea')} sizes="(max-width: 780px) calc(100vw - 40px), min(1280px, calc(100vw - 112px))" loading="eager"/>
       </span>
       <span class="sopro-shot-name">Vista aérea</span>
     </button>
@@ -72,7 +74,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
         {['Entrada', 'Acesso', 'Recepção'].map((caption) => (
           <button type="button" class="sopro-shot" data-sopro-photo={shotIndex(caption)} aria-label={`Ampliar: ${caption}`}>
             <span class="sopro-shot-frame">
-              <img src={shot(caption).src} alt={shot(caption).alt} width={shot(caption).width} height={shot(caption).height} loading="lazy"/>
+              <SoproImage {...shot(caption)} sizes="(max-width: 780px) calc(50vw - 26px), 48vw"/>
             </span>
             <span class="sopro-shot-name">{caption}</span>
           </button>
@@ -84,7 +86,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
       <div class="sopro-spread sopro-spread--water">
         <button type="button" class="sopro-plate sopro-plate--flush" data-sopro-photo={shotIndex('Parque aquático')} aria-label="Ampliar: Parque aquático">
           <span class="sopro-shot-frame">
-            <img src={shot('Parque aquático').src} alt={shot('Parque aquático').alt} width={shot('Parque aquático').width} height={shot('Parque aquático').height} loading="lazy"/>
+            <SoproImage {...shot('Parque aquático')} sizes="(max-width: 780px) calc(100vw - 40px), 62vw"/>
           </span>
           <span class="sopro-shot-name">Parque aquático</span>
         </button>
@@ -97,7 +99,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
         {['Praia do Sopro', 'Piscina e bar', 'Deck'].map((caption) => (
           <button type="button" class="sopro-shot" data-sopro-photo={shotIndex(caption)} aria-label={`Ampliar: ${caption}`}>
             <span class="sopro-shot-frame">
-              <img src={shot(caption).src} alt={shot(caption).alt} width={shot(caption).width} height={shot(caption).height} loading="lazy"/>
+              <SoproImage {...shot(caption)} sizes="(max-width: 780px) calc(50vw - 26px), 32vw"/>
             </span>
             <span class="sopro-shot-name">{caption}</span>
           </button>
@@ -113,7 +115,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
         </article>
         <button type="button" class="sopro-plate sopro-plate--flush sopro-plate--room" data-sopro-photo={shotIndex('Apartamento')} aria-label="Ampliar: Apartamento">
           <span class="sopro-shot-frame">
-            <img src={shot('Apartamento').src} alt={shot('Apartamento').alt} width={shot('Apartamento').width} height={shot('Apartamento').height} loading="lazy"/>
+            <SoproImage {...shot('Apartamento')} sizes="(max-width: 780px) calc(100vw - 40px), 62vw"/>
           </span>
           <span class="sopro-shot-name">Apartamento</span>
         </button>
@@ -122,7 +124,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
         {['Quarto', 'Living', 'Varanda gourmet'].map((caption) => (
           <button type="button" class:list={['sopro-shot', {'sopro-shot--portrait': shot(caption).portrait}]} data-sopro-photo={shotIndex(caption)} aria-label={`Ampliar: ${caption}`}>
             <span class="sopro-shot-frame">
-              <img src={shot(caption).src} alt={shot(caption).alt} width={shot(caption).width} height={shot(caption).height} loading="lazy"/>
+              <SoproImage {...shot(caption)} sizes="(max-width: 780px) calc(50vw - 26px), 38vw"/>
             </span>
             <span class="sopro-shot-name">{caption}</span>
           </button>
@@ -133,7 +135,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
     <div class="sopro-spread sopro-spread--late">
       <button type="button" class="sopro-plate sopro-plate--flush" data-sopro-photo={shotIndex('Spa')} aria-label="Ampliar: Spa">
         <span class="sopro-shot-frame">
-          <img src={shot('Spa').src} alt={shot('Spa').alt} width={shot('Spa').width} height={shot('Spa').height} loading="lazy"/>
+          <SoproImage {...shot('Spa')} sizes="(max-width: 780px) calc(100vw - 40px), 62vw"/>
         </span>
         <span class="sopro-shot-name">Spa</span>
       </button>
@@ -145,7 +147,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
 
     <button type="button" class="sopro-plate sopro-plate--wide" data-sopro-photo={shotIndex('Restaurante')} aria-label="Ampliar: Restaurante">
       <span class="sopro-shot-frame">
-        <img src={shot('Restaurante').src} alt={shot('Restaurante').alt} width={shot('Restaurante').width} height={shot('Restaurante').height} loading="lazy"/>
+        <SoproImage {...shot('Restaurante')} sizes="(max-width: 780px) calc(100vw - 40px), min(1280px, calc(100vw - 112px))"/>
       </span>
       <span class="sopro-shot-name">Restaurante</span>
     </button>
@@ -154,7 +156,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
       {morePhotos.map((photo) => (
         <button type="button" class:list={['sopro-shot', {'sopro-shot--portrait': photo.portrait}]} data-sopro-photo={shotIndex(photo.caption)} aria-label={`Ampliar: ${photo.caption}`}>
           <span class="sopro-shot-frame">
-            <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy"/>
+            <SoproImage {...photo} sizes="(max-width: 780px) calc(50vw - 26px), 24vw"/>
           </span>
           <span class="sopro-shot-name">{photo.caption}</span>
         </button>
@@ -167,6 +169,46 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
     <p class="demo-note sopro-spaces-note">Imagens oficiais do projeto. Perspectivas ilustrativas, sujeitas a alterações na execução.</p>
   </div>
 </section>
+
+<section class="sopro-types" id="tipologias">
+  <div class="container">
+    <div class="sopro-types-head">
+      <div>
+        <h2>Dois jeitos de<br/>viver o Sopro.</h2>
+        <p>Compare as plantas do térreo com garden e do pavimento superior. Em ambas, a piscina e a varanda gourmet fazem parte da experiência.</p>
+      </div>
+      <p class="sopro-types-source">Plantas do book oficial<br/>páginas 35 e 39</p>
+    </div>
+    <div class="sopro-type-grid">
+      {sopro.typologies.map((type) => (
+        <article class="sopro-type" data-sopro-type={type.id}>
+          <div class="sopro-type-heading">
+            <span>{type.id === 'terreo' ? 'TIPOS 01 E 02' : 'TIPOS 03 E 04'}</span>
+            <div>
+              <h3>{type.name}</h3>
+              <strong>{type.area}</strong>
+            </div>
+          </div>
+          <figure>
+            <SoproImage
+              src={type.plan}
+              alt={type.planAlt}
+              width={type.planWidth}
+              height={type.planHeight}
+              sizes="(max-width: 780px) calc(100vw - 40px), calc(50vw - 70px)"
+            />
+            <figcaption>Planta oficial · book, página {type.bookPage}</figcaption>
+          </figure>
+          <ul>
+            {type.features.map((feature) => <li>{feature}</li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+    <p class="demo-note sopro-types-note">As plantas identificam áreas arredondadas de 34 m² e 29 m². O cadastro comercial informa 34,2 m² e 29,2 m². Confirme área privativa, disponibilidade e alterações de projeto na documentação da unidade.</p>
+  </div>
+</section>
+
 <section class="sopro-plan" id="implantacao">
   <div class="container">
     <div class="sopro-plan-head">
@@ -174,7 +216,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
       <p>Três ruas de unidades, o lazer no centro e a praia à esquerda. O desenho do condomínio na Praia do Toque.</p>
     </div>
     <button type="button" class="sopro-plan-shot" data-sopro-photo={sopro.photos.length} aria-label="Ampliar a implantação do Sopro">
-      <img src={sopro.plan.src} alt={sopro.plan.alt} width={sopro.plan.width} height={sopro.plan.height} loading="lazy"/>
+      <SoproImage {...sopro.plan} sizes="(max-width: 780px) calc(100vw - 88px), min(1180px, calc(100vw - 160px))"/>
       <span>{sopro.plan.caption}</span>
     </button>
     <p class="demo-note">Planta de implantação oficial. Áreas e paisagismo ilustrativos do projeto.</p>
@@ -224,15 +266,15 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
         <p class="sopro-proof-lead">O Sopro é muito mais do que um empreendimento de praia. É conquistar o privilégio de investir onde todos sonham passar férias.</p>
       </div>
       <div class="sopro-proof-figure">
-        <img src="/images/sopro/ocupacao.webp" width="910" height="648" alt="Vista aérea da Praia do Toque, com coqueiral, faixa de areia e o mar." loading="lazy"/>
+        <SoproImage src="/images/sopro/ocupacao.webp" width={910} height={648} sizes="(max-width: 780px) calc(100vw - 40px), 47vw" alt="Vista aérea da Praia do Toque, com coqueiral, faixa de areia e o mar."/>
         <p class="sopro-proof-stat">
           <strong>{occupancy}<span>%</span></strong>
           <b>{occupancyLabel}</b>
         </p>
       </div>
       <div class="sopro-proof-side">
-        <img src="/images/sopro/toque-entrada.webp" width="446" height="644" alt="Placa de bem-vindo na Praia do Toque, sob uma árvore." loading="lazy"/>
-        <img src="/images/sopro/toque-orla.webp" width="446" height="646" alt="Orla da Praia do Toque, com ondas na areia e céu aberto." loading="lazy"/>
+        <SoproImage src="/images/sopro/toque-entrada.webp" width={446} height={644} sizes="(max-width: 780px) calc(50vw - 26px), 18vw" alt="Placa de bem-vindo na Praia do Toque, sob uma árvore."/>
+        <SoproImage src="/images/sopro/toque-orla.webp" width={446} height={646} sizes="(max-width: 780px) calc(50vw - 26px), 18vw" alt="Orla da Praia do Toque, com ondas na areia e céu aberto."/>
       </div>
       <p class="demo-note sopro-proof-note">* Dados da {occupancySource}. Média do destino — não é garantia de ocupação ou renda da unidade.</p>
     </div>
@@ -243,19 +285,42 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
   <div class="container">
     <div class="sopro-stage-head">
       <h2>Entre. Gire. Imagine.</h2>
-      <p>O bloco do Sopro em três dimensões: térreo e primeiro andar, duas unidades por pavimento, cada uma com piscina. Arraste para girar. Use o scroll para aproximar.</p>
+      <p>O bloco do Sopro em três dimensões: térreo e primeiro andar, duas unidades por pavimento, cada uma com piscina. O modelo de 3,3 MB só é carregado quando você escolhe explorar.</p>
     </div>
     {hasModel ? (
-      <div class="sopro-viewer">
-        <model-viewer
-          src={sopro.modelPath}
-          alt="Modelo 3D do bloco do Sopro, com térreo, primeiro andar e piscinas privativas"
-          camera-controls
-          touch-action="pan-y"
-          shadow-intensity="1"
-          exposure="1"
-          id="sopro-model"
-        ></model-viewer>
+      <div class="sopro-viewer" id="sopro-viewer" data-model-state="idle" aria-busy="false">
+        <div class="sopro-model-cover">
+          <SoproImage
+            src="/images/sopro/galeria-04.webp"
+            width={1920}
+            height={1072}
+            sizes="(max-width: 780px) calc(100vw - 40px), min(1280px, calc(100vw - 112px))"
+            alt="Vista aérea do Sopro usada como capa para a experiência em 3D"
+          />
+          <span class="sopro-model-shade"></span>
+          <div class="sopro-model-cover-copy">
+            <Icon name="cube" size={34}/>
+            <strong>Explore o bloco em 3D</strong>
+            <span>Carregamento sob demanda · 3,3 MB</span>
+            <button class="btn btn-cream" type="button" id="sopro-model-load">Abrir experiência 3D <Icon name="arrow" size={17}/></button>
+          </div>
+        </div>
+        <div class="sopro-model-host" id="sopro-model-host" hidden></div>
+        <div class="sopro-model-loading" role="status" aria-live="polite" hidden>
+          <span class="sopro-model-spinner" aria-hidden="true"></span>
+          <strong>Preparando o Sopro em 3D</strong>
+          <span>Carregando o visualizador e o modelo…</span>
+        </div>
+        <div class="sopro-model-error" role="alert" hidden>
+          <Icon name="cube" size={38}/>
+          <h3>O 3D não carregou desta vez.</h3>
+          <p>Você ainda pode conhecer a implantação completa ou tentar carregar o modelo novamente.</p>
+          <div>
+            <button class="btn btn-cream" type="button" id="sopro-model-retry">Tentar novamente</button>
+            <a class="text-link" href="#implantacao">Ver a implantação</a>
+          </div>
+        </div>
+        <noscript><p class="sopro-model-noscript">Ative o JavaScript para explorar o modelo 3D. A <a href="#implantacao">implantação completa</a> continua disponível.</p></noscript>
       </div>
     ) : (
       <div class="sopro-viewer sopro-viewer--empty">
@@ -312,25 +377,63 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
     if (event.key === 'ArrowLeft') show(current - 1);
     if (event.key === 'ArrowRight') show(current + 1);
   });
-  const model = document.querySelector('#sopro-model');
-  if (model) {
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      model.setAttribute('auto-rotate', '');
+  const modelShell = document.querySelector<HTMLElement>('#sopro-viewer');
+  const modelCover = modelShell?.querySelector<HTMLElement>('.sopro-model-cover');
+  const modelHost = document.querySelector<HTMLElement>('#sopro-model-host');
+  const modelLoading = modelShell?.querySelector<HTMLElement>('.sopro-model-loading');
+  const modelError = modelShell?.querySelector<HTMLElement>('.sopro-model-error');
+  const modelLoad = document.querySelector<HTMLButtonElement>('#sopro-model-load');
+  const modelRetry = document.querySelector<HTMLButtonElement>('#sopro-model-retry');
+  let modelTimeout: ReturnType<typeof setTimeout> | undefined;
+
+  type ModelState = 'idle' | 'loading' | 'ready' | 'error';
+  const setModelState = (state: ModelState) => {
+    if (!modelShell || !modelCover || !modelHost || !modelLoading || !modelError) return;
+    modelShell.dataset.modelState = state;
+    modelShell.setAttribute('aria-busy', state === 'loading' ? 'true' : 'false');
+    modelCover.hidden = state !== 'idle';
+    modelHost.hidden = state === 'idle' || state === 'error';
+    modelLoading.hidden = state !== 'loading';
+    modelError.hidden = state !== 'error';
+  };
+
+  const failModel = () => {
+    if (modelTimeout) clearTimeout(modelTimeout);
+    modelHost?.replaceChildren();
+    setModelState('error');
+  };
+
+  const openModel = async () => {
+    if (!modelHost || modelShell?.dataset.modelState === 'loading') return;
+    setModelState('loading');
+    modelHost.replaceChildren();
+
+    try {
+      await import('@google/model-viewer');
+      const model = document.createElement('model-viewer');
+      model.id = 'sopro-model';
+      model.setAttribute('src', '/models/sopro.glb');
+      model.setAttribute('alt', 'Modelo 3D do bloco do Sopro, com térreo, primeiro andar e piscinas privativas');
+      model.setAttribute('camera-controls', '');
+      model.setAttribute('touch-action', 'pan-y');
+      model.setAttribute('shadow-intensity', '1');
+      model.setAttribute('exposure', '1');
+      model.setAttribute('interaction-prompt', 'auto');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) model.setAttribute('auto-rotate', '');
+
+      model.addEventListener('load', () => {
+        if (modelTimeout) clearTimeout(modelTimeout);
+        setModelState('ready');
+      }, {once: true});
+      model.addEventListener('error', failModel, {once: true});
+      modelHost.append(model);
+      modelTimeout = setTimeout(failModel, 20_000);
+    } catch {
+      failModel();
     }
-    // O model-viewer pesa ~910 KB e puxa um .glb de ~3,3 MB. Nada disso precisa
-    // entrar no carregamento inicial da página: só quando o visualizador se aproxima da tela.
-    const load = () => {
-      const script = document.createElement('script');
-      script.type = 'module';
-      script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
-      document.head.append(script);
-    };
-    const near = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return;
-      near.disconnect();
-      load();
-    }, {rootMargin: '400px'});
-    near.observe(model);
-  }
+  };
+
+  modelLoad?.addEventListener('click', openModel);
+  modelRetry?.addEventListener('click', openModel);
 </script>
 </Layout>

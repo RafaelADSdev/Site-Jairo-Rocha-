@@ -1,0 +1,42 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  sizes: string;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  sizes,
+  loading = 'lazy',
+  fetchpriority = 'auto',
+  class: className,
+} = Astro.props;
+
+const stem = src.split('/').at(-1)?.replace(/\.webp$/i, '') ?? '';
+const optimizedRoot = `/images/sopro/optimized/${stem}`;
+const widths = [...new Set([480, 768, 1280, width].filter((candidate) => candidate <= width))].sort((a, b) => a - b);
+const fallbackWidth = widths.at(-1) ?? width;
+const optimized = (candidate: number) => `${optimizedRoot}-${candidate}.webp`;
+---
+<img
+  class={className}
+  src={optimized(fallbackWidth)}
+  srcset={widths.map((candidate) => `${optimized(candidate)} ${candidate}w`).join(', ')}
+  sizes={sizes}
+  alt={alt}
+  width={width}
+  height={height}
+  loading={loading}
+  fetchpriority={fetchpriority}
+  decoding="async"
+  data-sopro-responsive
+/>
