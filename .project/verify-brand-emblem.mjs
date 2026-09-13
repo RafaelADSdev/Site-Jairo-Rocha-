@@ -19,6 +19,10 @@ try {
   await desktop.getByRole('button', {name: 'Retomar giro 3D', exact: true}).click();
   await desktop.waitForTimeout(300);
   assert.notDeepEqual(await desktop.locator('[data-brand-canvas]').screenshot(), paused, 'Resumed geometry moves');
+  await desktop.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  await desktop.waitForFunction(() => document.querySelector('[data-brand-emblem]').dataset.brandState === 'paused');
+  await desktop.evaluate(() => scrollTo(0, 0));
+  await desktop.waitForFunction(() => document.querySelector('[data-brand-emblem]').dataset.brandState === 'ready');
   await desktop.emulateMedia({reducedMotion: 'reduce'});
   await desktop.waitForFunction(() => document.querySelector('[data-brand-emblem]').dataset.brandState === 'paused');
   await desktop.emulateMedia({reducedMotion: 'no-preference'});

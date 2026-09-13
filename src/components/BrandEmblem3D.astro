@@ -1,0 +1,20 @@
+---
+import '../styles/brand-emblem-3d.css';
+---
+<div class="brand-emblem" data-brand-emblem data-brand-state="fallback">
+  <div class="brand-emblem__stage" data-brand-stage aria-hidden="true">
+    <svg class="brand-emblem__fallback" data-brand-fallback viewBox="0 0 160 160" focusable="false" aria-hidden="true">
+      <circle cx="80" cy="80" r="53" fill="none" stroke="#f20a17" stroke-width="18" />
+      <circle cx="80" cy="80" r="23" fill="#f20a17" />
+    </svg>
+  </div>
+  <button class="brand-emblem__toggle" data-brand-toggle type="button" aria-label="Ativar símbolo 3D" disabled>
+    <span class="brand-emblem__control-icon" aria-hidden="true">↻</span>
+    <span data-brand-label>Ativar símbolo 3D</span>
+  </button>
+  <span class="brand-emblem__status" data-brand-status role="status"></span>
+</div>
+<script>
+  import {initBrandEmblems} from '../scripts/brand-emblem-3d';
+  initBrandEmblems();
+</script>
