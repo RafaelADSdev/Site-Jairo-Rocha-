@@ -1,0 +1,25 @@
+---
+import Icon from './Icon.astro';
+import BrandEmblem3D from './BrandEmblem3D.astro';
+import {coastImage,coastImageSet} from '../data/litoral-experience';
+import {priceScales,bedOptions} from '../data/filters';
+import '../styles/home-opening.css';
+---
+<section class="home-opening" data-home-opening aria-labelledby="home-headline">
+ <div class="home-landscape"><img data-home-photo src={coastImage('coast-hero',1600)} srcset={coastImageSet('coast-hero')} sizes="100vw" width="1600" height="900" alt="Fotografia de Porto de Galinhas, com recifes, mar e faixa de areia" fetchpriority="high"/><div class="home-landscape-shade"></div></div>
+ <div class="container home-opening-layout">
+  <div class="home-opening-copy"><span class="home-signature">Jairo Rocha · desde 1986</span><h1 id="home-headline"><span data-home-title>Seu lugar em Pernambuco.</span><span data-home-subtitle>Para viver ou investir.</span></h1><p data-home-description>Da vida urbana ao litoral, encontre imóveis e informações para escolher seu próximo endereço.</p><a class="home-feature-link" data-home-feature-link href="/litoral">Explorar o litoral <Icon name="diagonal" size={18}/></a></div>
+  <div class="home-brand-art"><BrandEmblem3D /></div>
+  <div class="home-feature-switcher"><div class="home-feature-buttons" role="group" aria-label="Escolher destaque, sem troca automática"><button type="button" data-home-feature="litoral" aria-pressed="true" disabled><span>Litoral</span><small>Praias de Pernambuco</small></button><button type="button" data-home-feature="sopro" aria-pressed="false" disabled><span>Sopro</span><small>Praia do Toque · AL</small></button><button type="button" data-home-feature="lafleur" aria-pressed="false" disabled><span>La Fleur Polinésia</span><small>Muro Alto · PE</small></button></div><p data-home-photo-note>Fotografia real · Porto de Galinhas <a href="/litoral#creditos-litoral">Créditos ↗</a></p></div>
+ </div><p class="sr-only" data-home-feature-status role="status" aria-live="polite"></p>
+</section>
+<section class="home-search-section container" id="encontre" aria-labelledby="home-search-heading">
+ <div class="home-search-surface"><div class="home-search-top"><h2 id="home-search-heading">O que você procura?</h2><div class="home-intents" role="group" aria-label="Objetivo da busca"><button type="button" data-home-intent="venda" aria-pressed="true" disabled>Comprar</button><button type="button" data-home-intent="locacao" aria-pressed="false" disabled>Alugar</button><a href="/litoral#investir" data-home-invest>Investir no litoral <Icon name="diagonal" size={16}/></a></div></div>
+  <form action="/imoveis" class="home-search-form"><div class="home-location" data-place-suggest><label for="place-home">Onde você quer encontrar seu imóvel?</label><div><Icon name="pin" size={20}/><input id="place-home" name="local" placeholder="Cidade, bairro ou empreendimento" autocomplete="off"/></div></div>
+   <details class="home-search-options"><summary>Personalizar busca <span>tipo, quartos e preço</span><Icon name="plus" size={16}/></summary><div class="home-options-grid"><label for="home-type">Seleção<select id="home-type" name="tipo"><option value="venda">Novos e seminovos</option><option value="novos">Somente novos</option><option value="seminovos">Somente seminovos</option><option value="locacao">Locação</option></select></label><label for="home-beds">Quartos<select id="home-beds" name="quartos">{bedOptions.map(([value,text])=><option value={value}>{text}</option>)}</select></label><label for="home-price"><span data-home-price-label>Preço de compra até</span><select id="home-price" name="valor">{priceScales.venda.options.map(([value,text])=><option value={value}>{text}</option>)}</select></label></div></details>
+   <button class="btn home-search-submit" type="submit" data-home-submit><Icon name="search" size={19}/>Buscar imóveis</button>
+  </form>
+ </div><p class="home-search-footnote">Escolha seu caminho. Explore os imóveis. Confirme preços e disponibilidade com a equipe.</p>
+ <noscript><p>Para personalizar a busca, abra os filtros. Os destaques também estão disponíveis: <a href="/sopro">Sopro</a> e <a href="/imovel/la-fleur-polinesia">La Fleur Polinésia</a>.</p></noscript>
+</section>
+<script>import '../scripts/home-opening';</script>
