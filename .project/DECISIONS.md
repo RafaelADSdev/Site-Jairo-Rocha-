@@ -33,3 +33,27 @@
 **Alternativas:** liberar indexação imediatamente e competir com o site oficial; retirar a publicação conceitual do ar.
 
 **Consequências:** a nota de SEO permanece baixa no Lighthouse, mas evita indexar uma prévia e criar conteúdo duplicado. A decisão deve ser revista quando houver domínio e estratégia de lançamento definidos.
+
+---
+
+## 2026-09-13 — Carregar a experiência 3D do Sopro somente após intenção do usuário
+
+**Contexto:** o modelo GLB tem aproximadamente 3,3 MB e a biblioteca de visualização adiciona cerca de 1 MB de JavaScript minificado. Carregar ambos na abertura penalizaria visitantes que não usam o recurso e uma falha de WebGL/rede deixaria apenas uma área vazia.
+
+**Decisão:** versionar `@google/model-viewer` 4.3.1 e `three` 0.183.0 no projeto, importar o componente dinamicamente após o clique na capa e só então solicitar o GLB. A interface possui estados explícitos de capa, loading, pronto e erro, com retry e link para a implantação como fallback.
+
+**Alternativas:** carregar o visualizador e o GLB na abertura; depender de script externo via CDN; remover o 3D.
+
+**Consequências:** o 3D continua disponível, mas seu custo só é pago por quem demonstra interesse. O bundle lazy ainda é grande e deve permanecer isolado do carregamento inicial; as versões ficam fixadas e precisam de atualização deliberada.
+
+---
+
+## 2026-09-13 — Gerar imagens responsivas do Sopro dentro do projeto
+
+**Contexto:** a estratégia genérica de imagens depende do Image CDN da Netlify, mas a prévia atual está na Vercel e a hospedagem definitiva ainda não foi escolhida. A página do Sopro entregava arquivos grandes também em telas pequenas.
+
+**Decisão:** gerar variantes WebP em 480, 768 e 1280 px, além da largura nativa quando aplicável, e centralizar `srcset`, `sizes`, lazy-loading e prioridade no componente `SoproImage.astro`.
+
+**Alternativas:** aguardar a definição da hospedagem; usar apenas uma imagem WebP por posição; contratar um serviço externo de transformação.
+
+**Consequências:** a otimização funciona em qualquer hospedagem estática. O repositório cresce com os derivados, mas uma navegação mobile completa da página passou a selecionar aproximadamente 0,98 MB de imagens contra 12,58 MB do conjunto original referenciado.

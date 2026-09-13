@@ -7,7 +7,7 @@ const errors=[];page.on('pageerror',e=>errors.push(e.message));
 const checks=[];
 for(const width of [1440,390]){
  await page.setViewportSize({width,height:width===1440?1000:844});
- for(const [name,path] of [['home','/'],['catalog','/imoveis'],['detail','/imovel/la-fleur-polinesia'],['litoral','/litoral'],['admin','/admin'],['form','/admin/novo']]){
+ for(const [name,path] of [['home','/'],['catalog','/imoveis'],['detail','/imovel/la-fleur-polinesia'],['sopro','/sopro'],['litoral','/litoral'],['admin','/admin'],['form','/admin/novo']]){
   await page.goto('http://localhost:4322'+path);await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(300);
   await page.evaluate(()=>document.querySelectorAll('img').forEach(image=>image.loading='eager'));
   await page.waitForFunction(()=>[...document.images].every(image=>image.complete),{timeout:5000}).catch(()=>{});

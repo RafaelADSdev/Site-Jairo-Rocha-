@@ -1,5 +1,32 @@
 # Diário — Site Jairo Rocha
 
+## 2026-09-13 17:02
+
+**Foco:** melhorar a página do Sopro com 3D resiliente, imagens otimizadas e comparação das tipologias.
+
+**Feito:**
+
+- Extraídas do book oficial as plantas do pavimento térreo (página 35, 34 m²) e superior (página 39, 29 m²), com aviso transparente sobre a diferença para os valores comerciais de 34,2 e 29,2 m² usados no site.
+- Criada a seção de comparação lado a lado com áreas, características, plantas e navegação por âncora.
+- Implementado o 3D sob demanda com capa, loading acessível, timeout, estado pronto, retry e fallback para a implantação; o GLB de aproximadamente 3,3 MB não é solicitado antes do clique.
+- `@google/model-viewer` 4.3.1 e `three` 0.183.0 foram fixados como dependências locais e carregados por importação dinâmica.
+- Geradas variantes WebP responsivas para as imagens do Sopro e criado o componente `SoproImage.astro`; numa navegação mobile completa, 35 imagens selecionadas somaram aproximadamente 0,98 MB, contra 12,58 MB do conjunto original referenciado.
+- Verificação focada passou pelos estados do 3D, fallback de erro, duas tipologias e imagens responsivas.
+- Regressão completa passou em 14 combinações de rota e viewport, sem overflow, imagens quebradas ou erros de página.
+- Build das 14 páginas e `npm audit` passaram; Lighthouse do Sopro marcou Acessibilidade 100 e Boas Práticas 100.
+
+**Próximos passos:**
+
+- Validar com a empresa os dados comerciais, as áreas e a autorização das mídias do Sopro.
+- Tratar performance global e LCP, principalmente CSS compartilhado, fontes e prioridades de recursos.
+- Definir a estratégia de entrega do PDF de aproximadamente 27,8 MB.
+
+**Bloqueios / dúvidas:**
+
+- O book oficial arredonda as áreas das plantas para 34 e 29 m², enquanto o site usa 34,2 e 29,2 m²; a página informa a diferença até a validação comercial.
+
+---
+
 ## 2026-09-13 13:51
 
 **Foco:** disponibilizar o código do portal na pasta local e iniciar o ambiente de desenvolvimento para o Alexandre.

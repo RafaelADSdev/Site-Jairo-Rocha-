@@ -35,7 +35,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
   <div class="sopro-hero-shade"></div>
   <div class="container sopro-hero-copy">
     <h1>Sopro.<br/>A praia sentida<br/>em <em>cada detalhe.</em></h1>
-    <p>Praia do Toque, São Miguel dos Milagres — AL. {sopro.units} unidades com piscina privativa e uma prainha só do empreendimento.</p>
+    <p>Praia do Toque, São Miguel dos Milagres, AL. {sopro.units} unidades com piscina privativa e uma prainha só do empreendimento.</p>
     <div class="sopro-hero-actions">
       <button class="btn btn-cream" data-chat-open>Quero conhecer o Sopro <Icon name="arrow"/></button>
       <a class="hero-link" href="#espacos">Ver os espaços <span><Icon name="plus" size={16}/></span></a>
@@ -55,7 +55,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
   <div class="container">
     <div class="sopro-spaces-head">
       <h2>Os espaços.</h2>
-      <p>Piscina privativa, prainha, restaurante, spa e a recepção — fotografias oficiais do empreendimento.</p>
+      <p>Piscina privativa, prainha, restaurante, spa e recepção. Fotografias oficiais do empreendimento.</p>
     </div>
 
     <button type="button" class="sopro-plate sopro-plate--lead" data-sopro-photo={shotIndex('Vista aérea')} aria-label="Ampliar: Vista aérea">
@@ -183,7 +183,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
       {sopro.typologies.map((type) => (
         <article class="sopro-type" data-sopro-type={type.id}>
           <div class="sopro-type-heading">
-            <span>{type.id === 'terreo' ? 'TIPOS 01 E 02' : 'TIPOS 03 E 04'}</span>
+            <span>{type.id === 'terreo' ? 'PAVIMENTO TÉRREO' : 'PAVIMENTO SUPERIOR'}</span>
             <div>
               <h3>{type.name}</h3>
               <strong>{type.area}</strong>
@@ -276,7 +276,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
         <SoproImage src="/images/sopro/toque-entrada.webp" width={446} height={644} sizes="(max-width: 780px) calc(50vw - 26px), 18vw" alt="Placa de bem-vindo na Praia do Toque, sob uma árvore."/>
         <SoproImage src="/images/sopro/toque-orla.webp" width={446} height={646} sizes="(max-width: 780px) calc(50vw - 26px), 18vw" alt="Orla da Praia do Toque, com ondas na areia e céu aberto."/>
       </div>
-      <p class="demo-note sopro-proof-note">* Dados da {occupancySource}. Média do destino — não é garantia de ocupação ou renda da unidade.</p>
+      <p class="demo-note sopro-proof-note">* Dados da {occupancySource}. Média do destino; não é garantia de ocupação ou renda da unidade.</p>
     </div>
   </div>
 </section>
@@ -339,7 +339,7 @@ const morePhotos = sopro.photos.filter((photo) => !featuredCaptions.includes(pho
       <div>
         <small>Valor de referência</small>
         <strong>{money(sopro.priceFrom)}</strong>
-        <p>A partir deste valor, sujeito a confirmação. {sopro.units} studios — 29,2&nbsp;m² no superior e 34,2&nbsp;m² no térreo, com garden. Piscina privativa em todas.</p>
+        <p>A partir deste valor, sujeito a confirmação. {sopro.units} studios: 29,2&nbsp;m² no superior e 34,2&nbsp;m² no térreo, com garden. Piscina privativa em todas.</p>
       </div>
       <button class="btn" data-chat-open>Quero conhecer este imóvel <Icon name="arrow" size={18}/></button>
     </div>

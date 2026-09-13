@@ -540,7 +540,7 @@ html.motion-on #main-photo.is-swapping{
   font-size:10px;
   font-weight:800;
   letter-spacing:.1em;
-  color:var(--gold-ink)
+  color:var(--gold-text)
 }
 .sopro-type-heading>div{text-align:right}
 .sopro-type-heading h3{
@@ -555,7 +555,7 @@ html.motion-on #main-photo.is-swapping{
   font-size:25px;
   font-style:italic;
   font-weight:400;
-  color:var(--gold-ink)
+  color:var(--gold-text)
 }
 .sopro-type figure{margin:0}
 .sopro-type figure img{
@@ -1027,7 +1027,7 @@ html.motion-on .sopro-plate.is-in:hover .sopro-shot-frame img{transform:scale(1.
   .sopro-map iframe{height:280px}
   .sopro-close-card{flex-direction:column;align-items:flex-start}
   .sopro-close-card .btn{width:100%}
-  .sopro-model-cover,.sopro-model-host,.sopro-model-loading,.sopro-model-error,.sopro-model-host model-viewer,.sopro-viewer--empty{min-height:380px;height:380px}
+  .sopro-viewer,.sopro-model-cover,.sopro-model-host,.sopro-model-loading,.sopro-model-error,.sopro-model-host model-viewer,.sopro-viewer--empty{min-height:380px;height:380px}
   .sopro-model-cover-copy{padding:28px}
   .sopro-model-cover-copy>strong{font-size:25px}
   .sopro-model-error>div{flex-direction:column;gap:18px}

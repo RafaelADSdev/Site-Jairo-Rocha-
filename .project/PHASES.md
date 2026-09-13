@@ -21,6 +21,9 @@
 
 ## 🚧 Fase 2 — Decisões de produção
 
+- [x] Criar comparação das tipologias do Sopro a partir das plantas oficiais
+- [x] Otimizar as imagens da página Sopro com `srcset` WebP gerado no projeto
+- [x] Tornar o 3D do Sopro sob demanda, com capa, loading, retry e fallback
 - [ ] Definir relação com o site operacional `jairorocha.com.br`
 - [ ] Escolher Vercel ou Netlify e alinhar imagens, cache e headers
 - [ ] Definir CMS/CRM/fonte do catálogo
