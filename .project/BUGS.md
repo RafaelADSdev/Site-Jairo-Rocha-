@@ -18,4 +18,4 @@
 - [x] 2026-09-13 Verificação E2E quebrava ao crescer o catálogo de 6 para 7 imóveis — causa: expectativa fixa; fix: comparar a restauração com a contagem inicial visível.
 - [x] 2026-09-13 Imagens lazy-loading eram classificadas como quebradas antes de completar o carregamento — causa: teste confundia imagem pendente com erro; fix: forçar carregamento na auditoria e validar `naturalWidth` somente após conclusão.
 - [x] 2026-09-13 Dependências apresentavam 3 vulnerabilidades, incluindo 1 crítica — causa: Astro 5.18.2 fora da linha corrigida; fix: migração para Astro 7.3.2, build e E2E completos.
-- [x] 2026-09-13 Nome acessível da marca omitia o selo visível “40 anos” — causa: `aria-label` incompleto; fix: incluir marca, aniversário e destino no nome acessível.
+- [x] 2026-09-13 Nome acessível da marca omitia o selo visível “40 anos” — causa: `aria-label` sobrescrevia o `alt` do logotipo e o texto do selo; fix: remover a sobrescrita e validar o nome acessível computado pelo navegador.
