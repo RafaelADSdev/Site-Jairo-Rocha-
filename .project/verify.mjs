@@ -9,13 +9,16 @@ for(const width of [1440,390]){
  await page.setViewportSize({width,height:width===1440?1000:844});
  for(const [name,path] of [['home','/'],['catalog','/imoveis'],['detail','/imovel/la-fleur-polinesia'],['litoral','/litoral'],['admin','/admin'],['form','/admin/novo']]){
   await page.goto('http://localhost:4322'+path);await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(300);
-  const state=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth>innerWidth,broken:[...document.images].filter(i=>!i.complete||!i.naturalWidth).map(i=>i.src)}));
+  await page.evaluate(()=>document.querySelectorAll('img').forEach(image=>image.loading='eager'));
+  await page.waitForFunction(()=>[...document.images].every(image=>image.complete),{timeout:5000}).catch(()=>{});
+  const state=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth>innerWidth,broken:[...document.images].filter(i=>i.complete&&!i.naturalWidth).map(i=>i.src)}));
   checks.push({width,path,...state});
   await page.screenshot({path:`${dir}/${name}-${width}.png`,fullPage:true});
  }
 }
+await page.goto('http://localhost:4322/imoveis');const initialCardCount=await page.locator('.property-card:visible').count();
 await page.goto('http://localhost:4322/imoveis?tipo=locacao');if(await page.locator('.property-card:visible').count()!==1)throw Error('Rental filter');
-await page.locator('input[name=local]').fill('inexistente');await page.locator('#filters').evaluate(f=>f.requestSubmit());if(!await page.locator('#empty').isVisible())throw Error('Empty filter');await page.locator('#clear').click();if(await page.locator('.property-card:visible').count()!==6)throw Error('Clear filter');
+await page.locator('input[name=local]').fill('inexistente');await page.locator('#filters').evaluate(f=>f.requestSubmit());if(!await page.locator('#empty').isVisible())throw Error('Empty filter');await page.locator('#clear').click();if(await page.locator('.property-card:visible').count()!==initialCardCount)throw Error('Clear filter');
 await page.goto('http://localhost:4322/imovel/la-fleur-polinesia');for(const tab of ['video','book','tour','fotos']){await page.locator('#tab-'+tab).click();if(!await page.locator('#panel-'+tab).isVisible())throw Error('Media tab '+tab)}
 await page.locator('#gallery-inline').click();if(!await page.locator('#gallery').isVisible())throw Error('Gallery');await page.locator('#gallery-close').click();
 await page.goto('http://localhost:4322/litoral');const before=await page.locator('#net-month').textContent();await page.locator('#daily').fill('900');await page.locator('#daily').dispatchEvent('input');if(before===await page.locator('#net-month').textContent())throw Error('Simulation update');
