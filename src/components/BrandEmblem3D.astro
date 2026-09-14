@@ -3,14 +3,18 @@ import '../styles/brand-emblem-3d.css';
 ---
 <div class="brand-emblem" data-brand-emblem data-brand-state="fallback">
   <div class="brand-emblem__stage" data-brand-stage>
-    <div class="brand-emblem__fallback" data-brand-fallback aria-hidden="true">
-      <img src="/images/logo.webp" width="186" height="67" alt="" data-brand-logo />
-      <span class="brand-emblem__anniversary" data-brand-anniversary><b>40</b><small>anos</small></span>
-    </div>
-    <button class="brand-emblem__toggle" data-brand-toggle type="button" aria-label="Ativar logo completa em 3D" title="Ativar logo completa em 3D" disabled>
-      <span class="brand-emblem__status" data-brand-label>Ativar logo completa em 3D</span>
+    <svg class="brand-emblem__fallback" data-brand-fallback viewBox="0 0 108 108" aria-hidden="true" focusable="false">
+      <circle cx="54" cy="54" r="43" fill="none" stroke="#f30716" stroke-width="15"/>
+      <circle cx="54" cy="54" r="19" fill="#f30716"/>
+    </svg>
+    <button class="brand-emblem__toggle" data-brand-toggle type="button" aria-label="Ativar símbolo 3D" title="Ativar símbolo 3D" disabled>
+      <span class="brand-emblem__status" data-brand-label>Ativar símbolo 3D</span>
     </button>
   </div>
+  <a class="brand-emblem__wordmark" data-brand-wordmark href="/" aria-label="Jairo Rocha Imóveis — página inicial">
+    <span class="brand-emblem__wordmark-image"><img src="/images/logo.webp" width="186" height="67" alt="" /></span>
+  </a>
+  <span class="brand-emblem__anniversary" data-brand-anniversary aria-label="40 anos"><b>40</b><small>anos</small></span>
   <span class="brand-emblem__status" data-brand-status role="status"></span>
 </div>
 <script>

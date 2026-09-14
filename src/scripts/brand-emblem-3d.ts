@@ -1,6 +1,6 @@
 type Disposable = {dispose: () => void};
 
-/** Original complete wordmark and anniversary artwork on a real beveled 3D sign. */
+/** Only the target rotates. The original name has a fixed, raster-traced 3D silhouette. */
 export function initBrandEmblems() {
   document.querySelectorAll<HTMLElement>('[data-brand-emblem]').forEach(initEmblem);
 }
@@ -12,6 +12,7 @@ function initEmblem(root: HTMLElement) {
   const button = root.querySelector<HTMLButtonElement>('[data-brand-toggle]')!;
   const label = root.querySelector<HTMLElement>('[data-brand-label]')!;
   const status = root.querySelector<HTMLElement>('[data-brand-status]')!;
+  const wordmark = root.querySelector<HTMLElement>('[data-brand-wordmark]')!;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const mobile = matchMedia('(max-width: 780px)');
   let requested = false;
@@ -25,6 +26,7 @@ function initEmblem(root: HTMLElement) {
   let angle = -.10;
   let render: (() => void) | undefined;
   let resize: (() => void) | undefined;
+  let resizeName: (() => void) | undefined;
   const resources: Disposable[] = [];
   let resizeObserver: ResizeObserver | undefined;
 
@@ -65,23 +67,23 @@ function initEmblem(root: HTMLElement) {
     if (!render || disposed) return;
     render();
     if (canMove()) {
-      setState('ready', 'Pausar giro da logo 3D');
+      setState('ready', 'Pausar giro do símbolo 3D');
       frame = requestAnimationFrame(animate);
     } else {
-      setState('paused', reduced.matches ? 'Logo 3D estática — movimento reduzido' : userPaused ? 'Retomar giro da logo 3D' : 'Pausar giro da logo 3D');
+      setState('paused', reduced.matches ? 'Símbolo estático — movimento reduzido' : userPaused ? 'Retomar giro do símbolo 3D' : 'Pausar giro do símbolo 3D');
     }
   };
 
   const initialize = async () => {
     if (loading || render || disposed) return;
     loading = true;
-    setState('loading', 'Carregando logo completa em 3D');
+    setState('loading', 'Carregando símbolo 3D');
     try {
       // Load after idle/visibility; reduced-motion visitors retain the complete static logo.
       const THREE = await import('three');
       const logo = new Image();
       logo.src = '/images/logo.webp';
-      await Promise.all([logo.decode(), document.fonts.load('700 230px Manrope'), document.fonts.load('400 82px Manrope')]);
+      await logo.decode();
       if (disposed) return;
       const renderer = new THREE.WebGLRenderer({alpha: true, antialias: true, powerPreference: 'low-power'});
       resources.push(renderer);
@@ -93,72 +95,109 @@ function initEmblem(root: HTMLElement) {
       renderer.domElement.dataset.brandCanvas = '';
       renderer.domElement.setAttribute('aria-hidden', 'true');
       const scene = new THREE.Scene();
-      const camera = new THREE.OrthographicCamera(-2, 2, .625, -.625, .1, 30);
+      const camera = new THREE.OrthographicCamera(-1.10, 1.10, 1.10, -1.10, .1, 30);
       camera.position.set(0, 0, 5);
       const emblem = new THREE.Group();
-      emblem.rotation.x = -.035;
+      emblem.rotation.x = -.055;
       scene.add(emblem);
-      // The original raster wordmark is preserved, not approximated with a substitute font.
-      const artwork = document.createElement('canvas');
-      artwork.width = 1536;
-      artwork.height = 440;
-      const context = artwork.getContext('2d');
-      if (!context) throw new Error('Canvas 2D is unavailable');
-      context.fillStyle = '#ffffff';
-      context.fillRect(0, 0, artwork.width, artwork.height);
-      context.imageSmoothingEnabled = true;
-      context.imageSmoothingQuality = 'high';
-      context.drawImage(logo, 70, 54, 925, 333);
-      context.fillStyle = '#d0ceca';
-      context.fillRect(1060, 65, 3, 308);
-      context.fillStyle = '#856a24';
-      context.textAlign = 'center';
-      context.font = '700 230px Manrope';
-      context.fillText('40', 1273, 266);
-      context.font = 'italic 400 82px Manrope';
-      context.fillText('anos', 1278, 365);
-      const texture = new THREE.CanvasTexture(artwork);
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 4);
-      resources.push(texture);
-
-      const width = 3.6;
-      const height = width * artwork.height / artwork.width;
-      const radius = .07;
-      const left = -width / 2;
-      const bottom = -height / 2;
       const shape = new THREE.Shape();
-      shape.moveTo(left + radius, bottom);
-      shape.lineTo(left + width - radius, bottom);
-      shape.quadraticCurveTo(left + width, bottom, left + width, bottom + radius);
-      shape.lineTo(left + width, bottom + height - radius);
-      shape.quadraticCurveTo(left + width, bottom + height, left + width - radius, bottom + height);
-      shape.lineTo(left + radius, bottom + height);
-      shape.quadraticCurveTo(left, bottom + height, left, bottom + height - radius);
-      shape.lineTo(left, bottom + radius);
-      shape.quadraticCurveTo(left, bottom, left + radius, bottom);
-      const volume = new THREE.ExtrudeGeometry(shape, {depth: .12, bevelEnabled: true, bevelThickness: .016, bevelSize: .016, bevelSegments: 3, curveSegments: 12, steps: 1});
-      volume.translate(0, 0, -.06);
-      const edgeMaterial = new THREE.MeshStandardMaterial({color: 0xf4f1eb, metalness: .22, roughness: .3});
-      resources.push(volume, edgeMaterial);
-      emblem.add(new THREE.Mesh(volume, edgeMaterial));
-      const faceGeometry = new THREE.ShapeGeometry(shape, 12);
-      const positions = faceGeometry.attributes.position;
-      const uv = faceGeometry.attributes.uv;
-      for (let index = 0; index < positions.count; index++) {
-        uv.setXY(index, (positions.getX(index) + width / 2) / width, (positions.getY(index) + height / 2) / height);
+      shape.absarc(0, 0, 1, 0, Math.PI * 2, false);
+      const hole = new THREE.Path();
+      hole.absarc(0, 0, .70, 0, Math.PI * 2, true);
+      shape.holes.push(hole);
+      const disc = new THREE.Shape();
+      disc.absarc(0, 0, .37, 0, Math.PI * 2, false);
+      const redMaterial = new THREE.MeshStandardMaterial({color: 0xe90012, metalness: .25, roughness: .30});
+      resources.push(redMaterial);
+      for (const outline of [shape, disc]) {
+        const geometry = new THREE.ExtrudeGeometry(outline, {depth: .17, bevelEnabled: true, bevelThickness: .018, bevelSize: .018, bevelSegments: 3, curveSegments: 48, steps: 1});
+        geometry.translate(0, 0, -.085);
+        resources.push(geometry);
+        emblem.add(new THREE.Mesh(geometry, redMaterial));
       }
-      uv.needsUpdate = true;
-      // Printed front/back artwork stays readable; the plaque, not the letters, is extruded.
-      const faceMaterial = new THREE.MeshBasicMaterial({map: texture, toneMapped: false});
-      resources.push(faceGeometry, faceMaterial);
-      const front = new THREE.Mesh(faceGeometry, faceMaterial);
-      front.position.z = .078;
-      emblem.add(front);
-      const back = new THREE.Mesh(faceGeometry, faceMaterial);
-      back.rotation.y = Math.PI;
-      back.position.z = -.078;
-      emblem.add(back);
+
+      // Build a stationary shallow extrusion from the exact black pixels of the original name.
+      // The original transparent artwork remains on its front, preserving all small captions.
+      const artwork = document.createElement('canvas');
+      artwork.width = 132;
+      artwork.height = 67;
+      const context = artwork.getContext('2d', {willReadFrequently: true});
+      if (!context) throw new Error('Canvas 2D is unavailable');
+      context.drawImage(logo, 54, 0, 132, 67, 0, 0, 132, 67);
+      const pixels = context.getImageData(0, 0, 132, 67).data;
+      const vertices: number[] = [];
+      const quad = (...points: number[][]) => {
+        for (const index of [0, 1, 2, 0, 2, 3]) vertices.push(...points[index]);
+      };
+      const darkPixel = (x: number, y: number) => {
+        const index = (y * 132 + x) * 4;
+        return pixels[index + 3] > 96 && pixels[index] + pixels[index + 1] + pixels[index + 2] < 330;
+      };
+      let runCount = 0;
+      for (let row = 0; row < 67; row++) {
+        let x = 0;
+        while (x < 132) {
+          if (!darkPixel(x, row)) {x++; continue;}
+          const from = x;
+          while (x < 132 && darkPixel(x, row)) x++;
+          const l = from - 66;
+          const r = x - 66;
+          const t = 33.5 - row;
+          const b = t - 1;
+          const d = 1.8;
+          quad([l,b,d],[r,b,d],[r,t,d],[l,t,d]);
+          quad([r,b,0],[l,b,0],[l,t,0],[r,t,0]);
+          quad([r,b,d],[r,b,0],[r,t,0],[r,t,d]);
+          quad([l,b,0],[l,b,d],[l,t,d],[l,t,0]);
+          quad([l,t,d],[r,t,d],[r,t,0],[l,t,0]);
+          quad([l,b,0],[r,b,0],[r,b,d],[l,b,d]);
+          runCount++;
+        }
+      }
+      if (!runCount) throw new Error('The original wordmark silhouette is unavailable');
+      const nameGeometry = new THREE.BufferGeometry();
+      nameGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+      nameGeometry.computeVertexNormals();
+      const nameMaterial = new THREE.MeshStandardMaterial({color: 0x171717, metalness: .12, roughness: .35});
+      const nameTexture = new THREE.CanvasTexture(artwork);
+      nameTexture.colorSpace = THREE.SRGBColorSpace;
+      const nameFaceGeometry = new THREE.PlaneGeometry(132, 67);
+      const nameFaceMaterial = new THREE.MeshBasicMaterial({map: nameTexture, transparent: true, alphaTest: .015, toneMapped: false});
+      resources.push(nameGeometry, nameMaterial, nameTexture, nameFaceGeometry, nameFaceMaterial);
+      const nameScene = new THREE.Scene();
+      const nameGroup = new THREE.Group();
+      nameGroup.rotation.y = -.09;
+      nameGroup.rotation.x = -.055;
+      nameGroup.add(new THREE.Mesh(nameGeometry, nameMaterial));
+      const nameFront = new THREE.Mesh(nameFaceGeometry, nameFaceMaterial);
+      nameFront.position.z = 1.82;
+      nameGroup.add(nameFront);
+      nameScene.add(nameGroup, new THREE.HemisphereLight(0xffffff, 0x5c5360, 2.0));
+      const nameLight = new THREE.DirectionalLight(0xffffff, 3);
+      nameLight.position.set(-40, 60, 150);
+      nameScene.add(nameLight);
+      const nameCamera = new THREE.OrthographicCamera(-68, 68, 34.5, -34.5, .1, 500);
+      nameCamera.position.z = 180;
+      const nameRenderer = new THREE.WebGLRenderer({alpha: true, antialias: true, powerPreference: 'low-power'});
+      resources.push(nameRenderer);
+      nameRenderer.setPixelRatio(Math.min(devicePixelRatio, mobile.matches ? 1.5 : 2));
+      nameRenderer.setClearColor(0x000000, 0);
+      nameRenderer.outputColorSpace = THREE.SRGBColorSpace;
+      nameRenderer.domElement.dataset.brandNameCanvas = '';
+      nameRenderer.domElement.dataset.brandNameGeometry = 'raster-silhouette-extrusion';
+      nameRenderer.domElement.setAttribute('aria-hidden', 'true');
+      nameRenderer.domElement.dataset.brandNameRuns = String(runCount);
+      resizeName = () => {
+        nameRenderer.setSize(Math.max(1, wordmark.clientWidth), Math.max(1, wordmark.clientHeight), false);
+        nameRenderer.render(nameScene, nameCamera);
+      };
+      wordmark.append(nameRenderer.domElement);
+      resizeName();
+      root.dataset.brandNameReady = 'true';
+      nameRenderer.domElement.addEventListener('webglcontextlost', (event) => {
+        event.preventDefault();
+        fail('A visualização 3D foi interrompida. A marca original continua visível.');
+      }, {once: true});
       scene.add(new THREE.HemisphereLight(0xffffff, 0x873c4a, 1.5));
       const key = new THREE.DirectionalLight(0xfff1e5, 3);
       key.position.set(-3, 4, 6);
@@ -171,15 +210,16 @@ function initEmblem(root: HTMLElement) {
         const stageWidth = Math.max(1, stage.clientWidth);
         const stageHeight = Math.max(44, stage.clientHeight);
         const aspect = stageWidth / stageHeight;
-        camera.left = -.625 * aspect;
-        camera.right = .625 * aspect;
+        camera.left = -1.10 * aspect;
+        camera.right = 1.10 * aspect;
         camera.updateProjectionMatrix();
         renderer.setSize(stageWidth, stageHeight, false);
         render?.();
       };
       stage.append(renderer.domElement);
-      resizeObserver = new ResizeObserver(resize);
+      resizeObserver = new ResizeObserver(() => {resize?.(); resizeName?.();});
       resizeObserver.observe(stage);
+      resizeObserver.observe(wordmark);
       resize();
       renderer.domElement.addEventListener('webglcontextlost', (event) => {
         event.preventDefault();
@@ -198,7 +238,9 @@ function initEmblem(root: HTMLElement) {
     resizeObserver?.disconnect();
     resources.splice(0).forEach(resource => resource.dispose());
     stage.querySelector('canvas')?.remove();
-    setState('error', 'Tentar logo completa em 3D novamente', message);
+    wordmark.querySelector('canvas')?.remove();
+    delete root.dataset.brandNameReady;
+    setState('error', 'Tentar símbolo 3D novamente', message);
   };
   const autoStart = () => {
     if (requested || render || loading || disposed || !visible || document.hidden || reduced.matches) return;
@@ -246,7 +288,9 @@ function initEmblem(root: HTMLElement) {
     document.removeEventListener('visibilitychange', onVisibility);
     resources.splice(0).forEach(resource => resource.dispose());
     stage.querySelector('canvas')?.remove();
-    setState('fallback', 'Ativar logo completa em 3D');
+    wordmark.querySelector('canvas')?.remove();
+    delete root.dataset.brandNameReady;
+    setState('fallback', 'Ativar símbolo 3D');
     button.disabled = true;
     window.addEventListener('pageshow', (event) => {
       if (event.persisted) {
