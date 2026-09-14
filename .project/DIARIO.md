@@ -1,5 +1,119 @@
 # Diário — Site Jairo Rocha
 
+## 2026-09-14 12:31
+
+**Foco:** preparar e enviar o trabalho consolidado ao repositório GitHub de origem.
+
+**Feito:** confirmado `origin` em `RafaelADSdev/Site-Jairo-Rocha-` e branch isolado `codex/takeover-audit`. Revisados pendentes, tamanhos e padrões de segredo; nenhum segredo encontrado e modelos abaixo do limite do GitHub. Build de 14 páginas, verificações das tipologias/assets, modelo financeiro e explorador completo com bloco, térreo e superior aprovados. O timeout observado na porta 4322 foi isolado como cache do servidor Astro iniciado no dia anterior; a mesma verificação passou no preview limpo da produção. SwiftShader adicionado ao teste headless para estabilidade local/CI.
+
+**Próximos passos:** publicar o branch em `origin` e abrir revisão/merge quando autorizado; reiniciar o servidor local antigo em momento oportuno para limpar seu cache, sem interromper a sessão atual do usuário.
+
+**Bloqueios / dúvidas:** nenhum para o push do branch; `main` não será alterado diretamente.
+
+---
+
+## 2026-09-13 21:08
+
+**Foco:** corrigir posição e partes móveis da marca conforme esclarecimento do usuário.
+
+**Feito:** removida placa da hero; componente integrado ao cabeçalho apenas da home. Alvo vermelho extrudado com giro próprio, nome original com geometria rasa traçada dos pixels pretos e face original, fixo e renderizado somente na carga/resize. Selo 40 anos fixo, botão invisível sobre símbolo separado do link do nome. Fallback SVG/imagem, redução de movimento e descarte de recursos preservados. RED reproduziu marca duplicada; GREEN passou em testes de nome estacionário, giro, pausa/Enter/toque, sem JS, WebGL indisponível, menu e 375/768/1440. Build de 14 páginas, regressão da abertura, detector e diff-check aprovados; capturas desktop/mobile inspecionadas. Sem push/deploy.
+
+**Próximos passos:** avaliação visual do usuário; vetor original seria necessário para ampliar bastante o nome sem a limitação raster de 186×67.
+
+**Bloqueios / dúvidas:** nenhum para entrega local; MCP Obsidian indisponível, sem sincronização externa.
+
+---
+
+## 2026-09-13 20:57
+
+**Foco:** atender correção do usuário sobre logo giratória e remoção do botão visível.
+
+**Feito:** emblema isolado substituído por letreiro fino 3D com arte original Jairo Rocha e selo dourado 40 anos nas duas faces. Pílula de pausa removida; interação por clique/toque/teclado na própria logo. Giro de 20 s, até 24 fps, mobile automático com DPR limitado; preferência de movimento reduzido e fallback completo mantidos. Ajustadas proporções desktop/mobile e validado build + E2E da marca/home. Não houve Blender, novas dependências ou publicação.
+
+**Próximos passos:** revisão visual do usuário. Se forem exigidas letras extrudadas individualmente, solicitar vetor oficial; a versão atual preserva a arte original sobre o volume.
+
+**Bloqueios / dúvidas:** nenhum para a alteração pedida. MCP Obsidian indisponível; registros locais atualizados.
+
+---
+
+## 2026-09-13 20:40
+
+**Foco:** abertura da home aprovada, busca orientada à intenção e símbolo 3D giratório.
+
+**Feito:** componentes isolados de abertura e emblema; marca original em cabeçalho claro; fotografia real com crédito; destaques manuais com um h1; busca Comprar/Alugar/Investir, filtros complementares mobile e escala mensal correta. Helper de compra testado (4 casos, 100% de cobertura) e integrado ao catálogo. Emblema real com anel/disco extrudados, giro de 16 s, carregamento progressivo, pausa, mobile opt-in, movimento reduzido, SVG e retry. Testes E2E da home em 375/768/1440, compra/locação, sem JS, teclado e WebGL/fallback passaram. Revisão independente corrigiu filtros sem JS e proteção de preço. Regressão de sete rotas em desktop/mobile passou, sem imagens quebradas ou erros JS. Checkpoints locais RED/GREEN só dos arquivos desta tarefa; sem push/deploy.
+
+**Próximos passos:** avaliação visual pelo usuário; validar dados comerciais antes da publicação. Manter performance global como pendência de produção, sem declarar nova nota Lighthouse.
+
+**Bloqueios / dúvidas:** nenhum para entrega local. Não foi usado Blender. MCP Obsidian indisponível nesta sessão, sem sincronização externa. Mudanças anteriores de Sopro preservadas.
+
+---
+
+## 2026-09-13 20:06
+
+**Foco:** aplicar a pesquisa aprovada à experiência do investidor.
+
+**Feito:** comparação de 12 compras e oito hospedagens em quatro praias, fontes/data/limites, divergência AirDNA/AirROI, simulador de custos completos com três sensibilidades e equilíbrio, checklist jurídico-operacional e pedido copiável. Nova navegação e preservação dos atalhos da home. Motor testado com 16 casos e 100% de cobertura. E2E em 375/768/1440 px, sem JS, falha de clipboard, validações e anúncio acessível; mapa real, planejador e filmes preservados; regressão global de sete páginas em duas larguras passou. Checkpoints locais RED/GREEN somente dos arquivos desta implementação.
+
+**Próximos passos:** revisão do usuário e coleta de extratos/documentação de unidades específicas. Preços são amostra anunciada de 13/09, não estoque garantido.
+
+**Bloqueios / dúvidas:** sem bloqueios para entrega local. Não houve deploy/push. MCP Obsidian não exposto; contexto local atualizado sem sincronização externa. Alterações anteriores do Sopro preservadas.
+
+---
+
+## 2026-09-13 19:44
+
+**Foco:** pesquisa aprofundada do litoral para investidor e comparação de preços atuais.
+
+**Feito:** dossiê em `research/litoral-2026-09/`, com 12 anúncios originais de compra, oito referências de temporada, datas/limites, rota/pedágios, demanda, sazonalidade, STJ/MPPE/SPU e custos. Comparadas AirDNA/AirROI sem escolher a estimativa mais favorável. Modelo de R$600 mil testado, cenários e fronteiras revisados independentemente; relatório diferencia caixa antes de IR/dívida de lucro líquido pessoal. Nenhum código do site, anúncio ou serviço externo alterado.
+
+**Próximos passos:** obter 12–24 meses de extratos e documentação de unidades escolhidas; cotação uniforme de hospedagem e orçamentos operacionais; só então aprovar dados/fluxos para a área do investidor.
+
+**Bloqueios / dúvidas:** não há evidência privada suficiente para atestar rentabilidade individual. MCP Obsidian não exposto, sem sincronização externa. Pesquisa pública entregue sem promessa de retorno.
+
+---
+
+## 2026-09-13 19:25
+
+**Foco:** reformular Viva o litoral e cumprir a correção para fotografias reais das praias já listadas.
+
+**Feito:** atlas interativo com quatro destinos, rotas Google Maps, planejador hipotético com cópia, layout mobile, 20 WebPs e filmes Remotion de 22 s em duas composições. Fontes/licenças documentadas; IA removida da entrega. Simulador anterior preservado em seção expansível. Build de 14 páginas, cinco testes unitários, E2E específico e regressão global aprovados. QA visual e limitações registradas em LITORAL-QA.md.
+
+**Próximos passos:** revisão do usuário e eventual integração de inventário real de temporada, somente com dados confirmados. Nenhuma publicação feita.
+
+**Bloqueios / dúvidas:** MCP Obsidian indisponível; nota externa não sincronizada. Nenhum bloqueio para a experiência local entregue.
+
+---
+
+## 2026-09-13 18:32
+
+**Foco:** ampliar o Sopro com interiores detalhados e explicações contextualizadas.
+
+**Feito:**
+
+- Aplicadas orquestração e análise de material imobiliário; frontend delegado com escopo isolado enquanto a modelagem foi executada pelo agente principal via Blender MCP.
+- Revisadas plantas oficiais dos tipos 01/03 (book páginas 35/39) e perspectivas de dormitório, living e varanda gourmet.
+- Criadas duas cenas organizadas por ambiente/material com cama, enxoval, closet aberto, cabideiros, objetos de apoio, sofá, tapetes, bancada/TV, esquadrias, banheiro, mesa/cadeiras, bancada gourmet, piscina e paisagismo térreo.
+- Preservado o bloco existente; salvo arquivo editável `assets/blender/sopro-ambientes.blend` e gerador `scripts/blender_sopro_interiors.py`.
+- Integradas três cenas independentes, seis pontos no bloco e sete em cada interior, com explicações, imagens oficiais ampliáveis e links para planta/book.
+- Controles fora do canvas, painel lateral no desktop e abaixo no mobile; zoom de ambiente explícito, vista superior, reset, teclado e fullscreen.
+- Ajustado ângulo inicial para revelar os interiores; identificados cortes de teto/paredes e limites de fidelidade na interface.
+- Corrigidos cache de falha/retry e eventos tardios; mantidas imagens responsivas inclusive na troca de ponto.
+- Comprimidos GLBs com Draco e restringida exportação à cena ativa: térreo 1.051.648 bytes/61 meshes; superior 939.968 bytes/57 meshes. Decoder servido localmente, licença incluída.
+- Build de produção aprovado (14 páginas); verificações de assets, três GLBs reais, estados de carga/erro/retry, troca de cena, pontos, câmeras, teclado, plantas e 39 imagens responsivas aprovadas. Capturas desktop/mobile revisadas.
+- Documentados fontes, limites, medidas ilustrativas e reprodução em `assets/blender/README.md`; atualizado `.project/`.
+
+**Próximos passos:**
+
+- Validar a apresentação com o usuário e obter cotas/projeto executivo para evolução de fidelidade técnica.
+- Novas áreas coletivas dependem de plantas/referências suficientes; não foram inventados ambientes sem base documental.
+
+**Bloqueios / dúvidas:**
+
+- MCP Obsidian não está exposto nesta sessão; contexto local atualizado, sem sincronização da nota do vault.
+- Sem publicação ou commit nesta rodada. O aviso conhecido de chunk grande do visualizador permanece, mitigado pelo import sob demanda.
+
+---
+
 ## 2026-09-13 18:07
 
 **Foco:** corrigir a circulação das escadas externas no novo modelo 3D do Sopro.

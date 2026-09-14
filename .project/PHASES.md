@@ -21,13 +21,28 @@
 
 ## 🚧 Fase 2 — Decisões de produção
 
+- [x] Atender esclarecimento final: marca no cabeçalho, nome com volume fixo, apenas símbolo giratório e nenhuma marca duplicada na hero
+
+- [x] Corrigir logo 3D para composição completa do cabeçalho (wordmark + 40 anos), retirar pílula de pausa e preservar controle pela própria logo
+
+- [x] Reformular abertura/busca da home e criar emblema 3D giratório com pausa, fallback e movimento reduzido; validar compra/locação e mobile
+
 - [x] Criar comparação das tipologias do Sopro a partir das plantas oficiais
 - [x] Otimizar as imagens da página Sopro com `srcset` WebP gerado no projeto
 - [x] Tornar o 3D do Sopro sob demanda, com capa, loading, retry e fallback
 - [x] Transformar o 3D do Sopro em experiência guiada com vistas, progresso, teclado e tela cheia
 - [x] Registrar o Blender MCP no Codex e instalar o add-on no Blender 5.2
 - [x] Reconstruir e otimizar a geometria do bloco do Sopro via Blender MCP
+- [x] Criar interiores detalhados em corte das unidades tipo 01 e 03 via Blender MCP, com fontes e limites documentados
+- [x] Organizar três cenas sob demanda com pontos explicativos, imagens oficiais, plantas, enquadramento e decoder Draco local
 - [ ] Definir relação com o site operacional `jairorocha.com.br`
+- [x] Recriar Viva o litoral com atlas interativo, rotas e planejador de temporada responsivo
+- [x] Usar fotos reais identificadas das quatro praias locais, com autoria/licença e WebP responsivo
+- [x] Integrar filme Remotion de 22 s horizontal/vertical, sem autoplay
+- [x] Validar cálculos, mapa/retry, fallback de cópia, vídeo mobile e regressão global
+- [x] Pesquisar preços pedidos atuais, diárias, demanda, rota e riscos para o investidor, com dossiê e cenários auditáveis
+- [x] Incorporar pesquisa à área do investidor, com fontes, capital total, custos discriminados, prejuízo, equilíbrio e pedido de estudo copiável; validar mobile e regressão
+- [ ] Obter extratos e documentos de unidades para comprovar desempenho e recalibrar o simulador; não usar médias municipais como garantia
 - [ ] Escolher Vercel ou Netlify e alinhar imagens, cache e headers
 - [ ] Definir CMS/CRM/fonte do catálogo
 - [ ] Definir captura, consentimento e destino dos leads

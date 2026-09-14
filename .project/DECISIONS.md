@@ -1,5 +1,49 @@
 # Decisões Técnicas — Site Jairo Rocha
 
+## 2026-09-13 — Correção explícita: marca no cabeçalho, giro somente do símbolo
+
+**Contexto:** a interpretação anterior estava errada: o usuário não queria um letreiro duplicado na hero nem o nome girando.
+**Decisão:** substituir a marca da home no próprio cabeçalho por símbolo volumétrico giratório e nome original com profundidade fixa; manter selo 40 anos estático. Remover a instância na hero e sua coluna. Demais cabeçalhos preservados.
+**Consequências:** esta decisão substitui as duas anteriores sobre a composição da marca. Não redesenhar tipografia com fonte aproximada nem animar o nome.
+
+## 2026-09-13 — Logo completa substitui emblema isolado
+
+**Contexto:** usuário mostrou a composição do cabeçalho e pediu essa marca inteira girando, removendo a pílula de pausa.
+**Decisão:** usar a arte original raster no letreiro extrudado branco com selo 40 anos, frente/verso legíveis; interação sem botão visual, pela área da própria logo. Manter redução de movimento e fallback.
+**Consequências:** preserva fidelidade da tipografia existente; a placa tem volume real, mas as letras não são extrudadas individualmente. Fonte raster original limita a resolução. Substitui a decisão anterior de animar apenas o símbolo.
+
+## 2026-09-13 — Home manual e símbolo de marca 3D progressivo
+
+**Contexto:** usuário aprovou reorganização da abertura/busca e pediu logo em 3D girando.
+**Decisão:** manter wordmark oficial estático em cabeçalho branco; emblema circular vermelho recriado em geometria extrudada Three.js (dependência existente), com SVG inicial. Giro lento no desktop, ativação no celular, pausa e preferência reduzida. Remover carrossel automático e shader de mar da home ativa; destaques manuais e fotografia real já licenciada. Comprar passa a categoria agregada `venda` no catálogo.
+**Alternativas:** girar o nome completo no cabeçalho; vídeo de logo; Blender/GLB; continuar incluindo aluguel na busca genérica de compra.
+**Consequências:** identidade sempre legível, movimento controlável e sem mídia/dependência nova. WebGL opcional; busca do catálogo ainda requer JavaScript para aplicar filtros. Layout das demais páginas preservado.
+
+## 2026-09-13 — Evidências e cálculo do investidor separados
+
+**Contexto:** incorporar a pesquisa aprovada sem transformar preço pedido, diária anunciada ou estatística municipal em promessa de retorno.
+**Decisão:** dados tipados de evidência separados do motor financeiro puro e da interface Astro. Premissas editáveis, capital total, caixa antes de IR/dívida, fonte/data por oferta. Filtro de praia não altera hipóteses de diária/ocupação. Sem backend, cópia local do pedido de estudo.
+**Alternativas:** reutilizar calibração hoteleira e IR universal do simulador anterior; preencher retorno automaticamente por anúncio; prometer desempenho com estimativas agregadas.
+**Consequências:** transparência e testes completos do cálculo, sem dependência nova; rentabilidade individual exige extratos, custos e documentação da unidade. Modelos legados não são executados na área nova.
+
+## 2026-09-13 — Litoral real, planejamento transparente e vídeo offline
+
+**Contexto:** transformar a página em experiência de temporada; usuário corrigiu o briefing para praias locais já listadas e fotos reais.
+**Decisão:** quatro fotos vinculadas aos quatro destinos, fontes/licenças preservadas; Leaflet/OSM sob demanda com fallback e rotas externas; cenários explicitamente hipotéticos; Remotion renderizado para MP4 horizontal/vertical sem React no navegador.
+**Alternativas:** imagens IA (descartadas por pedido do usuário), mapa pago com chave, player React/Remotion em runtime, falsa disponibilidade (não adotada).
+**Consequências:** página leve antes das interações e edição reproduzível; mapa depende de terceiros, fotos não garantem condições atuais, reservas reais exigem catálogo/integração futuros.
+
+## 2026-09-13 — Interiores em corte documentados e independentes do bloco
+
+**Contexto:** o usuário pediu mais áreas detalhadas com planta e imagem de qualidade, além de explicações do que está vendo. As plantas comerciais não fornecem todas as cotas executivas.
+
+**Decisão:** gerar via Blender MCP duas cenas individuais (tipos 01 e 03), organizadas por ambiente/material, usando plantas das páginas 35 e 39 e perspectivas oficiais de dormitório, estar e gourmet. Não inventar layouts de áreas de lazer sem planta suficiente. Mostrar fontes e limites no painel do site; teto omitido e paredes rebaixadas são cortes de visualização.
+
+**Alternativas:** um GLB único com todas as cenas; áreas adicionais sem respaldo; aguardar projeto executivo para qualquer representação comercial.
+
+**Consequências:** mais detalhe sem transferir todos os modelos na abertura. Geometria comprimida com Draco (1,05 MB/940 KB), exportação restrita à cena ativa e decoder local sem CDN externo. As dimensões, decoração e especificações continuam ilustrativas. Aumenta o acervo versionado, preservando o `.blend` editável e script de reprodução.
+
+
 ## 2026-09-13 — Preservar os dois históricos durante o takeover
 
 **Contexto:** o repositório local tinha um branch `master` com documentação histórica, enquanto o GitHub fornecido tinha um branch `main` não relacionado com o site implementado.
