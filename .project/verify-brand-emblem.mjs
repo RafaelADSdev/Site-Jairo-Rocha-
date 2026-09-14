@@ -5,12 +5,19 @@ try {
  const page=await browser.newPage({viewport:{width:1440,height:1000}});
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('http://localhost:4322/',{waitUntil:'networkidle'});
- assert.equal(await page.locator('[data-brand-fallback] img').count(),1,'Complete original wordmark replaces isolated emblem');
- assert.equal(await page.locator('[data-brand-fallback] img').getAttribute('src'),'/images/logo.webp');
- assert.match(await page.locator('[data-brand-fallback]').textContent(),/40/);
+ assert.equal(await page.locator('.home-opening [data-brand-emblem]').count(),0,'No duplicated brand in hero');
+ assert.equal(await page.locator('header [data-brand-emblem]').count(),1,'3D brand belongs in header');
+ assert.equal(await page.locator('[data-brand-wordmark] img').getAttribute('src'),'/images/logo.webp');
+ assert.match(await page.locator('[data-brand-anniversary]').textContent(),/40/);
+ assert.equal(await page.locator('a [data-brand-toggle]').count(),0,'Symbol button must not nest in home link');
+ const wordmark=await page.locator('[data-brand-wordmark]').screenshot();
  assert.equal(await page.locator('.brand-emblem__control-icon').count(),0,'No visible pill or rotating-arrow icon');
  assert.equal(await page.locator('[data-brand-toggle]').evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)');
  await page.waitForFunction(()=>document.querySelector('[data-brand-emblem]').dataset.brandState==='ready');
+ await page.waitForTimeout(600);
+ assert.deepEqual(await page.locator('[data-brand-wordmark]').screenshot(),wordmark,'Name remains fixed while symbol rotates');
+ const symbolBox=await page.locator('[data-brand-stage]').boundingBox();
+ assert(symbolBox.width<=64 && symbolBox.height>=44,'Only compact header symbol rotates');
  await page.locator('[data-brand-toggle]').click();
  assert.equal(await page.locator('[data-brand-emblem]').getAttribute('data-brand-state'),'paused');
  const still=await page.locator('[data-brand-canvas]').screenshot();
@@ -32,7 +39,8 @@ try {
  const reduced=await browser.newPage({reducedMotion:'reduce'});
  await reduced.goto('http://localhost:4322/',{waitUntil:'networkidle'});
  assert.equal(await reduced.locator('[data-brand-canvas]').count(),0);
- assert(await reduced.locator('[data-brand-fallback] img').isVisible());
+ assert(await reduced.locator('[data-brand-fallback]').isVisible());
+ assert(await reduced.locator('[data-brand-wordmark]').isVisible());
  const fallback=await browser.newPage();
  await fallback.addInitScript(()=>{
   const original=HTMLCanvasElement.prototype.getContext;
@@ -40,8 +48,10 @@ try {
  });
  await fallback.goto('http://localhost:4322/',{waitUntil:'networkidle'});
  await fallback.waitForFunction(()=>document.querySelector('[data-brand-emblem]').dataset.brandState==='error');
- assert(await fallback.locator('[data-brand-fallback] img').isVisible());
+ assert(await fallback.locator('[data-brand-fallback]').isVisible());
  assert.match(await fallback.locator('[data-brand-toggle]').getAttribute('aria-label'),/Tentar/);
  assert.deepEqual(errors,[]);
- console.log('PASS full rotating logo: original brand + 40 years, no pill, click/keyboard/tap pause, mobile, reduced motion, WebGL fallback.');
+ await page.screenshot({path:'tmp/header-brand-1440.png'});
+ await mobile.screenshot({path:'tmp/header-brand-375.png'});
+ console.log('PASS header brand: hero clear, fixed original name, rotating symbol only, keyboard/tap, mobile, reduced motion, fallback.');
 } finally {await browser.close();}
