@@ -78,3 +78,18 @@
 /* The brand now lives exclusively in the header; the hero has no logo column. */
 .home-opening-layout { grid-template-columns:minmax(0,1fr); }
 .home-opening-copy { max-width:850px; }
+/* A abertura troca sozinha: a barra mede o tempo da aba ativa e o botão detém o giro. */
+.home-landscape>img[data-home-photo-trail] { opacity:0; transition:opacity .55s ease; }
+.home-feature-tabs { display:flex; align-items:end; gap:18px; }
+.home-feature-buttons button { position:relative; }
+.home-feature-buttons button[aria-pressed=true] { border-bottom-color:#ffffff4d; }
+.home-feature-progress { position:absolute; left:0; right:0; bottom:0; height:2px; background:#fff; transform:scaleX(0); transform-origin:left; pointer-events:none; }
+/* Sem giro (pausa, aba oculta ou movimento reduzido) a barra fica cheia e marca a aba ativa. */
+.home-feature-buttons button[aria-pressed=true] .home-feature-progress { transform:scaleX(1); }
+.home-feature-pause { display:inline-flex; align-items:center; justify-content:center; width:44px; min-height:44px; margin-bottom:8px; background:transparent; border:1px solid #ffffff59; border-radius:50%; color:#fff; }
+.home-feature-pause:hover { background:#ffffff1f; }
+.home-feature-pause>span { display:flex; }
+.home-feature-pause [data-icon-play],.home-feature-pause[aria-pressed=true] [data-icon-pause] { display:none; }
+.home-feature-pause[aria-pressed=true] [data-icon-play] { display:flex; }
+@media(max-width:780px) { .home-feature-tabs { gap:10px; align-items:center; } .home-feature-pause { width:40px; min-height:40px; margin-bottom:0; flex:none; } }
+@media(prefers-reduced-motion:reduce) { .home-landscape>img[data-home-photo-trail] { transition:none; } }
