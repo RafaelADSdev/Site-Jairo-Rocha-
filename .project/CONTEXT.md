@@ -8,6 +8,8 @@ O portal conceitual está publicado separadamente em `https://site-jairo-rocha.v
 
 ## Estado atual
 
+Branch `codex/takeover-audit` publicado em `origin` no mesmo repositório `RafaelADSdev/Site-Jairo-Rocha-` em 14/09/2026, com rastreamento remoto configurado. O `main` não foi alterado; a integração pode ser revisada por pull request.
+
 Correção mais recente (13/09): a marca 3D está SOMENTE no cabeçalho da home. Símbolo vermelho extrudado gira; nome original tem extrusão rasa baseada na silhueta raster e fica fixo, com canvas renderizado uma vez/redimensionamento. Selo 40 anos fixo. Letreiro da hero e coluna removidos. Teste específico confirma nome estável durante giro, pausa/teclado/toque, fallback, sem JS, menu e 375/768/1440; build aprovado. As descrições de letreiro abaixo são histórico superado, não a versão ativa.
 
 Correção visual posterior: a home agora gira a composição COMPLETA da logo do cabeçalho, com wordmark original e selo 40 anos, nas faces de letreiro branco fino em 3D. Botão de pausa visível removido; clique/toque/teclado na própria logo pausa ou retoma. Giro automático também no celular com limite de 24 fps/DPR reduzido; movimento reduzido mantém versão estática. Testes da marca completa e da home aprovados. Letras preservadas como imagem original aplicada ao volume, não extrudadas individualmente. Esta versão substitui o emblema isolado descrito no histórico abaixo.

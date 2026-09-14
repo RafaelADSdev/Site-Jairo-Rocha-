@@ -6,7 +6,7 @@
 
 **Feito:** confirmado `origin` em `RafaelADSdev/Site-Jairo-Rocha-` e branch isolado `codex/takeover-audit`. Revisados pendentes, tamanhos e padrões de segredo; nenhum segredo encontrado e modelos abaixo do limite do GitHub. Build de 14 páginas, verificações das tipologias/assets, modelo financeiro e explorador completo com bloco, térreo e superior aprovados. O timeout observado na porta 4322 foi isolado como cache do servidor Astro iniciado no dia anterior; a mesma verificação passou no preview limpo da produção. SwiftShader adicionado ao teste headless para estabilidade local/CI.
 
-**Próximos passos:** publicar o branch em `origin` e abrir revisão/merge quando autorizado; reiniciar o servidor local antigo em momento oportuno para limpar seu cache, sem interromper a sessão atual do usuário.
+**Próximos passos:** branch `codex/takeover-audit` publicado em `origin`; abrir revisão/merge quando autorizado. Reiniciar o servidor local antigo em momento oportuno para limpar seu cache, sem interromper a sessão atual do usuário.
 
 **Bloqueios / dúvidas:** nenhum para o push do branch; `main` não será alterado diretamente.
 
